@@ -23,10 +23,21 @@ defineProps<{ groupName: string; iconClass: string; selected: boolean }>()
   background-color: var(--p-primary-50);
 }
 
+.dark-mode .contact-group:hover {
+  background-color: var(--p-primary-300);
+}
+
 .contact-group.selected {
   background-color: var(--p-primary-100);
 }
 .contact-group.selected:hover {
   background-color: var(--p-primary-200);
+}
+
+.dark-mode .contact-group.selected {
+  background-color: var(--p-primary-500);
+}
+.dark-mode .contact-group.selected:hover {
+  background-color: var(--p-primary-600);
 }
 </style>

@@ -37,40 +37,39 @@ const login = () => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col flex-justify-center flex-items-center">
-    <Card>
-      <template #title>
-        <div class="flex flex-justify-center">登录 Onebot</div>
-      </template>
-      <template #content>
-        <div class="grid grid-cols-2 w-180">
-          <div class="m-r-sm flex-grow">
-            <ScrollPanel class="w-full h-45 p-sm">
-              <TransitionGroup
-                name="list"
-                enter-active-class="fade-in-fwd"
-                leave-active-class="fade-out-fwd"
-              >
-                <ButtonGroup v-for="(account, index) in config.accounts" :key="index">
-                  <div class="w-full m-b-sm grid accounts-grid">
-                    <Button class="h-10" severity="secondary" @click="getAccount(index)">
-                      <div class="flex flex-items-center flex-justify-between w-full">
-                        <i class="i-fluent-color-person-24 font-size-5" />
-                        <div class="flex flex-col flex-items-end">
-                          <div class="font-size-4">{{ account.url }}</div>
-                          <div class="font-size-2">{{ account.token }}</div>
-                        </div>
-                      </div>
-                    </Button>
-                    <Button class="h-10" severity="danger" @click="deleteAccount(index)">
-                      <i class="i-fluent-delete-24-regular font-size-5" />
-                    </Button>
-                  </div>
-                </ButtonGroup>
-              </TransitionGroup>
-            </ScrollPanel>
+  <div class="h-full w-full grid grid-cols-2 p-sm">
+    <div class="calc-height w-full primary-border p-sm scrollbar scrollbar-w-1 scrollbar-rounded">
+      <div class="switch-text text-lg flex justify-center m-b-sm">快捷登录</div>
+      <TransitionGroup
+        name="list"
+        enter-active-class="fade-in-fwd"
+        leave-active-class="fade-out-fwd"
+      >
+        <ButtonGroup v-for="(account, index) in config.accounts" :key="index">
+          <div class="w-full m-b-sm grid accounts-grid">
+            <Button class="h-10" severity="secondary" @click="getAccount(index)">
+              <div class="flex items-center justify-between w-full">
+                <i class="i-fluent-color-person-24 font-size-5" />
+                <div class="flex flex-col items-end">
+                  <div class="font-size-4">{{ account.url }}</div>
+                  <div class="font-size-2">{{ account.token }}</div>
+                </div>
+              </div>
+            </Button>
+            <Button class="h-10" severity="danger" @click="deleteAccount(index)">
+              <i class="i-fluent-delete-24-regular font-size-5" />
+            </Button>
           </div>
-          <div class="m-l-sm flex-grow">
+        </ButtonGroup>
+      </TransitionGroup>
+    </div>
+    <div class="h-full flex flex-col justify-center items-center">
+      <Card>
+        <template #title>
+          <div class="flex justify-center">登录 Onebot</div>
+        </template>
+        <template #content>
+          <div class="w-80 m-l-sm flex-grow">
             <FloatLabel class="m-b-sm m-t-sm" variant="on">
               <IconField>
                 <InputIcon class="i-fluent-color-person-24" />
@@ -86,7 +85,7 @@ const login = () => {
               <label for="token">Access Token (可选)</label>
             </FloatLabel>
             <Divider />
-            <div class="flex flex-justify-center">
+            <div class="flex justify-center">
               <Button
                 class="w-full m-r-sm"
                 label="加入快捷登录"
@@ -104,10 +103,10 @@ const login = () => {
               />
             </div>
           </div>
-        </div>
-      </template>
-      <template #footer> </template>
-    </Card>
+        </template>
+        <template #footer> </template>
+      </Card>
+    </div>
   </div>
 </template>
 
@@ -115,5 +114,13 @@ const login = () => {
 .accounts-grid {
   grid-gap: 0;
   grid-template-columns: 1fr auto;
+}
+
+.calc-height {
+  height: calc(100vh - 6.35rem);
+}
+
+.dark-mode .switch-text {
+  color: var(--p-gray-100);
 }
 </style>

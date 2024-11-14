@@ -16,18 +16,18 @@ const fetchResult = async () => {
 </script>
 
 <template>
-  <div class="flex flex-row flex-justify-center flex-items-center w-full h-full">
+  <div class="flex flex-row justify-center items-center w-full h-full">
     <Card class="w-180">
       <template #title>Connector Sender</template>
       <template #content>
-        <div class="flex flex-col flex-justify-between flex-items-center">
-          <div class="flex flex-col flex-justify-start flex-items-center w-full m-b-2">
+        <div class="flex flex-col justify-between items-center">
+          <div class="flex flex-col justify-start items-center w-full m-b-2">
             <InputText v-model="action" class="w-full m-b-2" placeholder="Action Name" />
             <InputText v-model="paramsRaw" class="w-full m-b-2" placeholder="params" />
             <InputText v-model="echo" class="w-full m-b-2" placeholder="Echo" />
           </div>
 
-          <div class="flex flex-row flex-justify-between flex-items-center w-full m-b-2">
+          <div class="flex flex-row justify-between items-center w-full m-b-2">
             <Button class="flex-1 m-r-1" label="Clear" severity="success" @click="result = ''" />
             <Button
               class="flex-1"

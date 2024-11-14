@@ -44,12 +44,12 @@ const avatarUrl = computed(() => {
 </script>
 
 <template>
-  <div class="w-full calc-height flex flex-col flex-justify-center flex-items-center">
+  <div class="w-full calc-height flex flex-col justify-center items-center">
     <Card class="w-4/5">
       <template #title>
-        <div class="w-full flex flex-row flex-justify-between flex-items-center">
+        <div class="w-full flex flex-row justify-between items-center">
           <img :src="avatarUrl" class="w-15 h-15 rounded-full" />
-          <div class="w-full flex flex-col flex-justify-center flex-items-end gap-2">
+          <div class="w-full flex flex-col justify-center items-end gap-2">
             <div class="text-xl font-bold">{{ contactName }}</div>
             <div class="text-sm text-gray-500">ID: {{ contact?.id }}</div>
           </div>
@@ -59,9 +59,9 @@ const avatarUrl = computed(() => {
         <Divider />
         <div
           v-if="contact?.type === 'friend'"
-          class="w-full flex flex-col flex-justify-start flex-items-center"
+          class="w-full flex flex-col justify-start items-center"
         >
-          <div class="w-full flex flex-row flex-justify-between flex-items-center">
+          <div class="w-full flex flex-row justify-between items-center">
             <div class="font-bold">备注</div>
             <div class="text-gray-500">{{ (contactObj as Friend).remark }}</div>
           </div>

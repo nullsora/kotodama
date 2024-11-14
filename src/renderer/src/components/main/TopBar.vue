@@ -43,7 +43,7 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
 </script>
 
 <template>
-  <Toolbar class="draggable" style="padding: 0.3rem; border-radius: 2.7rem">
+  <Toolbar class="draggable topbar" style="padding: 0.3rem; border-radius: 2.7rem">
     <template #start>
       <Tag rounded severity="primary" :value="props.title ?? 'Kotodama'" />
     </template>
@@ -115,6 +115,11 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
 
 .non-drag {
   -webkit-app-region: no-drag;
+}
+
+.dark-mode .topbar {
+  background-color: var(--p-gray-800);
+  border: 1px solid var(--p-gray-700);
 }
 
 .topbar-menu {

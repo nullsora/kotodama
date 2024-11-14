@@ -31,7 +31,7 @@ const name = computed(() => {
 <template>
   <div v-ripple :class="{ selected: selected }" class="w-full primary-border contact-card p-2">
     <img :src="avatarUrl" class="w-10 h-10 rounded-full" />
-    <div class="flex flex-col flex-justify-center flex-items-start ml-2">
+    <div class="flex flex-col justify-center items-start ml-2">
       <span class="text-sm">{{ name }}</span>
     </div>
   </div>
@@ -52,10 +52,16 @@ const name = computed(() => {
   background-color: var(--p-gray-50);
 }
 
-.contact-card.selected {
-  background-color: var(--p-primary-100);
+.dark-mode .contact-card {
+  color: white;
 }
-.contact-card.selected:hover {
-  background-color: var(--p-primary-200);
+
+.dark-mode .contact-card:hover {
+  background-color: var(--p-gray-700);
+}
+
+.contact-card.selected {
+  background-color: var(--p-primary-500);
+  color: white;
 }
 </style>

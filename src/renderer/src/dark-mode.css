@@ -1,0 +1,62 @@
+.dark-mode .primary-border {
+  border-color: var(--p-gray-700);
+}
+
+.dark-mode .scrollbar {
+  --scrollbar-track: var(--p-gray-700);
+  --scrollbar-thumb: var(--p-gray-500);
+}
+
+.dark-mode .p-card {
+  background-color: var(--p-gray-800);
+  color: var(--p-gray-100);
+  border-color: var(--p-gray-700);
+}
+
+.dark-mode .p-inputtext {
+  background-color: var(--p-gray-700);
+  color: var(--p-gray-100);
+  border-color: var(--p-gray-700);
+}
+
+.dark-mode .p-menu {
+  background-color: var(--p-gray-800);
+  border-color: var(--p-gray-700);
+}
+
+.dark-mode .p-menu-submenu-label {
+  color: var(--p-gray-100);
+}
+
+.dark-mode .p-menu-item-content {
+  color: var(--p-gray-100);
+}
+
+.dark-mode .p-dialog {
+  background-color: var(--p-gray-800);
+  color: var(--p-gray-100);
+  border-color: var(--p-gray-700);
+}
+
+.dark-mode .p-accordionheader {
+  background-color: var(--p-gray-800);
+  color: var(--p-gray-100);
+}
+
+.dark-mode .p-accordioncontent-content {
+  background-color: var(--p-gray-800);
+  color: var(--p-gray-100);
+}
+
+.gray-text {
+  color: var(--p-gray-500);
+}
+
+.dark-gray-text {
+  color: var(--p-gray-700);
+}
+
+.dark-mode .gray-text,
+.dark-mode .dark-gray-text {
+  color: var(--p-gray-100);
+}

@@ -179,35 +179,34 @@ watch(
 <template>
   <div
     ref="msgPanel"
-    class="msg-panel bg-gray-100 scrollbar scrollbar-w-1 scrollbar-rounded p-l-sm p-r-sm"
+    class="msg-panel scrollbar scrollbar-w-1 scrollbar-rounded p-l-sm p-r-sm"
     @scroll="handleScroll"
   >
     <div v-if="msgHistoryList.length > 0">
       <div v-for="(msgChainDate, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
-        <div class="w-full flex flex-row flex-justify-center flex-items-center">
+        <div class="w-full flex flex-row justify-center items-center">
           <Tag class="format-day" :value="formateDay(msgChainDate.time)" />
         </div>
         <div v-for="(msgChainNode, index) in msgChainDate.messages" :key="index">
           <div
-            v-if="checkSenderSelf(msgChainNode)"
-            class="w-full flex flex-row flex-justify-end flex-items-end m-b-sm"
+            class="flex flex-row items-end m-b-sm"
+            :class="checkSenderSelf(msgChainNode) ? 'justify-end' : 'justify-start'"
           >
-            <div class="flex flex-col flex-justify-end flex-items-end gap-1">
+            <UserAvatar v-if="!checkSenderSelf(msgChainNode)" :id="msgChainNode.sender.user_id" />
+            <div
+              class="flex flex-col justify-end gap-1"
+              :class="checkSenderSelf(msgChainNode) ? 'items-end' : 'items-start'"
+            >
               <div class="text-gray-500 text-xs">{{ getSenderName(msgChainDate, index) }}</div>
               <div v-for="(msg, msgIndex) in msgChainNode.data" :key="msgIndex">
-                <MsgCard :reverse="true" :message="msg" />
+                <MsgCard :reverse="checkSenderSelf(msgChainNode)" :message="msg" />
               </div>
             </div>
-            <UserAvatar :id="msgChainNode.sender.user_id" position="right" />
-          </div>
-          <div v-else class="w-full flex flex-row flex-justify-start flex-items-end m-b-sm">
-            <UserAvatar :id="msgChainNode.sender.user_id" />
-            <div class="flex flex-col flex-justify-end flex-items-start gap-1">
-              <div class="text-gray-500 text-xs">{{ getSenderName(msgChainDate, index) }}</div>
-              <div v-for="(msg, msgIndex) in msgChainNode.data" :key="msgIndex">
-                <MsgCard :message="msg" />
-              </div>
-            </div>
+            <UserAvatar
+              v-if="checkSenderSelf(msgChainNode)"
+              :id="msgChainNode.sender.user_id"
+              position="right"
+            />
           </div>
         </div>
       </div>
@@ -219,6 +218,12 @@ watch(
 .msg-panel {
   width: 100%;
   height: calc(100vh - 10.35rem);
+
+  background-color: var(--p-gray-100);
+}
+
+.dark-mode .msg-panel {
+  background-color: var(--p-gray-800);
 }
 
 .format-day {

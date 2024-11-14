@@ -13,17 +13,25 @@ const props = defineProps<{
 
 <template>
   <div class="w-full h-full chat-panel primary-border">
-    <div v-if="props.chatInfo" class="w-full flex flex-col flex-justify-start flex-items-center">
+    <div v-if="props.chatInfo" class="w-full flex flex-col justify-start items-center">
       <ChatInfo class="w-full" :chat-info="props.chatInfo" />
       <MsgPanel :chat-info="props.chatInfo" />
       <MsgSender :chat-info="props.chatInfo" />
     </div>
-    <div v-else class="w-full h-full bg-gray-100" />
+    <div v-else class="chat-panel-skeleton w-full h-full rd-2" />
   </div>
 </template>
 
 <style scoped>
 .chat-panel {
   height: calc(100vh - 4.35rem);
+}
+
+.chat-panel-skeleton {
+  background-color: var(--p-gray-50);
+}
+
+.dark-mode .chat-panel-skeleton {
+  background-color: var(--p-gray-800);
 }
 </style>

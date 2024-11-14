@@ -65,41 +65,38 @@ const parseTime = (time: number | undefined) => {
 
 <template>
   <div v-ripple :class="{ selected: selected }" class="primary-border p-2 chat-card">
-    <div class="flex flex-row flex-justify-start flex-items-center gap-2">
+    <div class="flex flex-row justify-start items-center gap-2">
       <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" />
-      <div class="flex flex-col flex-justify-center flex-items-start gap-0.3">
-        <div class="text-sm text-bold overflow-text">
-          <i
-            class="pi"
+      <div class="flex flex-col justify-center items-start gap-0.3">
+        <div class="flex flex-row items-center">
+          <div
+            class="mr-1 chat-name"
             :class="
               props.chat.type === 'private'
                 ? 'i-fluent-chat-24-regular'
                 : 'i-fluent-chat-multiple-24-regular'
             "
           />
-          {{ getName }}
+          <div class="chat-name text-sm overflow-text">
+            {{ getName }}
+          </div>
         </div>
-        <div class="text-sm text-gray-500 overflow-text">
+        <div :class="selected ? '' : ' text-gray-500'" class="text-sm overflow-text">
           <Suspense>
             <TextShortMsg :msg="props.chat.latestMsg" />
           </Suspense>
         </div>
       </div>
     </div>
-    <div class="flex flex-col flex-justify-between flex-items-center">
-      <div class="text-xs text-gray-500 text-end">{{ parseTime(props.chat?.latestMsg?.time) }}</div>
+    <div class="flex flex-col justify-between items-center">
+      <div :class="selected ? '' : ' text-gray-500'" class="text-xs text-end">
+        {{ parseTime(props.chat?.latestMsg?.time) }}
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.overflow-text {
-  max-width: 9rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .chat-card {
   display: flex;
   flex-direction: row;
@@ -110,14 +107,32 @@ const parseTime = (time: number | undefined) => {
   -webkit-user-select: none;
 }
 
+.dark-mode .chat-name {
+  color: white;
+}
+
+.overflow-text {
+  max-width: 8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .chat-card:hover {
   background-color: var(--p-gray-50);
 }
 
-.chat-card.selected {
-  background-color: var(--p-primary-100);
+.dark-mode .chat-card:hover {
+  background-color: var(--p-gray-700);
 }
+
+.chat-card.selected {
+  background-color: var(--p-primary-500);
+  color: white;
+}
+
 .chat-card.selected:hover {
-  background-color: var(--p-primary-200);
+  background-color: var(--p-primary-500);
+  color: white;
 }
 </style>

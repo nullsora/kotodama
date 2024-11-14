@@ -16,6 +16,7 @@ import 'primeicons/primeicons.css'
 import 'virtual:uno.css'
 
 import './animation.css'
+import './dark-mode.css'
 
 const app = createApp(App)
 

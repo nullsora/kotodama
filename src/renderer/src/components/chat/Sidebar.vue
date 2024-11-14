@@ -40,7 +40,7 @@ const deleteContactGroup = (index: number, event: Event) => {
 
 <template>
   <div class="sidebar primary-border">
-    <div class="flex flex-col flex-justify-start flex-items-center gap-2">
+    <div class="flex flex-col justify-start items-center gap-2">
       <ContactGroup
         group-name="所有对话"
         icon-class="i-fluent-color-chat-multiple-24"
@@ -80,13 +80,13 @@ const deleteContactGroup = (index: number, event: Event) => {
               v-for="(group, index) in runtimeData.user.value.contactGroups"
               :key="index"
               v-ripple
-              class="flex flex-row flex-justify-between flex-items-center gap-2 mb-2 select-none"
+              class="flex flex-row justify-between items-center gap-2 mb-2 select-none"
             >
-              <div class="flex flex-row flex-items-center gap-2">
+              <div class="flex flex-row items-center gap-2">
                 <i class="pi" :class="group.iconClass" />
                 <div class="primary-text">{{ group.name }}</div>
               </div>
-              <div class="flex flex-row flex-justify-end flex-items-center gap-2">
+              <div class="flex flex-row justify-end items-center gap-2">
                 <Button
                   icon="i-fluent-edit-24-regular"
                   text
@@ -123,7 +123,7 @@ const deleteContactGroup = (index: number, event: Event) => {
             }
           "
         >
-          <div class="flex flex-row flex-items-center gap-2">
+          <div class="flex flex-row items-center gap-2">
             <i class="i-fluent-color-add-circle-24 text-size-5" />
             新建分组
           </div>

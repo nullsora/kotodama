@@ -44,9 +44,9 @@ watch(props, getOringinalMsg)
 </script>
 
 <template>
-  <div class="flex flex-col flex-justify-start gap-2 flex-items-start reply-msg">
+  <div class="flex flex-col justify-start gap-2 items-start reply-msg">
     <div class="reply-msg-sender text-xs font-bold">{{ getName }}</div>
-    <div v-if="onlyImage" class="flex flex-row flex-justify-start gap-2 flex-items-center">
+    <div v-if="onlyImage" class="flex flex-row justify-start gap-2 items-center">
       <Suspense>
         <MsgImage
           class="max-w-50 max-h-50"
@@ -54,7 +54,7 @@ watch(props, getOringinalMsg)
         />
       </Suspense>
     </div>
-    <div v-else class="text-xs text-gray-500">
+    <div v-else class="text-xs msg-content">
       {{ renderShortMsg }}
     </div>
   </div>
@@ -68,7 +68,25 @@ watch(props, getOringinalMsg)
   padding: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+.dark-mode .reply-msg {
+  border-left: 0.2rem solid var(--p-primary-100);
+  background-color: var(--p-primary-500);
+}
+
 .reply-msg-sender {
   color: var(--p-primary-500);
+}
+
+.dark-mode .reply-msg-sender {
+  color: var(--p-primary-100);
+}
+
+.msg-content {
+  color: var(--p-gray-500);
+}
+
+.dark-mode .msg-content {
+  color: var(--p-gray-100);
 }
 </style>

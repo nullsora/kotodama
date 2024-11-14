@@ -7,5 +7,5 @@ defineProps<{
 </script>
 
 <template>
-  <span class="text-sm whitespace-pre-wrap">{{ msg.data.text }}</span>
+  <span class="max-w-100 text-sm whitespace-pre-wrap">{{ msg.data.text }}</span>
 </template>

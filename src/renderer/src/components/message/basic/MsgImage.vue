@@ -4,7 +4,15 @@ import { DataManager } from '@renderer/functions/data_manager'
 
 const runtimeData = inject('runtimeData') as DataManager
 
-const props = defineProps<{ src: string }>()
+const props = withDefaults(
+  defineProps<{
+    src: string
+    showMenu?: boolean
+  }>(),
+  {
+    showMenu: true
+  }
+)
 
 const res = ref('')
 const menu = ref()
@@ -28,7 +36,7 @@ const menuItems = ref([
 ])
 
 const onImgRightClick = (e: MouseEvent) => {
-  menu.value.show(e)
+  if (props.showMenu) menu.value.show(e)
 }
 
 const getImg = async () => {
@@ -58,6 +66,6 @@ watch(props, async () => {
       @contextmenu="onImgRightClick"
     />
     <Skeleton v-else v-bind="$attrs" size="15rem" />
-    <ContextMenu ref="menu" :model="menuItems" />
+    <ContextMenu v-if="showMenu" ref="menu" :model="menuItems" />
   </div>
 </template>

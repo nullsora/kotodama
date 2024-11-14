@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, provide, ref } from 'vue'
+import { computed, onMounted, provide, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import localforage from 'localforage'
 
@@ -22,16 +22,21 @@ import FadeTransition from './components/misc/FadeTransition.vue'
 const config = useConfigStore()
 
 const currentPage = ref(Pages.Chat)
-const darkModeClass = computed(() => (config.darkMode ? 'dark-mode' : ''))
 
 const runtimeData = new DataManager(storeToRefs(config).userSettings)
 
 onMounted(() => {
   config.loadFromStorage()
   runtimeData.watchConnect()
+  runtimeData.clearImgBufferCache()
 
   config.$subscribe(
     async (_mutation, state) => {
+      if (state.darkMode) {
+        document.body.classList.add('dark-mode')
+      } else {
+        document.body.classList.remove('dark-mode')
+      }
       await localforage.setItem('config', JSON.stringify(state))
     },
     { detached: true }
@@ -41,11 +46,12 @@ onMounted(() => {
 
   Logger.getInstance().debug('watching connection')
 })
+
 provide('runtimeData', runtimeData)
 </script>
 
 <template>
-  <div :class="darkModeClass" class="overflow-hidden">
+  <div class="overflow-hidden">
     <MainLayout>
       <template #header>
         <TopBar

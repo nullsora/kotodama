@@ -69,16 +69,16 @@ const sendMsg = async () => {
 </script>
 
 <template>
-  <div class="w-full h-full p-1 flex flex-row flex-justify-between flex-items-end gap-1">
-    <Button icon="i-fluent-add-circle-24-regular" severity="secondary" text />
+  <div class="w-full h-12 p-1 flex flex-row justify-between items-end gap-1">
+    <Button icon="i-fluent-add-circle-24-regular w-5 h-5" severity="secondary" text />
     <InputText
       v-model="sendText"
       class="w-4/5 h-10 scrollbar scrollbar-w-1 scrollbar-rounded"
       @keydown="watchKeydown"
     />
-    <Button icon="i-fluent-emoji-24-regular" severity="secondary" text />
+    <Button icon="i-fluent-emoji-24-regular w-5 h-5" severity="secondary" text />
     <Button
-      icon="i-fluent-send-24-regular"
+      icon="i-fluent-send-24-regular w-5 h-5"
       text
       :severity="invalid ? 'danger' : 'primary'"
       :disabled="invalid"

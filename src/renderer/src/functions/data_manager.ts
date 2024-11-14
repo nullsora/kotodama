@@ -303,4 +303,29 @@ export class DataManager {
       }
     } else return await fetchBuffer()
   }
+
+  async clearImgBufferCache(all: boolean = false) {
+    let imgCache = await localforage.getItem<{
+      [url: string]: {
+        buffer: ArrayBuffer
+        savedTime: number
+      }
+    }>('img-cache')
+
+    if (!imgCache) {
+      imgCache = {}
+      await localforage.setItem('img-cache', imgCache)
+    }
+
+    if (all) {
+      await localforage.removeItem('img-cache')
+    } else {
+      for (const url in imgCache) {
+        if (Date.now() - imgCache[url].savedTime > 1000 * 60 * 60 * 24) {
+          delete imgCache[url]
+        }
+      }
+      await localforage.setItem('img-cache', imgCache)
+    }
+  }
 }

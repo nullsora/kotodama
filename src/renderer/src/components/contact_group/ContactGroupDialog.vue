@@ -125,7 +125,7 @@ watch(
     <template #header>
       <div class="text-xl font-bold">新建分组</div>
     </template>
-    <div class="mb-sm mt-sm flex flex-row flex-justify-between flex-items-center gap-2">
+    <div class="mb-sm mt-sm flex flex-row justify-between items-center gap-2">
       <FloatLabel class="w-full" variant="on">
         <InputText
           id="token"
