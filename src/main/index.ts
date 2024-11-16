@@ -24,8 +24,18 @@ function createWindow(): void {
 
   registerIpc(mainWindow)
 
+  // CrossOrigin settings
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    const headers = details.responseHeaders ?? {}
+    headers['Access-Control-Allow-Origin'] = ['*']
+    callback({
+      responseHeaders: headers
+    })
+  })
+
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.openDevTools()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

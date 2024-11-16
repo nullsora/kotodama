@@ -126,6 +126,21 @@ const getSenderName = (node: PrivateMsgChainNode | GroupMsgChainNode, index: num
   } else return ''
 }
 
+const getPosition = (
+  node: PrivateMessage<AnyMessage>[] | GroupMessage<AnyMessage>[],
+  index: number
+) => {
+  if (node.length === 1) {
+    return 'single'
+  } else if (index === 0) {
+    return 'start'
+  } else if (index === node.length - 1) {
+    return 'end'
+  } else {
+    return 'mid'
+  }
+}
+
 const appendMsgHistory = async (append: boolean = false, count: number = 30) => {
   const _count = !append ? count : msgHistoryList.value.length + count
   if (props.chatInfo?.type === 'friend') {
@@ -185,7 +200,7 @@ watch(
     <div v-if="msgHistoryList.length > 0">
       <div v-for="(msgChainDate, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
         <div class="w-full flex flex-row justify-center items-center">
-          <Tag class="format-day" :value="formateDay(msgChainDate.time)" />
+          <Tag class="format-day" rounded :value="formateDay(msgChainDate.time)" />
         </div>
         <div v-for="(msgChainNode, index) in msgChainDate.messages" :key="index">
           <div
@@ -199,7 +214,11 @@ watch(
             >
               <div class="text-gray-500 text-xs">{{ getSenderName(msgChainDate, index) }}</div>
               <div v-for="(msg, msgIndex) in msgChainNode.data" :key="msgIndex">
-                <MsgCard :reverse="checkSenderSelf(msgChainNode)" :message="msg" />
+                <MsgCard
+                  :reverse="checkSenderSelf(msgChainNode)"
+                  :position="getPosition(msgChainNode.data, msgIndex)"
+                  :message="msg"
+                />
               </div>
             </div>
             <UserAvatar
@@ -219,16 +238,16 @@ watch(
   width: 100%;
   height: calc(100vh - 10.35rem);
 
-  background-color: var(--p-gray-100);
+  background-color: rgba(243, 244, 246, 0.55);
 }
 
 .dark-mode .msg-panel {
-  background-color: var(--p-gray-800);
+  background-color: rgba(32, 41, 55, 0.65);
 }
 
 .format-day {
   background-color: var(--p-slate-400);
-  opacity: 0.7;
+  opacity: 0.6;
   color: var(--p-gray-900);
   font-weight: 600;
   font-size: 0.9rem;

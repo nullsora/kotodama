@@ -39,7 +39,7 @@ const deleteContactGroup = (index: number, event: Event) => {
 </script>
 
 <template>
-  <div class="sidebar primary-border">
+  <div class="sidebar glassmorphism">
     <div class="flex flex-col justify-start items-center gap-2">
       <ContactGroup
         group-name="所有对话"

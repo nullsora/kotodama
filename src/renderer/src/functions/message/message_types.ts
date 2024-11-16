@@ -70,6 +70,7 @@ export type MessageTypes = {
   Text: TextMessage
   QQFace: QQFaceMessage
   Image: ImageMessage
+  MFace: MFaceMessage
   Record: RecordMessage
   Video: VideoMessage
   At: AtMessage
@@ -92,6 +93,7 @@ export type AnyMessage =
   | TextMessage
   | QQFaceMessage
   | ImageMessage
+  | MFaceMessage
   | RecordMessage
   | VideoMessage
   | AtMessage
@@ -130,12 +132,25 @@ type ImageMessage = {
     file: string
     /** 图片类型, 如果是闪照则为`'flash'`, 否则无此项 */
     type: 'flash' | undefined
-    /** 1为表情 */
-    sub_type: 0 | 1
+    /** 非零为表情 */
+    sub_type?: number
+    /** 非零为表情 */
+    subType?: number
     /** 图片URL */
     url: string
     file_size?: string
     file_unique?: string
+  }
+}
+
+type MFaceMessage = {
+  type: 'mface'
+  data: {
+    summary: string
+    url: string
+    emoji_id: string
+    emoji_package_id: number
+    key: string
   }
 }
 

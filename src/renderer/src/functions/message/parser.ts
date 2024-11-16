@@ -65,7 +65,7 @@ export class Parser {
 
 const parseNoticeFuncs = {
   // 心跳包
-  meta_event: (type: string, msg: { [key: string]: unknown }) => {
+  meta_event: (_type: string, _msg: { [key: string]: unknown }) => {
     // TODO: 记录心跳相关信息
     // DataManager.getInstance().connected = true
   },

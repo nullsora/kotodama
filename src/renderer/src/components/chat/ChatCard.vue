@@ -8,9 +8,9 @@ const props = defineProps<{ chat: Chat; selected: boolean }>()
 
 const getAvatarUrl = computed(() => {
   if (props.chat.type === 'private') {
-    return `/api/qq_avatar/g?b=qq&s=0&nk=${(props.chat.data as Friend).user_id}`
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${(props.chat.data as Friend).user_id}`
   } else {
-    return `/api/qq_group_avatar/gh/${(props.chat.data as Group).group_id}/${(props.chat.data as Group).group_id}/640`
+    return `https://p.qlogo.cn/gh/${(props.chat.data as Group).group_id}/${(props.chat.data as Group).group_id}/640`
   }
 })
 
@@ -64,9 +64,9 @@ const parseTime = (time: number | undefined) => {
 </script>
 
 <template>
-  <div v-ripple :class="{ selected: selected }" class="primary-border p-2 chat-card">
+  <div v-ripple :class="{ selected: selected }" class="glassmorphism p-2 chat-card">
     <div class="flex flex-row justify-start items-center gap-2">
-      <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" />
+      <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
       <div class="flex flex-col justify-center items-start gap-0.3">
         <div class="flex flex-row items-center">
           <div
@@ -81,7 +81,7 @@ const parseTime = (time: number | undefined) => {
             {{ getName }}
           </div>
         </div>
-        <div :class="selected ? '' : ' text-gray-500'" class="text-sm overflow-text">
+        <div :class="selected ? '' : 'short-msg'" class="text-sm overflow-text">
           <Suspense>
             <TextShortMsg :msg="props.chat.latestMsg" />
           </Suspense>
@@ -111,8 +111,16 @@ const parseTime = (time: number | undefined) => {
   color: white;
 }
 
+.short-msg {
+  color: var(--p-gray-500);
+}
+
+.dark-mode .short-msg {
+  color: var(--p-gray-400);
+}
+
 .overflow-text {
-  max-width: 8rem;
+  max-width: 7rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -40,8 +40,14 @@ const onImgRightClick = (e: MouseEvent) => {
 }
 
 const getImg = async () => {
-  const buffer = await runtimeData.getImgBuffer(props.src)
-  blob.value = new Blob([buffer], { type: 'image/png' })
+  // if (
+  //   props.src.startsWith('https://multimedia.nt.qq.com.cn') ||
+  //   props.src.startsWith('https://gchat.qpic.cn') ||
+  //   props.src.startsWith('https://gxh.vip.qq.com')
+  // ) {
+  //   return props.src
+  // }
+  blob.value = await runtimeData.getImgBlob(props.src)
   return URL.createObjectURL(blob.value)
 }
 

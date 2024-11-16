@@ -3,11 +3,11 @@ defineProps<{ title?: string; description?: string }>()
 </script>
 
 <template>
-  <div class="setting-item primary-border">
-    <div class="">
+  <div class="setting-item glassmorphism">
+    <div>
       <div class="flex flex-col flex-item-start justify-start">
         <div class="font-size-4 font-bold">{{ title ?? '' }}</div>
-        <div v-if="description" class="text-gray-500 font-size-3">{{ description }}</div>
+        <div v-if="description" class="description font-size-3">{{ description }}</div>
       </div>
     </div>
     <div>
@@ -27,7 +27,14 @@ defineProps<{ title?: string; description?: string }>()
 }
 
 .dark-mode .setting-item {
-  background-color: var(--p-gray-800);
   color: white;
+}
+
+.description {
+  color: var(--p-gray-500);
+}
+
+.dark-mode .description {
+  color: var(--p-gray-300);
 }
 </style>

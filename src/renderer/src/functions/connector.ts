@@ -1,6 +1,7 @@
 import { Logger } from './logger'
 import { Parser } from './message/parser'
 
+// @ts-ignore allow window
 const { onebot, crypto } = window.kotodama
 
 const Connector = {

@@ -11,8 +11,19 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = '[表情]'
       break
     case 'image':
-      if (msg.data.file === 'marketface' || msg.data.sub_type === 1) shortMsg = '[动画表情]'
+      if (
+        (() => {
+          if (msg.data.file === 'marketface') return true
+          else if (msg.data.sub_type) return true
+          else if (msg.data.subType) return true
+          else return false
+        })()
+      )
+        shortMsg = '[动画表情]'
       else shortMsg = '[图片]'
+      break
+    case 'mface':
+      shortMsg = msg.data.summary
       break
     case 'record':
       shortMsg = '[语音]'
@@ -49,10 +60,12 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
     case 'forward':
       shortMsg = '[聊天记录]'
       break
-    // TODO: XML & JSON 消息格式解析
+    // TODO: XML 消息格式解析
     case 'xml':
+      shortMsg = '[XML]'
+      break
     case 'json':
-      shortMsg = '[XML/JSON]'
+      shortMsg = JSON.parse(msg.data.data).prompt
       break
     case 'file':
       shortMsg = `[文件] ${msg.data.file}`
@@ -61,7 +74,8 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = '[Markdown]'
       break
     default:
-      shortMsg = '[解析错误]'
+      // @ts-ignore 未知消息类型
+      shortMsg = `[${msg.type}: 解析错误]`
       console.log(msg)
   }
   return shortMsg
@@ -90,6 +104,7 @@ const parseAtMsg = async (msg: string, sendGroupId?: number) => {
 export const msgListToShortMsg = async (
   message: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
 ) => {
+  if (!message || !message.message) return null
   if (message.message.length === 0) return '[已撤回的消息]'
   let shortMsg = ''
   for (const msg of message.message) {

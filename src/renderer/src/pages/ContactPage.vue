@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import ContactPanel from '@renderer/components/contact/ContactPanel.vue'
 import ContactPageLayout from '@renderer/components/layout/ContactPageLayout.vue'
 import ContactInfo from '@renderer/components/contact/ContactInfo.vue'
+import FadeTransition from '@renderer/components/misc/FadeTransition.vue'
 
 const selectedContact = ref<{
   type: 'friend' | 'group'
@@ -16,7 +17,9 @@ const selectedContact = ref<{
       <ContactPanel v-model:selected-contact="selectedContact" />
     </template>
     <template #info>
-      <ContactInfo v-if="selectedContact" :contact="selectedContact" />
+      <FadeTransition>
+        <ContactInfo v-if="selectedContact" :contact="selectedContact" />
+      </FadeTransition>
     </template>
   </ContactPageLayout>
 </template>

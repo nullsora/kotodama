@@ -39,7 +39,7 @@ const getSelected = (chat: Chat) => {
 </script>
 
 <template>
-  <div class="h-full primary-border p-2 overflow-hidden">
+  <div class="h-full glassmorphism p-2 overflow-hidden">
     <div class="w-full flex justify-center items-center mb-2">
       <ButtonGroup class="w-1/2 mt-2">
         <Button

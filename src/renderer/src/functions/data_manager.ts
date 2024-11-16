@@ -6,6 +6,7 @@ import localforage from 'localforage'
 
 export class DataManager {
   private static instance: DataManager
+  // @ts-ignore allow window
   private static onebot = window.kotodama.onebot
 
   private static sortChats(chats: Chat[]) {
@@ -268,10 +269,10 @@ export class DataManager {
     return latestMsg
   }
 
-  async getImgBuffer(url: string) {
+  async getImgBlob(url: string) {
     let imgCache = await localforage.getItem<{
       [url: string]: {
-        buffer: ArrayBuffer
+        blob: Blob
         savedTime: number
       }
     }>('img-cache')
@@ -281,27 +282,29 @@ export class DataManager {
       await localforage.setItem('img-cache', imgCache)
     }
 
-    const fetchBuffer = async () => {
+    const fetchBlob = async () => {
+      // @ts-ignore allow window
       const res = await window.kotodama.web.fetchBuffer(url)
+      const blob = new Blob([res], { type: 'image/png' })
       imgCache[url] = {
-        buffer: res,
+        blob: blob,
         savedTime: Date.now()
       }
       await localforage.setItem('img-cache', imgCache)
-      return res
+      return blob
     }
 
-    const imgBuffer = imgCache?.[url]?.buffer
-    if (imgBuffer) {
+    const imgBlob = imgCache?.[url]?.blob
+    if (imgBlob) {
       const nowDate = Date.now()
       if (nowDate - imgCache[url].savedTime < 1000 * 60 * 60 * 24) {
-        return imgBuffer
+        return imgBlob
       } else {
         delete imgCache[url]
         await localforage.setItem('img-cache', imgCache)
-        return await fetchBuffer()
+        return await fetchBlob()
       }
-    } else return await fetchBuffer()
+    } else return await fetchBlob()
   }
 
   async clearImgBufferCache(all: boolean = false) {

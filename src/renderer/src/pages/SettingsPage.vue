@@ -8,6 +8,8 @@ import { useConfigStore } from '@renderer/stores/ConfigStore'
 import SettingItem from '@renderer/components/misc/SettingItem.vue'
 import DebugWS from '@renderer/components/misc/DebugWS.vue'
 import localforage from 'localforage'
+import PrimaryColorSettings from '@renderer/components/settings/PrimaryColorSettings.vue'
+import BackgroundSettings from '@renderer/components/settings/BackgroundSettings.vue'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -107,10 +109,12 @@ const confirmClearAll = (event) => {
         <SettingItem :title="'窗口标题'" :description="'设置窗口标题'">
           <InputText v-model="config.windowTitle" />
         </SettingItem>
-        <SettingItem class="m-t-sm" :title="'RESET'" :description="'重置所有设置'">
+        <PrimaryColorSettings />
+        <BackgroundSettings />
+        <SettingItem class="mt-sm" :title="'RESET'" :description="'重置所有设置'">
           <Button label="重置" severity="danger" @click="confirmResetConfig($event)" />
         </SettingItem>
-        <SettingItem class="m-t-sm" :title="'CLEAR ALL'" :description="'CLEAR ALL'">
+        <SettingItem class="mt-sm" :title="'CLEAR ALL'" :description="'CLEAR ALL'">
           <Button label="CLEAR" severity="danger" @click="confirmClearAll($event)" />
         </SettingItem>
       </ScrollPanel>

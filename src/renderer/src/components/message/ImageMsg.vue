@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import MsgImage from './basic/MsgImage.vue'
 
 const props = defineProps<{
-  msg: MessageTypes['Image']
+  msg: MessageTypes['Image'] | MessageTypes['MFace']
 }>()
 
 const imageUrl = computed(
@@ -12,7 +12,12 @@ const imageUrl = computed(
 )
 
 const isFace = computed(() => {
-  return props.msg.data.file === 'marketface' || props.msg.data.sub_type === 1
+  if (props.msg.type === 'mface') return true
+
+  if (props.msg.data.file === 'marketface') return true
+  else if (props.msg.data.sub_type) return true
+  else if (props.msg.data.subType) return true
+  else return false
 })
 
 const imageClass = computed(() => (isFace.value ? 'max-w-30 max-h-30' : 'max-w-80 max-h-80'))

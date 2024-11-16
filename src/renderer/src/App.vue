@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, provide, ref, watch } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import localforage from 'localforage'
 
@@ -51,7 +51,7 @@ provide('runtimeData', runtimeData)
 </script>
 
 <template>
-  <div class="overflow-hidden">
+  <div class="overflow-hidden main-layout">
     <MainLayout>
       <template #header>
         <TopBar
@@ -71,8 +71,8 @@ provide('runtimeData', runtimeData)
             <SettingsPage
               v-else-if="runtimeData.connected.value && currentPage === Pages.Settings"
             />
-            <LoginPage v-else />
           </FadeTransition>
+          <LoginPage v-if="!runtimeData.connected.value" />
         </div>
       </template>
     </MainLayout>
@@ -80,9 +80,12 @@ provide('runtimeData', runtimeData)
   </div>
 </template>
 
-<style>
-::selection {
-  background-color: var(--p-gray-300);
-  opacity: 0.7;
+<style scoped>
+.main-layout {
+  background: var(--k-light-theme-bg);
+}
+
+.dark-mode .main-layout {
+  background: var(--k-dark-theme-bg);
 }
 </style>

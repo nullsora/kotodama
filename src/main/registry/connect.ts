@@ -3,12 +3,6 @@ import { Connector } from '../connection/connector'
 
 let connector: Connector | null = null
 
-type ImageCache = {
-  url: string
-  buffer: ArrayBuffer
-  savedTime: number
-}[]
-
 export default (window: BrowserWindow) => {
   ipcMain.handle('onebot:connect', (_event, { url, token }) => {
     if (!connector) {

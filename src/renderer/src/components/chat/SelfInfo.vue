@@ -5,7 +5,7 @@ import { DataManager } from '@renderer/functions/data_manager'
 const runtimeData = inject('runtimeData') as DataManager
 
 const avatarUrl = computed(() => {
-  return `/api/qq_avatar/g?b=qq&s=0&nk=${runtimeData.userInfo.value.main.user_id ?? 10000}`
+  return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${runtimeData.userInfo.value.main.user_id ?? 10000}`
 })
 
 const genderSymbol = computed(() => {
@@ -26,7 +26,7 @@ const togglePopup = async (event: unknown) => {
   <Menu id="user_info_panel" ref="menu" :popup="true" class="p-sm">
     <template #start>
       <div class="flex flex-rol justify-between items-center">
-        <img :src="avatarUrl" loading="lazy" class="w-12 h-12 rd-full" />
+        <img :src="avatarUrl" loading="lazy" class="w-12 h-12 rd-full" crossorigin="anonymous" />
         <div class="text-right">
           <div class="font-bold text-lg dark-gray-text">
             <i
@@ -68,7 +68,7 @@ const togglePopup = async (event: unknown) => {
       aria-controls="user_info_panel"
       @click="togglePopup"
     >
-      <img :src="avatarUrl" loading="lazy" class="w-10 rd-10" />
+      <img :src="avatarUrl" loading="lazy" class="w-10 rd-10" crossorigin="anonymous" />
     </Button>
   </OverlayBadge>
 </template>

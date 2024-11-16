@@ -6,6 +6,27 @@ export enum Pages {
   Settings = 'settings'
 }
 
+export enum PrimaryColor {
+  Noir = 'slate',
+  Emerald = 'emerald',
+  Green = 'green',
+  Lime = 'lime',
+  Red = 'red',
+  Orange = 'orange',
+  Amber = 'amber',
+  Yellow = 'yellow',
+  Teal = 'teal',
+  Cyan = 'cyan',
+  Sky = 'sky',
+  Blue = 'blue',
+  Indigo = 'indigo',
+  Violet = 'violet',
+  Purple = 'purple',
+  Fuchsia = 'fuchsia',
+  Pink = 'pink',
+  Rose = 'rose'
+}
+
 // API body types
 
 export interface MsgBody<T> {

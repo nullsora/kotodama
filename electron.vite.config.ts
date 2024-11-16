@@ -20,20 +20,7 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    server: {
-      proxy: {
-        '/api/qq_avatar': {
-          target: 'https://q1.qlogo.cn',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/qq_avatar/, '')
-        },
-        '/api/qq_group_avatar': {
-          target: 'https://p.qlogo.cn',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/qq_group_avatar/, '')
-        }
-      }
-    },
+    server: {},
     plugins: [
       vue(),
       UnoCSS(),

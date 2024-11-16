@@ -38,7 +38,9 @@ const fetchResult = async () => {
           </div>
 
           <ScrollPanel class="w-full h-80 m-b-2">
-            <Message severity="success" class="w-full">{{ result }}</Message>
+            <Message severity="success" class="w-full whitespace-pre-wrap break-words">
+              {{ result }}
+            </Message>
           </ScrollPanel>
         </div>
       </template>

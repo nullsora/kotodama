@@ -43,45 +43,41 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
 </script>
 
 <template>
-  <Toolbar class="draggable topbar" style="padding: 0.3rem; border-radius: 2.7rem">
-    <template #start>
-      <Tag rounded severity="primary" :value="props.title ?? 'Kotodama'" />
-    </template>
-    <template v-if="showMenu" #center>
-      <div class="non-drag topbar-menu">
-        <Button
-          class="menu-btn"
-          size="small"
-          rounded
-          :severity="getMenuButtonStyle(Pages.Chat)"
-          @click="currentPage = Pages.Chat"
-        >
-          <i class="i-fluent-color-chat-multiple-24 font-size-4" />
-          {{ currentPage === Pages.Chat ? '聊天' : '' }}
-        </Button>
-        <Button
-          class="menu-btn"
-          size="small"
-          rounded
-          :severity="getMenuButtonStyle(Pages.Contacts)"
-          @click="currentPage = Pages.Contacts"
-        >
-          <i class="i-fluent-color-people-24 font-size-4" />
-          {{ currentPage === Pages.Contacts ? '联系人' : '' }}
-        </Button>
-        <Button
-          class="menu-btn"
-          size="small"
-          rounded
-          :severity="getMenuButtonStyle(Pages.Settings)"
-          @click="currentPage = Pages.Settings"
-        >
-          <i class="i-fluent-color-wrench-24 font-size-4" />
-          {{ currentPage === Pages.Settings ? '设置' : '' }}
-        </Button>
-      </div>
-    </template>
-    <template #end>
+  <div class="draggable topbar glassmorphism">
+    <Tag rounded severity="primary" :value="props.title ?? 'Kotodama'" />
+    <div v-if="showMenu" class="non-drag topbar-menu">
+      <Button
+        class="menu-btn"
+        size="small"
+        rounded
+        :severity="getMenuButtonStyle(Pages.Chat)"
+        @click="currentPage = Pages.Chat"
+      >
+        <i class="i-fluent-color-chat-multiple-24 font-size-4" />
+        {{ currentPage === Pages.Chat ? '聊天' : '' }}
+      </Button>
+      <Button
+        class="menu-btn"
+        size="small"
+        rounded
+        :severity="getMenuButtonStyle(Pages.Contacts)"
+        @click="currentPage = Pages.Contacts"
+      >
+        <i class="i-fluent-color-people-24 font-size-4" />
+        {{ currentPage === Pages.Contacts ? '联系人' : '' }}
+      </Button>
+      <Button
+        class="menu-btn"
+        size="small"
+        rounded
+        :severity="getMenuButtonStyle(Pages.Settings)"
+        @click="currentPage = Pages.Settings"
+      >
+        <i class="i-fluent-color-wrench-24 font-size-4" />
+        {{ currentPage === Pages.Settings ? '设置' : '' }}
+      </Button>
+    </div>
+    <div>
       <Button
         class="non-drag"
         size="small"
@@ -104,8 +100,8 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
           <i class="i-fluent-dismiss-24-regular font-size-4" />
         </Button>
       </ButtonGroup>
-    </template>
-  </Toolbar>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -117,9 +113,13 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
   -webkit-app-region: no-drag;
 }
 
-.dark-mode .topbar {
-  background-color: var(--p-gray-800);
-  border: 1px solid var(--p-gray-700);
+.topbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem;
+  border-radius: 3rem;
 }
 
 .topbar-menu {

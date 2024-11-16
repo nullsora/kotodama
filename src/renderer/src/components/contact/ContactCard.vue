@@ -12,9 +12,9 @@ const props = defineProps<{
 
 const avatarUrl = computed(() => {
   if (props.contact.type === 'private') {
-    return `/api/qq_avatar/g?b=qq&s=0&nk=${(props.contact.data as Friend).user_id}`
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${(props.contact.data as Friend).user_id}`
   } else {
-    return `/api/qq_group_avatar/gh/${(props.contact.data as Group).group_id}/${(props.contact.data as Group).group_id}/640`
+    return `https://p.qlogo.cn/gh/${(props.contact.data as Group).group_id}/${(props.contact.data as Group).group_id}/640`
   }
 })
 const name = computed(() => {
@@ -30,7 +30,7 @@ const name = computed(() => {
 
 <template>
   <div v-ripple :class="{ selected: selected }" class="w-full primary-border contact-card p-2">
-    <img :src="avatarUrl" class="w-10 h-10 rounded-full" />
+    <img :src="avatarUrl" class="w-10 h-10 rounded-full" crossorigin="anonymous" />
     <div class="flex flex-col justify-center items-start ml-2">
       <span class="text-sm">{{ name }}</span>
     </div>

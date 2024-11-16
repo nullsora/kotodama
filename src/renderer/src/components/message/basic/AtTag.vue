@@ -34,7 +34,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Tag>
+  <Tag rounded>
     <span class="text-sm">@{{ name }}</span>
   </Tag>
 </template>

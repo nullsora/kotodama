@@ -27,7 +27,7 @@ const getMsgContent = async () => {
     }撤回了一条消息`
 
   let showMsg = ''
-  if (props.msg?.message) showMsg = await msgListToShortMsg(props.msg)
+  if (props.msg?.message) showMsg = (await msgListToShortMsg(props.msg)) ?? ''
 
   return `${sender}: ${showMsg}`
 }

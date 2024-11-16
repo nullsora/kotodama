@@ -46,9 +46,9 @@ const chatName = computed(() => {
 
 const avartarUrl = computed(() => {
   if (props.chatInfo?.type === 'friend') {
-    return `/api/qq_avatar/g?b=qq&s=0&nk=${props.chatInfo.id}`
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${props.chatInfo.id}`
   } else if (props.chatInfo?.type === 'group') {
-    return `/api/qq_group_avatar/gh/${props.chatInfo.id}/${props.chatInfo.id}/640`
+    return `https://p.qlogo.cn/gh/${props.chatInfo.id}/${props.chatInfo.id}/640`
   } else return ''
 })
 </script>
@@ -67,7 +67,7 @@ const avartarUrl = computed(() => {
       <Transition enter-active-class="slide-in-right" leave-active-class="slide-out-right">
         <div v-if="showInfo" class="chat-info-modal scrollbar scrollbar-w-1 scrollbar-rounded">
           <div class="info-card w-full p-sm gap-sm primary-border flex flex-row items-center">
-            <img :src="avartarUrl" class="w-12 h-12 rounded-full" />
+            <img :src="avartarUrl" class="w-12 h-12 rounded-full" crossorigin="anonymous" />
             <div class="flex flex-col justify-center items-start gap-1">
               <div class="max-w-55 whitespace-nowrap overflow-hidden text-ellipsis">
                 {{ chatName.name }}
@@ -100,7 +100,6 @@ const avartarUrl = computed(() => {
 
   padding: 0.8rem;
   padding-right: 0.3rem;
-  background-color: white;
   color: black;
 
   border-bottom: 1px solid #e2e8f0;
@@ -108,7 +107,6 @@ const avartarUrl = computed(() => {
 }
 
 .dark-mode .chat-info {
-  background-color: var(--p-gray-800);
   color: white;
 
   border-bottom: 1px solid var(--p-gray-700);
@@ -116,8 +114,8 @@ const avartarUrl = computed(() => {
 
 .chat-info-modal {
   position: absolute;
-  top: 6.9rem;
-  right: 0.5rem;
+  top: 3rem;
+  right: 0;
 
   width: 22.5rem;
   height: calc(100vh - 7.5rem);

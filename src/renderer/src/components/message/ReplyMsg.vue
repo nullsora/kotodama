@@ -22,7 +22,7 @@ const getOringinalMsg = async () => {
   const oriId = props.msg.data.id
   const oriMsg = await packagedGetter.getMsg(oriId)
   originalMsg.value = oriMsg.data
-  renderShortMsg.value = await msgListToShortMsg(oriMsg.data)
+  renderShortMsg.value = (await msgListToShortMsg(oriMsg.data)) ?? '[引用消息不存在]'
 }
 
 const onlyImage = computed(() => {
@@ -36,7 +36,7 @@ const getName = computed(() => {
     return originalMsg.value.sender.card === ''
       ? originalMsg.value.sender.nickname
       : originalMsg.value.sender.card
-  } else return ''
+  } else return '[解析错误]'
 })
 
 onMounted(getOringinalMsg)
@@ -67,23 +67,23 @@ watch(props, getOringinalMsg)
   background-color: var(--p-primary-100);
   padding: 0.5rem;
   margin-bottom: 0.5rem;
+  cursor: pointer;
 }
 
 .dark-mode .reply-msg {
-  border-left: 0.2rem solid var(--p-primary-100);
-  background-color: var(--p-primary-500);
+  background-image: linear-gradient(300deg, var(--p-primary-600) 0%, var(--p-gray-700) 80%);
 }
 
 .reply-msg-sender {
   color: var(--p-primary-500);
 }
 
-.dark-mode .reply-msg-sender {
-  color: var(--p-primary-100);
-}
-
 .msg-content {
   color: var(--p-gray-500);
+
+  max-height: 3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dark-mode .msg-content {

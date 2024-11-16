@@ -37,75 +37,78 @@ const login = () => {
 </script>
 
 <template>
-  <div class="h-full w-full grid grid-cols-2 p-sm">
-    <div class="calc-height w-full primary-border p-sm scrollbar scrollbar-w-1 scrollbar-rounded">
-      <div class="switch-text text-lg flex justify-center m-b-sm">快捷登录</div>
-      <TransitionGroup
-        name="list"
-        enter-active-class="fade-in-fwd"
-        leave-active-class="fade-out-fwd"
-      >
-        <ButtonGroup v-for="(account, index) in config.accounts" :key="index">
-          <div class="w-full m-b-sm grid accounts-grid">
-            <Button class="h-10" severity="secondary" @click="getAccount(index)">
-              <div class="flex items-center justify-between w-full">
-                <i class="i-fluent-color-person-24 font-size-5" />
-                <div class="flex flex-col items-end">
-                  <div class="font-size-4">{{ account.url }}</div>
-                  <div class="font-size-2">{{ account.token }}</div>
+  <div class="h-full rd-lg gradient">
+    <div class="h-full w-full">
+      <div class="h-full flex flex-col justify-center items-center">
+        <Card>
+          <template #title>
+            <div class="flex justify-center">登录 Onebot</div>
+          </template>
+          <template #content>
+            <div class="grid grid-cols-2 gap-sm items-center justify-between w-full">
+              <div class="calc-height w-full p-2 scrollbar scrollbar-w-1 scrollbar-rounded">
+                <TransitionGroup
+                  name="list"
+                  enter-active-class="fade-in-fwd"
+                  leave-active-class="fade-out-bck"
+                >
+                  <ButtonGroup v-for="(account, index) in config.accounts" :key="index">
+                    <div class="w-full grid accounts-grid mb-2">
+                      <Button class="h-10" severity="secondary" @click="getAccount(index)">
+                        <div class="flex items-center justify-between w-full">
+                          <i class="i-fluent-color-person-24 font-size-5" />
+                          <div class="flex flex-col items-end">
+                            <div class="font-size-4">{{ account.url }}</div>
+                            <div class="font-size-2">{{ account.token }}</div>
+                          </div>
+                        </div>
+                      </Button>
+                      <Button class="h-10" severity="danger" @click="deleteAccount(index)">
+                        <i class="i-fluent-delete-24-regular font-size-5" />
+                      </Button>
+                    </div>
+                  </ButtonGroup>
+                </TransitionGroup>
+              </div>
+              <div class="w-80 m-l-sm flex-grow">
+                <FloatLabel class="m-b-sm m-t-sm" variant="on">
+                  <IconField>
+                    <InputIcon class="i-fluent-color-person-24" />
+                    <InputText id="url" v-model="url" :invalid="!urlValid" class="w-full" />
+                  </IconField>
+                  <label for="url">Onebot URL</label>
+                </FloatLabel>
+                <FloatLabel class="m-b-sm" variant="on">
+                  <IconField>
+                    <InputIcon class="i-fluent-color-shield-24" />
+                    <InputText id="token" v-model="accessToken" class="w-full" />
+                  </IconField>
+                  <label for="token">Access Token (可选)</label>
+                </FloatLabel>
+                <Divider />
+                <div class="flex justify-center">
+                  <Button
+                    class="w-full m-r-sm"
+                    label="加入快捷登录"
+                    severity="secondary"
+                    icon="i-fluent-add-24-regular"
+                    :disabled="!urlValid"
+                    @click="addToAccounts"
+                  />
+                  <Button
+                    class="w-full"
+                    label="登录"
+                    icon="i-fluent-send-24-regular"
+                    :disabled="!urlValid"
+                    @click="login"
+                  />
                 </div>
               </div>
-            </Button>
-            <Button class="h-10" severity="danger" @click="deleteAccount(index)">
-              <i class="i-fluent-delete-24-regular font-size-5" />
-            </Button>
-          </div>
-        </ButtonGroup>
-      </TransitionGroup>
-    </div>
-    <div class="h-full flex flex-col justify-center items-center">
-      <Card>
-        <template #title>
-          <div class="flex justify-center">登录 Onebot</div>
-        </template>
-        <template #content>
-          <div class="w-80 m-l-sm flex-grow">
-            <FloatLabel class="m-b-sm m-t-sm" variant="on">
-              <IconField>
-                <InputIcon class="i-fluent-color-person-24" />
-                <InputText id="url" v-model="url" :invalid="!urlValid" class="w-full" />
-              </IconField>
-              <label for="url">Onebot URL</label>
-            </FloatLabel>
-            <FloatLabel class="m-b-sm" variant="on">
-              <IconField>
-                <InputIcon class="i-fluent-color-shield-24" />
-                <InputText id="token" v-model="accessToken" class="w-full" />
-              </IconField>
-              <label for="token">Access Token (可选)</label>
-            </FloatLabel>
-            <Divider />
-            <div class="flex justify-center">
-              <Button
-                class="w-full m-r-sm"
-                label="加入快捷登录"
-                severity="secondary"
-                icon="i-fluent-add-24-regular"
-                :disabled="!urlValid"
-                @click="addToAccounts"
-              />
-              <Button
-                class="w-full"
-                label="登录"
-                icon="i-fluent-send-24-regular"
-                :disabled="!urlValid"
-                @click="login"
-              />
             </div>
-          </div>
-        </template>
-        <template #footer> </template>
-      </Card>
+          </template>
+          <template #footer> </template>
+        </Card>
+      </div>
     </div>
   </div>
 </template>
@@ -117,10 +120,98 @@ const login = () => {
 }
 
 .calc-height {
-  height: calc(100vh - 6.35rem);
+  max-height: calc(100vh - 25rem);
 }
 
-.dark-mode .switch-text {
-  color: var(--p-gray-100);
+.gradient {
+  background-color: #d299c2;
+  background-image: radial-gradient(closest-side, #a18cd1ff, #fbc2eb00),
+    radial-gradient(closest-side, #a1c4fdff, #c2e9fb00),
+    radial-gradient(closest-side, #fccb90ff, #d57eeb00),
+    radial-gradient(closest-side, #4facfeff, #00f2fe00),
+    radial-gradient(closest-side, #fa709aff, #fee14000);
+  background-size:
+    130vmax 130vmax,
+    80vmax 80vmax,
+    90vmax 90vmax,
+    110vmax 110vmax,
+    90vmax 90vmax;
+  background-position:
+    -80vmax -80vmax,
+    60vmax -30vmax,
+    10vmax 10vmax,
+    -30vmax -10vmax,
+    50vmax 50vmax;
+  background-repeat: no-repeat;
+  animation: 10s movement linear infinite;
+}
+
+.gradient::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes movement {
+  0%,
+  100% {
+    background-size:
+      130vmax 130vmax,
+      80vmax 80vmax,
+      90vmax 90vmax,
+      110vmax 110vmax,
+      90vmax 90vmax;
+    background-position:
+      -80vmax -80vmax,
+      60vmax -30vmax,
+      10vmax 10vmax,
+      -30vmax -10vmax,
+      50vmax 50vmax;
+  }
+  25% {
+    background-size:
+      100vmax 100vmax,
+      90vmax 90vmax,
+      100vmax 100vmax,
+      90vmax 90vmax,
+      60vmax 60vmax;
+    background-position:
+      -60vmax -90vmax,
+      50vmax -40vmax,
+      0vmax -20vmax,
+      -40vmax -20vmax,
+      40vmax 60vmax;
+  }
+  50% {
+    background-size:
+      80vmax 80vmax,
+      110vmax 110vmax,
+      80vmax 80vmax,
+      60vmax 60vmax,
+      80vmax 80vmax;
+    background-position:
+      -50vmax -70vmax,
+      40vmax -30vmax,
+      10vmax 0vmax,
+      20vmax 10vmax,
+      30vmax 70vmax;
+  }
+  75% {
+    background-size:
+      90vmax 90vmax,
+      90vmax 90vmax,
+      100vmax 100vmax,
+      90vmax 90vmax,
+      70vmax 70vmax;
+    background-position:
+      -50vmax -40vmax,
+      50vmax -30vmax,
+      20vmax 0vmax,
+      -10vmax 10vmax,
+      40vmax 60vmax;
+  }
 }
 </style>
