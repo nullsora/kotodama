@@ -14,6 +14,7 @@ import SettingsPage from './pages/SettingsPage.vue'
 
 import Connector from './functions/connector'
 import { Logger } from './functions/logger'
+import { packagedGetter } from './functions/packaged_api'
 import { Pages } from './functions/types'
 import { DataManager } from './functions/data_manager'
 import ContactPage from './pages/ContactPage.vue'
@@ -28,7 +29,7 @@ const runtimeData = new DataManager(storeToRefs(config).userSettings)
 onMounted(() => {
   config.loadFromStorage()
   runtimeData.watchConnect()
-  runtimeData.clearImgBufferCache()
+  packagedGetter.clearImgBlobCache()
 
   config.$subscribe(
     async (_mutation, state) => {
@@ -48,6 +49,7 @@ onMounted(() => {
 })
 
 provide('runtimeData', runtimeData)
+provide('currentPage', currentPage)
 </script>
 
 <template>

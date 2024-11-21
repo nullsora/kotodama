@@ -159,6 +159,7 @@ type RecordMessage = {
   data: {
     file: string
     url: string
+    path?: string
     /** 变声为1 */
     magic: 0 | 1
   }
@@ -286,4 +287,35 @@ type MarkdownMessage = {
   data: {
     content: string
   }
+}
+
+// 以下是JSON消息内联的特殊格式消息类型
+
+export type JsonInnerMsg = {
+  app: string
+  bizsrc: string
+  meta: {
+    // @ts-ignore 未知类型
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any
+  }
+  prompt: string
+  view: string
+}
+
+export type GroupAnnounceMsg = {
+  cr: number
+  encode: number
+  fid: string
+  gc: string
+  pic: {
+    width: number
+    height: number
+    url: string
+  }[]
+  sign: string
+  text: string
+  title: string
+  tw: number
+  uin: number
 }

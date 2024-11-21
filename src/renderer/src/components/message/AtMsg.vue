@@ -4,7 +4,7 @@ import AtTag from './basic/AtTag.vue'
 
 defineProps<{
   msg: MessageTypes['At']
-  sendGroupId: number
+  sendGroupId?: number
 }>()
 </script>
 

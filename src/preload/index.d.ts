@@ -3,7 +3,6 @@ import { UUID } from 'crypto'
 
 declare global {
   interface Window {
-    electron: ElectronAPI
     kotodama: {
       window: {
         minimize: () => Promise<void>
@@ -12,6 +11,8 @@ declare global {
           callback: (event: IpcRendererEvent, windowState: boolean, ...args: unknown[]) => void
         ) => void
         close: () => Promise<void>
+
+        openNewWindow: (url: string) => Promise<void>
       }
       onebot: {
         connect(url: string, token: string): Promise<void>

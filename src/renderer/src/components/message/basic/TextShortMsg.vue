@@ -10,7 +10,7 @@ const props = defineProps<{ msg?: PrivateMessage<AnyMessage> | GroupMessage<AnyM
 
 const getName = computed(() => {
   if (props.msg?.message_type === 'private') {
-    return props.msg.sender.nickname
+    return ''
   } else if (props.msg?.message_type === 'group') {
     return props.msg.sender.card === '' ? props.msg.sender.nickname : props.msg.sender.card
   } else return ''
@@ -20,6 +20,7 @@ const shortMsg = ref('')
 
 const getMsgContent = async () => {
   const sender = getName.value
+  const prefix = sender === '' ? '' : sender + ': '
 
   if (props.msg?.message.length === 0)
     return `${
@@ -29,7 +30,7 @@ const getMsgContent = async () => {
   let showMsg = ''
   if (props.msg?.message) showMsg = (await msgListToShortMsg(props.msg)) ?? ''
 
-  return `${sender}: ${showMsg}`
+  return `${prefix}${showMsg}`
 }
 
 shortMsg.value = await getMsgContent()

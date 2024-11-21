@@ -1,5 +1,5 @@
 import { packagedGetter } from '../packaged_api'
-import { AnyMessage, GroupMessage, PrivateMessage } from './message_types'
+import { AnyMessage, GroupMessage, JsonInnerMsg, PrivateMessage } from './message_types'
 
 const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
   let shortMsg = ''
@@ -65,7 +65,7 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = '[XML]'
       break
     case 'json':
-      shortMsg = JSON.parse(msg.data.data).prompt
+      shortMsg = (JSON.parse(msg.data.data) as JsonInnerMsg).prompt
       break
     case 'file':
       shortMsg = `[文件] ${msg.data.file}`

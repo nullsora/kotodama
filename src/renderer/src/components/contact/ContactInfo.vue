@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed, inject, Ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
-import { Friend, Group } from '@renderer/functions/types'
+import { Friend, Group, Pages } from '@renderer/functions/types'
 
 const runtimeData = inject('runtimeData') as DataManager
+const currentPage = inject('currentPage') as Ref<Pages>
 
 const props = defineProps<{
   contact: {
@@ -41,6 +42,18 @@ const avatarUrl = computed(() => {
     return `https://p.qlogo.cn/gh/${(contactObj.value as Group).group_id}/${(contactObj.value as Group).group_id}/640`
   } else return ''
 })
+
+const jumpToMsg = async () => {
+  if (props.contact?.type === 'friend') {
+    await runtimeData.pushFriend(props.contact.id)
+    currentPage.value = Pages.Chat
+    // selectedChat.value = { type: 'friend', id: props.contact.id }
+  } else if (props.contact?.type === 'group') {
+    await runtimeData.pushGroup(props.contact.id)
+    currentPage.value = Pages.Chat
+    // selectedChat.value = { type: 'group', id: props.contact.id }
+  }
+}
 </script>
 
 <template>
@@ -80,7 +93,7 @@ const avatarUrl = computed(() => {
       </template>
       <template #footer>
         <div class="w-full flex flex-row justify-end items-center gap-sm">
-          <Button size="small" label="发送消息" />
+          <Button size="small" label="发送消息" @click="jumpToMsg" />
         </div>
       </template>
     </Card>

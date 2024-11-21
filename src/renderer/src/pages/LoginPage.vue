@@ -42,7 +42,10 @@ const login = () => {
       <div class="h-full flex flex-col justify-center items-center">
         <Card>
           <template #title>
-            <div class="flex justify-center">登录 Onebot</div>
+            <div class="flex flex-col justify-start items-center gap-sm">
+              <i class="pi i-fluent-iot-24-filled w-15 h-15 gray-text" />
+              连接 Onebot
+            </div>
           </template>
           <template #content>
             <div class="grid grid-cols-2 gap-sm items-center justify-between w-full">
@@ -70,15 +73,15 @@ const login = () => {
                   </ButtonGroup>
                 </TransitionGroup>
               </div>
-              <div class="w-80 m-l-sm flex-grow">
-                <FloatLabel class="m-b-sm m-t-sm" variant="on">
+              <div class="w-80 ml-sm flex-grow">
+                <FloatLabel class="mb-sm mt-sm" variant="on">
                   <IconField>
                     <InputIcon class="i-fluent-color-person-24" />
                     <InputText id="url" v-model="url" :invalid="!urlValid" class="w-full" />
                   </IconField>
                   <label for="url">Onebot URL</label>
                 </FloatLabel>
-                <FloatLabel class="m-b-sm" variant="on">
+                <FloatLabel class="mb-sm" variant="on">
                   <IconField>
                     <InputIcon class="i-fluent-color-shield-24" />
                     <InputText id="token" v-model="accessToken" class="w-full" />
@@ -88,7 +91,7 @@ const login = () => {
                 <Divider />
                 <div class="flex justify-center">
                   <Button
-                    class="w-full m-r-sm"
+                    class="w-full mr-sm"
                     label="加入快捷登录"
                     severity="secondary"
                     icon="i-fluent-add-24-regular"

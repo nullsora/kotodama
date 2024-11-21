@@ -101,7 +101,7 @@ const confirmClearAll = (event) => {
 
 <template>
   <div class="flex flex-row h-full p-2">
-    <div class="flex-1 w-full m-r-2">
+    <div class="flex-1 w-full mr-2">
       <Menu class="h-full" :model="menuItems" />
     </div>
     <div class="flex-3 w-full">

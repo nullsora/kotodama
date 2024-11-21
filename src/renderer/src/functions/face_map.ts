@@ -116,3 +116,12 @@ export const faceMap = {
   324: '吃糖',
   326: '生气'
 }
+
+export const findFromFaceMap = (name: string) => {
+  for (const key in faceMap) {
+    if (faceMap[key] === name) {
+      return key
+    }
+  }
+  return null
+}

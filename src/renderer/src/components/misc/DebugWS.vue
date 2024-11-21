@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Connector from '@renderer/functions/connector'
 import { ref } from 'vue'
+import GetMsgHistory from './debug/GetMsgHistory.vue'
 
 const action = ref('')
 const paramsRaw = ref('{}')
@@ -16,19 +17,20 @@ const fetchResult = async () => {
 </script>
 
 <template>
-  <div class="flex flex-row justify-center items-center w-full h-full">
-    <Card class="w-180">
+  <div class="w-full calc-height scrollbar scrollbar-w-1 scrollbar-rounded items-center">
+    <GetMsgHistory />
+    <Card class="w-180 mt-sm">
       <template #title>Connector Sender</template>
       <template #content>
         <div class="flex flex-col justify-between items-center">
-          <div class="flex flex-col justify-start items-center w-full m-b-2">
-            <InputText v-model="action" class="w-full m-b-2" placeholder="Action Name" />
-            <InputText v-model="paramsRaw" class="w-full m-b-2" placeholder="params" />
-            <InputText v-model="echo" class="w-full m-b-2" placeholder="Echo" />
+          <div class="flex flex-col justify-start items-center w-full mb-2">
+            <InputText v-model="action" class="w-full mb-2" placeholder="Action Name" />
+            <InputText v-model="paramsRaw" class="w-full mb-2" placeholder="params" />
+            <InputText v-model="echo" class="w-full mb-2" placeholder="Echo" />
           </div>
 
-          <div class="flex flex-row justify-between items-center w-full m-b-2">
-            <Button class="flex-1 m-r-1" label="Clear" severity="success" @click="result = ''" />
+          <div class="flex flex-row justify-between items-center w-full mb-2">
+            <Button class="flex-1 mr-1" label="Clear" severity="success" @click="result = ''" />
             <Button
               class="flex-1"
               icon="i-fluent-send-24-regular"
@@ -37,7 +39,7 @@ const fetchResult = async () => {
             />
           </div>
 
-          <ScrollPanel class="w-full h-80 m-b-2">
+          <ScrollPanel class="w-full h-80 mb-2">
             <Message severity="success" class="w-full whitespace-pre-wrap break-words">
               {{ result }}
             </Message>
@@ -47,3 +49,9 @@ const fetchResult = async () => {
     </Card>
   </div>
 </template>
+
+<style scoped>
+.calc-height {
+  height: calc(100vh - 6rem);
+}
+</style>

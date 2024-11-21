@@ -1,5 +1,4 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
 import { randomUUID } from 'crypto'
 
 const kotodama = {
@@ -11,7 +10,9 @@ const kotodama = {
     ) => {
       ipcRenderer.on('window:watchMaximize', callback)
     },
-    close: async () => await ipcRenderer.invoke('window:close')
+    close: async () => await ipcRenderer.invoke('window:close'),
+
+    openNewWindow: async (url: string) => await ipcRenderer.invoke('window:openNewWindow', { url })
   },
   onebot: {
     connect: async (url: string, token: string) =>
@@ -64,14 +65,11 @@ const kotodama = {
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('kotodama', kotodama)
   } catch (error) {
     console.error(error)
   }
 } else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI
   // @ts-ignore (define in dts)
   window.kotodama = kotodama
 }

@@ -12,7 +12,7 @@ const url = computed(() => {
 </script>
 
 <template>
-  <div :class="`avatar ${position === 'right' ? 'm-l-2' : 'm-r-2'}`" class="avatar m-b-0.2">
+  <div :class="`avatar ${position === 'right' ? 'ml-2' : 'mr-2'}`" class="avatar mb-0.2">
     <img :src="url" class="w-8.5 h-8.5 rd-full" crossorigin="anonymous" />
   </div>
 </template>

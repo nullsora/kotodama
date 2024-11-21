@@ -16,7 +16,7 @@ const config = useConfigStore()
         <InputText v-model="config.themeSettings.backgroundImage.dark" class="w-80" />
         <Tag class="text-lg">深色模式背景</Tag>
       </div>
-      <Button label="更新" severity="primary" @click="config.updateTheme" />
+      <Button label="更新" @click="config.updateTheme" />
     </div>
   </SettingItem>
 </template>

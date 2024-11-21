@@ -55,7 +55,7 @@ const updatePrimaryColor = () => {
           </div>
         </template>
       </Select>
-      <Button class="m-l-sm" label="更新" severity="primary" @click="updatePrimaryColor()" />
+      <Button class="ml-sm" label="更新" @click="updatePrimaryColor()" />
     </div>
   </SettingItem>
 </template>

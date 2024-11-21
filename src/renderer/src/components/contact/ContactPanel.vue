@@ -81,7 +81,7 @@ const getSelected = (chat: Chat) => {
                 <div
                   v-for="(friend, friendIndex) in categories.buddyList"
                   :key="friendIndex"
-                  class="m-b-2 w-full"
+                  class="mb-2 w-full"
                 >
                   <ContactCard
                     :contact="{ type: 'private', data: friend }"
@@ -101,7 +101,7 @@ const getSelected = (chat: Chat) => {
           <ContactCard
             v-for="group in runtimeData.user.value.contacts.groups"
             :key="group.group_id"
-            class="m-b-2"
+            class="mb-2"
             :contact="{ type: 'group', data: group }"
             :selected="getSelected({ type: 'group', data: group })"
             @click="selectedContact = { type: 'group', id: group.group_id }"

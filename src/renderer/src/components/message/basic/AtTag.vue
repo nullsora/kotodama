@@ -5,7 +5,7 @@ import { packagedGetter } from '@renderer/functions/packaged_api'
 
 const props = defineProps<{
   msg: MessageTypes['At']
-  sendGroupId: number
+  sendGroupId?: number
 }>()
 
 const name = ref('')

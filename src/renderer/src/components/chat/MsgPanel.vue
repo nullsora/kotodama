@@ -118,7 +118,7 @@ const formateDay = (time: number) => {
 
 const getSenderName = (node: PrivateMsgChainNode | GroupMsgChainNode, index: number) => {
   if (node.type === 'private') {
-    return node.messages[index].sender.nickname
+    return ''
   } else if (node.type === 'group') {
     return !node.messages[index].sender?.card || node.messages[index].sender.card === ''
       ? node.messages[index].sender.nickname
@@ -141,7 +141,7 @@ const getPosition = (
   }
 }
 
-const appendMsgHistory = async (append: boolean = false, count: number = 30) => {
+const updateMsgHistory = async (append: boolean = false, count: number = 30) => {
   const _count = !append ? count : msgHistoryList.value.length + count
   if (props.chatInfo?.type === 'friend') {
     msgHistoryList.value = (
@@ -159,7 +159,7 @@ const handleScroll = async (e: Event) => {
   const element = e.target as HTMLElement
   if (element.scrollTop < 100) {
     const heightBefore = element.scrollHeight
-    await appendMsgHistory(true)
+    await updateMsgHistory(true)
     await nextTick(() => {
       element.scrollTop = element.scrollHeight - heightBefore
     })
@@ -168,7 +168,7 @@ const handleScroll = async (e: Event) => {
 
 const updateComponent = async () => {
   if (props.chatInfo) {
-    await appendMsgHistory()
+    await updateMsgHistory()
     await nextTick(() => {
       if (msgPanel.value) {
         msgPanel.value.scrollTop = msgPanel.value.scrollHeight
@@ -204,7 +204,7 @@ watch(
         </div>
         <div v-for="(msgChainNode, index) in msgChainDate.messages" :key="index">
           <div
-            class="flex flex-row items-end m-b-sm"
+            class="flex flex-row items-end mb-sm"
             :class="checkSenderSelf(msgChainNode) ? 'justify-end' : 'justify-start'"
           >
             <UserAvatar v-if="!checkSenderSelf(msgChainNode)" :id="msgChainNode.sender.user_id" />

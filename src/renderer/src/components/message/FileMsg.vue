@@ -6,6 +6,29 @@ const props = defineProps<{
   msg: MessageTypes['File']
 }>()
 
+const flieColorMap = [
+  {
+    selector: ['doc', 'docx'],
+    bg: 'var(--p-blue-500)',
+    color: 'white'
+  },
+  {
+    selector: ['xls', 'xlsx'],
+    bg: 'var(--p-green-500)',
+    color: 'white'
+  },
+  {
+    selector: ['ppt', 'pptx'],
+    bg: 'var(--p-red-500)',
+    color: 'white'
+  },
+  {
+    selector: ['pdf'],
+    bg: 'var(--p-red-500)',
+    color: 'white'
+  }
+]
+
 const fileType = computed(() => {
   const file = props.msg.data.file
   const ext = file.split('.').pop()?.toLowerCase()
@@ -30,6 +53,28 @@ const fileSize = computed(() => {
   return `${(size / 1024 / 1024 / 1024).toFixed(2)}GB`
 })
 
+const bgColor = computed(() => {
+  const ext = props.msg.data.file.split('.').pop()?.toLowerCase()
+  if (!ext) return 'var(--p-gray-300)'
+  const color = flieColorMap.find((item) => item.selector.includes(ext))
+  return color ? color.bg : 'var(--p-gray-300)'
+})
+
+const iconColor = computed(() => {
+  const ext = props.msg.data.file.split('.').pop()?.toLowerCase()
+  if (!ext) return 'var(--p-gray-800)'
+  const color = flieColorMap.find((item) => item.selector.includes(ext))
+  return color ? color.color : 'var(--p-gray-800)'
+})
+
+const avatarStyle = computed(() => {
+  return {
+    'background-color': bgColor.value,
+    color: iconColor.value
+  }
+})
+
+/*
 const downloadFile = async () => {
   // Create download link
   const link = document.createElement('a')
@@ -39,14 +84,16 @@ const downloadFile = async () => {
   link.click()
   document.body.removeChild(link)
 }
+  */
 </script>
 
 <template>
   <div
+    v-tooltip.top="props.msg.data.file"
+    type="text"
     class="file-message flex flex-row items-center gap-sm cursor-pointer"
-    @click="downloadFile"
   >
-    <Avatar size="large" :icon="fileType" />
+    <Avatar size="large" :icon="fileType" :style="avatarStyle" />
     <div class="flex flex-col">
       <span class="truncate text-sm max-w-60">{{ props.msg.data.file }}</span>
       <span class="text-xs text-gray-500">{{ fileSize }}</span>

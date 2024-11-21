@@ -25,6 +25,6 @@ const imageClass = computed(() => (isFace.value ? 'max-w-30 max-h-30' : 'max-w-8
 
 <template>
   <Suspense>
-    <MsgImage :class="imageClass" :src="imageUrl" :show-menu="!isFace" />
+    <MsgImage :class="imageClass" :src="imageUrl" :show-menu="!isFace" :preview="!isFace" />
   </Suspense>
 </template>

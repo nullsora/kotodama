@@ -31,6 +31,14 @@ const deleteContactGroup = (index: number, event: Event) => {
     target: event.target as HTMLElement,
     message: '确定要删除这个分组吗？',
     icon: 'i-fluent-warning-24-regular',
+    acceptProps: {
+      label: '确定',
+      severity: 'danger'
+    },
+    rejectProps: {
+      label: '取消',
+      severity: 'secondary'
+    },
     accept: () => {
       runtimeData.user.value.contactGroups.splice(index, 1)
     }

@@ -16,4 +16,13 @@ export default (window: BrowserWindow) => {
   ipcMain.handle('window:close', async (_event) => {
     window.close()
   })
+
+  ipcMain.handle('window:openNewWindow', async (_event, { url }: { url: string }) => {
+    const newWindow = new BrowserWindow({
+      width: 800,
+      height: 600
+    })
+
+    newWindow.loadURL(url)
+  })
 }

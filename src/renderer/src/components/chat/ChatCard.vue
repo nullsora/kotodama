@@ -68,18 +68,16 @@ const parseTime = (time: number | undefined) => {
     <div class="flex flex-row justify-start items-center gap-2">
       <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
       <div class="flex flex-col justify-center items-start gap-0.3">
-        <div class="flex flex-row items-center">
-          <div
-            class="mr-1 chat-name"
+        <div class="chat-name text-sm overflow-text">
+          <i
+            class="chat-name w-4.2 h-4.2 align-mid pi"
             :class="
               props.chat.type === 'private'
                 ? 'i-fluent-chat-24-regular'
                 : 'i-fluent-chat-multiple-24-regular'
             "
           />
-          <div class="chat-name text-sm overflow-text">
-            {{ getName }}
-          </div>
+          {{ getName }}
         </div>
         <div :class="selected ? '' : 'short-msg'" class="text-sm overflow-text">
           <Suspense>

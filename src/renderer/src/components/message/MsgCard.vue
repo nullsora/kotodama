@@ -10,6 +10,7 @@ import FaceMsg from './FaceMsg.vue'
 import FileMsg from './FileMsg.vue'
 import XMLMsg from './XMLMsg.vue'
 import JsonMsg from './JsonMsg.vue'
+import RecordMsg from './RecordMsg.vue'
 
 const {
   message,
@@ -25,6 +26,7 @@ const msgComponents = {
   text: TextMsg,
   image: ImageMsg,
   mface: ImageMsg,
+  record: RecordMsg,
   at: AtMsg,
   reply: ReplyMsg,
   face: FaceMsg,
@@ -85,13 +87,12 @@ const checkOnly = computed(() => {
         <span class="text-sm text-red-400">[已撤回]</span>
       </span>
       <span v-for="(msg, index) in messageList" :key="index">
-        <component
-          :is="msgComponents[msg.type] ?? 'span'"
-          :send-group-id="
-            message.message_type === 'group' && msg.type === 'at' ? message.group_id : undefined
-          "
+        <AtMsg
+          v-if="msg.type === 'at'"
           :msg="msg"
+          :send-group-id="message.message_type === 'group' ? message.group_id : undefined"
         />
+        <component :is="msgComponents[msg.type] ?? 'span'" v-else :msg="msg" />
       </span>
     </div>
     <SendTime v-if="!reverse" :time="message.time" />

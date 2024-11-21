@@ -253,7 +253,7 @@ export class DataManager {
     let latestMsg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage> | undefined
 
     let msgCount = 1
-    while (!latestMsg?.time) {
+    while (!latestMsg?.time && msgCount < 10) {
       if (chat.type === 'private') {
         latestMsg = (
           await packagedGetter.getFriendMsgHistory((chat.data as Friend).user_id, msgCount)
@@ -267,68 +267,5 @@ export class DataManager {
     }
     chat.latestMsg = latestMsg
     return latestMsg
-  }
-
-  async getImgBlob(url: string) {
-    let imgCache = await localforage.getItem<{
-      [url: string]: {
-        blob: Blob
-        savedTime: number
-      }
-    }>('img-cache')
-
-    if (!imgCache) {
-      imgCache = {}
-      await localforage.setItem('img-cache', imgCache)
-    }
-
-    const fetchBlob = async () => {
-      // @ts-ignore allow window
-      const res = await window.kotodama.web.fetchBuffer(url)
-      const blob = new Blob([res], { type: 'image/png' })
-      imgCache[url] = {
-        blob: blob,
-        savedTime: Date.now()
-      }
-      await localforage.setItem('img-cache', imgCache)
-      return blob
-    }
-
-    const imgBlob = imgCache?.[url]?.blob
-    if (imgBlob) {
-      const nowDate = Date.now()
-      if (nowDate - imgCache[url].savedTime < 1000 * 60 * 60 * 24) {
-        return imgBlob
-      } else {
-        delete imgCache[url]
-        await localforage.setItem('img-cache', imgCache)
-        return await fetchBlob()
-      }
-    } else return await fetchBlob()
-  }
-
-  async clearImgBufferCache(all: boolean = false) {
-    let imgCache = await localforage.getItem<{
-      [url: string]: {
-        buffer: ArrayBuffer
-        savedTime: number
-      }
-    }>('img-cache')
-
-    if (!imgCache) {
-      imgCache = {}
-      await localforage.setItem('img-cache', imgCache)
-    }
-
-    if (all) {
-      await localforage.removeItem('img-cache')
-    } else {
-      for (const url in imgCache) {
-        if (Date.now() - imgCache[url].savedTime > 1000 * 60 * 60 * 24) {
-          delete imgCache[url]
-        }
-      }
-      await localforage.setItem('img-cache', imgCache)
-    }
   }
 }

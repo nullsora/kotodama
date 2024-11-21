@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
+import { faceMap, findFromFaceMap } from '@renderer/functions/face_map'
 import {
   AnyMessage,
   GroupMessage,
   PrivateMessage,
   SendingMessage
 } from '@renderer/functions/message/message_types'
-import { packagedGetter } from '@renderer/functions/packaged_api'
+import { packagedGetter, packagedSender } from '@renderer/functions/packaged_api'
 import { Friend, Group } from '@renderer/functions/types'
+import FaceSelect from './FaceSelect.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 
@@ -27,24 +29,61 @@ const watchKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter' && e.ctrlKey) sendMsg()
 }
 
-const sendMsg = async () => {
-  if (!props.chatInfo) return
-  if (sendText.value.length === 0) return
+const selectFace = (id: number) => {
+  sendText.value += `[/${faceMap[id]}]`
+}
 
-  const sender: SendingMessage = {
+const parseSender = () => {
+  if (!props.chatInfo) return
+
+  const parser: AnyMessage[] = []
+
+  // Read until '[/'
+  let i = 0
+  let start = 0
+  while (i < sendText.value.length) {
+    if (sendText.value[i] === '[' && sendText.value[i + 1] === '/') {
+      if (i !== start) {
+        parser.push({
+          type: 'text',
+          data: { text: sendText.value.slice(start, i) }
+        })
+      }
+      start = i
+      // match '[/xxx]'
+      while (sendText.value[i] !== ']') i++
+      const face = findFromFaceMap(sendText.value.slice(start + 2, i))
+      if (face) {
+        parser.push({
+          type: 'face',
+          data: { id: parseInt(face) }
+        })
+      } else {
+        parser.push({
+          type: 'text',
+          data: { text: sendText.value.slice(start, i + 1) }
+        })
+      }
+      start = i + 1
+    }
+    i++
+  }
+
+  return {
     type: props.chatInfo.type === 'friend' ? 'private' : 'group',
     id: props.chatInfo.id,
-    messages: [
-      {
-        type: 'text',
-        data: {
-          text: sendText.value
-        }
-      }
-    ]
-  }
-  const msgId = (await packagedGetter.sendMessage(sender)).data.message_id
+    messages: parser
+  } as SendingMessage
+}
 
+const sendMsg = async () => {
+  if (!props.chatInfo) return
+  if (!parseSender()) return
+
+  // Send
+  const msgId = (await packagedSender.sendMessage(parseSender()!)).data.message_id
+
+  // Update rendering
   let msg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
 
   if (props.chatInfo.type === 'friend') {
@@ -76,7 +115,7 @@ const sendMsg = async () => {
       class="w-4/5 h-10 scrollbar scrollbar-w-1 scrollbar-rounded"
       @keydown="watchKeydown"
     />
-    <Button icon="i-fluent-emoji-24-regular w-5 h-5" severity="secondary" text />
+    <FaceSelect @select="selectFace" />
     <Button
       icon="i-fluent-send-24-regular w-5 h-5"
       text

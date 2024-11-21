@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, watch } from 'vue'
-import { DataManager } from '@renderer/functions/data_manager'
+import { onMounted, ref, watch } from 'vue'
+import { packagedGetter } from '@renderer/functions/packaged_api'
+import ImgPreview from '@renderer/components/misc/ImgPreview.vue'
 
-const runtimeData = inject('runtimeData') as DataManager
-
-const props = withDefaults(
-  defineProps<{
-    src: string
-    showMenu?: boolean
-  }>(),
-  {
-    showMenu: true
-  }
-)
+const {
+  src,
+  showMenu = true,
+  preview = false
+} = defineProps<{
+  src: string
+  showMenu?: boolean
+  preview?: boolean
+}>()
 
 const res = ref('')
 const menu = ref()
+const showPreview = ref(false)
 
 const blob = ref<Blob>()
 
@@ -36,29 +36,32 @@ const menuItems = ref([
 ])
 
 const onImgRightClick = (e: MouseEvent) => {
-  if (props.showMenu) menu.value.show(e)
+  if (showMenu) menu.value.show(e)
 }
 
 const getImg = async () => {
   // if (
-  //   props.src.startsWith('https://multimedia.nt.qq.com.cn') ||
-  //   props.src.startsWith('https://gchat.qpic.cn') ||
-  //   props.src.startsWith('https://gxh.vip.qq.com')
+  //   src.startsWith('https://multimedia.nt.qq.com.cn') ||
+  //   src.startsWith('https://gchat.qpic.cn') ||
+  //   src.startsWith('https://gxh.vip.qq.com')
   // ) {
-  //   return props.src
+  //   return src
   // }
-  blob.value = await runtimeData.getImgBlob(props.src)
+  blob.value = await packagedGetter.getImgBlob(src)
   return URL.createObjectURL(blob.value)
 }
 
 onMounted(async () => {
   res.value = await getImg()
 })
-watch(props, async () => {
-  URL.revokeObjectURL(res.value)
-  res.value = ''
-  res.value = await getImg()
-})
+watch(
+  () => src,
+  async () => {
+    URL.revokeObjectURL(res.value)
+    res.value = ''
+    res.value = await getImg()
+  }
+)
 </script>
 
 <template>
@@ -70,8 +73,10 @@ watch(props, async () => {
       class="rd-2"
       aria-haspopup="true"
       @contextmenu="onImgRightClick"
+      @dblclick="showPreview = preview"
     />
     <Skeleton v-else v-bind="$attrs" size="15rem" />
     <ContextMenu v-if="showMenu" ref="menu" :model="menuItems" />
+    <ImgPreview v-if="preview" v-model="showPreview" :src="res" />
   </div>
 </template>

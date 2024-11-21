@@ -35,6 +35,10 @@
   box-shadow: rgba(90, 90, 90, 0.15) 0 0.3rem 0.5rem 0;
 }
 
+.primary-text {
+  color: var(--p-primary-500);
+}
+
 .gray-text {
   color: var(--p-gray-500);
 }
@@ -67,6 +71,21 @@
   --p-inputtext-color: var(--p-gray-100);
   --p-inputtext-border-color: var(--p-gray-600);
   --p-inputtext-hover-border-color: var(--p-gray-500);
+}
+
+/*------------------ Context Menu ------------------*/
+.p-contextmenu {
+  min-width: 8rem !important;
+}
+
+.dark-mode .p-contextmenu {
+  --p-contextmenu-background: var(--p-gray-800);
+  --p-contextmenu-border-color: var(--p-gray-700);
+  --p-contextmenu-item-color: var(--p-gray-100);
+
+  --p-contextmenu-item-focus-background: var(--p-gray-600);
+  --p-contextmenu-item-focus-color: white;
+  --p-contextmenu-item-icon-focus-color: white;
 }
 
 /*------------------ Menu ------------------*/

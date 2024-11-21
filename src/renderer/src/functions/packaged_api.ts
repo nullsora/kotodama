@@ -1,8 +1,131 @@
+import localforage from 'localforage'
 import Connector from './connector'
 import { PrivateMessage, AnyMessage, GroupMessage, SendingMessage } from './message/message_types'
 import { Friend, FriendsCategory, Group, GroupMember, MsgBody, Stranger, UserInfo } from './types'
 
 export const packagedGetter = {
+  getImgBlob: async (url: string) => {
+    let imgCache = await localforage.getItem<{
+      [url: string]: {
+        blob: Blob
+        savedTime: number
+      }
+    }>('img-cache')
+
+    if (!imgCache) {
+      imgCache = {}
+      await localforage.setItem('img-cache', imgCache)
+    }
+
+    const fetchBlob = async () => {
+      // @ts-ignore allow window
+      const res = await window.kotodama.web.fetchBuffer(url)
+      const blob = new Blob([res], { type: 'image/png' })
+      imgCache[url] = {
+        blob: blob,
+        savedTime: Date.now()
+      }
+      await localforage.setItem('img-cache', imgCache)
+      return blob
+    }
+
+    const imgBlob = imgCache?.[url]?.blob
+    if (imgBlob) {
+      const nowDate = Date.now()
+      if (nowDate - imgCache[url].savedTime < 1000 * 60 * 60 * 24) {
+        return imgBlob
+      } else {
+        delete imgCache[url]
+        await localforage.setItem('img-cache', imgCache)
+        return await fetchBlob()
+      }
+    } else return await fetchBlob()
+  },
+  clearImgBlobCache: async (all: boolean = false) => {
+    let imgCache = await localforage.getItem<{
+      [url: string]: {
+        blob: Blob
+        savedTime: number
+      }
+    }>('img-cache')
+
+    if (!imgCache) {
+      imgCache = {}
+      await localforage.setItem('img-cache', imgCache)
+    }
+
+    if (all) {
+      await localforage.removeItem('img-cache')
+    } else {
+      for (const url in imgCache) {
+        if (Date.now() - imgCache[url].savedTime > 1000 * 60 * 60 * 24) {
+          delete imgCache[url]
+        }
+      }
+      await localforage.setItem('img-cache', imgCache)
+    }
+  },
+  getRecordBuffer: async (url: string) => {
+    let recordCache = await localforage.getItem<{
+      [url: string]: {
+        buffer: ArrayBuffer
+        savedTime: number
+      }
+    }>('record-cache')
+
+    if (!recordCache) {
+      recordCache = {}
+      await localforage.setItem('record-cache', recordCache)
+    }
+
+    const fetchBuffer = async () => {
+      // @ts-ignore allow window
+      const res = await window.kotodama.web.fetchBuffer(url)
+      recordCache[url] = {
+        buffer: res,
+        savedTime: Date.now()
+      }
+      await localforage.setItem('record-cache', recordCache)
+      return res
+    }
+
+    const recordBuffer = recordCache?.[url]?.buffer
+    if (recordBuffer) {
+      const nowDate = Date.now()
+      if (nowDate - recordCache[url].savedTime < 1000 * 60 * 60 * 24) {
+        return recordBuffer
+      } else {
+        delete recordCache[url]
+        await localforage.setItem('record-cache', recordCache)
+        return await fetchBuffer()
+      }
+    } else return await fetchBuffer()
+  },
+  clearRecordBufferCache: async (all: boolean = false) => {
+    let recordCache = await localforage.getItem<{
+      [url: string]: {
+        buffer: ArrayBuffer
+        savedTime: number
+      }
+    }>('record-cache')
+
+    if (!recordCache) {
+      recordCache = {}
+      await localforage.setItem('record-cache', recordCache)
+    }
+
+    if (all) {
+      await localforage.removeItem('record-cache')
+    } else {
+      for (const url in recordCache) {
+        if (Date.now() - recordCache[url].savedTime > 1000 * 60 * 60 * 24) {
+          delete recordCache[url]
+        }
+      }
+      await localforage.setItem('record-cache', recordCache)
+    }
+  },
+
   getUserInfo: async () => {
     return (await Connector.fetch('get_login_info', 'getUserInfo')) as MsgBody<UserInfo>
   },
@@ -47,7 +170,7 @@ export const packagedGetter = {
     return (await Connector.fetch('get_friend_msg_history', 'getFriendMsgHistory', {
       user_id: userId,
       count,
-      message_id: startMsgId
+      message_seq: startMsgId
     })) as MsgBody<{
       messages: PrivateMessage<AnyMessage>[]
     }>
@@ -56,11 +179,11 @@ export const packagedGetter = {
     return (await Connector.fetch('get_group_msg_history', 'getGroupMsgHistory', {
       group_id: groupId,
       count,
-      message_id: startMsgId
+      message_seq: startMsgId
     })) as MsgBody<{
       messages: GroupMessage<AnyMessage>[]
     }>
-  },
+  }
   /*
   getRecentContacts: async (count: number = 10) => {
     return (await Connector.fetch('get_recent_contacts', 'getRecentContacts', {
@@ -68,7 +191,9 @@ export const packagedGetter = {
     })) as MsgBody<>
   }
   */
+}
 
+export const packagedSender = {
   sendMessage: async (sender: SendingMessage) => {
     if (sender.type === 'private') {
       return (await Connector.fetch('send_private_msg', 'sendPrivateMsg', {
