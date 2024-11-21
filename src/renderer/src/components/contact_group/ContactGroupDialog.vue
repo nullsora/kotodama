@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
-import { Chat, Friend, Group } from '@renderer/functions/types'
+import { Chat } from '@renderer/functions/types'
 import SelectIcon from './SelectIcon.vue'
 import FadeTransition from '../misc/FadeTransition.vue'
 import ContactCard from '../contact/ContactCard.vue'
@@ -31,31 +31,23 @@ const canEmit = computed(() => {
   )
 })
 
+const checkSameChat = (chat1: Chat, chat2: Chat) => {
+  if (chat1.type === 'friend' && chat2.type === 'friend') {
+    return chat1.data.user_id === chat2.data.user_id
+  } else if (chat1.type === 'group' && chat2.type === 'group') {
+    return chat1.data.group_id === chat2.data.group_id
+  } else return false
+}
+
 const checkChatInList = (chat: Chat) => {
-  return (
-    newContactGroupInfo.value.chats.find((c) => {
-      if (c.type !== chat.type) return false
-
-      if (c.type === 'private') return (c.data as Friend).user_id === (chat.data as Friend).user_id
-      else if (c.type === 'group')
-        return (c.data as Group).group_id === (chat.data as Group).group_id
-
-      return false
-    }) !== undefined
-  )
+  return newContactGroupInfo.value.chats.find((c) => checkSameChat(c, chat)) !== undefined
 }
 
 const toggleSelection = (chat: Chat) => {
   if (checkChatInList(chat)) {
-    newContactGroupInfo.value.chats = newContactGroupInfo.value.chats.filter((c) => {
-      if (c.type !== chat.type) return true
-
-      if (c.type === 'private') return (c.data as Friend).user_id !== (chat.data as Friend).user_id
-      else if (c.type === 'group')
-        return (c.data as Group).group_id !== (chat.data as Group).group_id
-
-      return true
-    })
+    newContactGroupInfo.value.chats = newContactGroupInfo.value.chats.filter(
+      (c) => !checkSameChat(c, chat)
+    )
   } else {
     newContactGroupInfo.value.chats.push(chat)
   }
@@ -81,10 +73,10 @@ const submitGroup = async () => {
     return
   }
   for (const chat of newContactGroupInfo.value.chats) {
-    if (chat.type === 'private') {
-      await runtimeData.pushFriend((chat.data as Friend).user_id)
+    if (chat.type === 'friend') {
+      await runtimeData.addToList.private(chat.data.user_id)
     } else if (chat.type === 'group') {
-      await runtimeData.pushGroup((chat.data as Group).group_id)
+      await runtimeData.addToList.group(chat.data.group_id)
     }
   }
   await runtimeData.updateInfo()
@@ -171,17 +163,17 @@ watch(
         class="primary-border p-sm max-h-40vh overflow-y-auto scrollbar scrollbar-w-1 scrollbar-rounded"
       >
         <div
-          v-for="(friend, index) in runtimeData.user.value.contacts.friends"
+          v-for="(friend, index) in runtimeData.curContacts.friends"
           :key="index"
           class="mb-2"
-          @click="toggleSelection({ type: 'private', data: friend })"
+          @click="toggleSelection({ type: 'friend', data: friend })"
         >
           <ContactCard
             :contact="{
-              type: 'private',
+              type: 'friend',
               data: friend
             }"
-            :selected="checkChatInList({ type: 'private', data: friend })"
+            :selected="checkChatInList({ type: 'friend', data: friend })"
           />
         </div>
       </div>
@@ -190,7 +182,7 @@ watch(
         class="primary-border p-sm max-h-40vh overflow-y-auto scrollbar scrollbar-w-1 scrollbar-rounded"
       >
         <div
-          v-for="(group, index) in runtimeData.user.value.contacts.groups"
+          v-for="(group, index) in runtimeData.curContacts.groups"
           :key="index"
           class="mb-2"
           @click="toggleSelection({ type: 'group', data: group })"

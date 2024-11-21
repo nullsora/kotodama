@@ -1,27 +1,20 @@
 <script setup lang="ts">
 import { computed, inject, Ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
-import { Friend, Group, Pages } from '@renderer/functions/types'
+import { ChatInfo, Friend, Group, Pages } from '@renderer/functions/types'
 
 const runtimeData = inject('runtimeData') as DataManager
 const currentPage = inject('currentPage') as Ref<Pages>
 
 const props = defineProps<{
-  contact: {
-    type: 'friend' | 'group'
-    id: number
-  } | null
+  contact: ChatInfo | null
 }>()
 
 const contactObj = computed(() => {
   if (props.contact?.type === 'friend') {
-    return runtimeData.user.value.contacts.friends.find(
-      (friend: Friend) => friend.user_id === props.contact?.id
-    )
+    return runtimeData.curContacts.friends.find((friend) => friend.user_id === props.contact?.id)
   } else if (props.contact?.type === 'group') {
-    return runtimeData.user.value.contacts.groups.find(
-      (group: Group) => group.group_id === props.contact?.id
-    )
+    return runtimeData.curContacts.groups.find((group) => group.group_id === props.contact?.id)
   }
   return null
 })
@@ -45,13 +38,13 @@ const avatarUrl = computed(() => {
 
 const jumpToMsg = async () => {
   if (props.contact?.type === 'friend') {
-    await runtimeData.pushFriend(props.contact.id)
+    await runtimeData.addToList.private(props.contact.id)
     currentPage.value = Pages.Chat
-    // selectedChat.value = { type: 'friend', id: props.contact.id }
+    runtimeData.showingChat.value = { type: 'friend', id: props.contact.id }
   } else if (props.contact?.type === 'group') {
-    await runtimeData.pushGroup(props.contact.id)
+    await runtimeData.addToList.group(props.contact.id)
     currentPage.value = Pages.Chat
-    // selectedChat.value = { type: 'group', id: props.contact.id }
+    runtimeData.showingChat.value = { type: 'group', id: props.contact.id }
   }
 }
 </script>

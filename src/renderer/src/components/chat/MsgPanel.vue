@@ -145,11 +145,11 @@ const updateMsgHistory = async (append: boolean = false, count: number = 30) => 
   const _count = !append ? count : msgHistoryList.value.length + count
   if (props.chatInfo?.type === 'friend') {
     msgHistoryList.value = (
-      await packagedGetter.getFriendMsgHistory(props.chatInfo.id, _count)
+      await packagedGetter.getMsg.friend(props.chatInfo.id, _count)
     ).data.messages
   } else if (props.chatInfo?.type === 'group') {
     msgHistoryList.value = (
-      await packagedGetter.getGroupMsgHistory(props.chatInfo.id, _count)
+      await packagedGetter.getMsg.group(props.chatInfo.id, _count)
     ).data.messages
   }
 }
@@ -194,7 +194,7 @@ watch(
 <template>
   <div
     ref="msgPanel"
-    class="msg-panel scrollbar scrollbar-w-1 scrollbar-rounded p-l-sm p-r-sm"
+    class="msg-panel scrollbar scrollbar-w-1 scrollbar-rounded pl-sm pr-sm"
     @scroll="handleScroll"
   >
     <div v-if="msgHistoryList.length > 0">

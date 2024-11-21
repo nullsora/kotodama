@@ -4,11 +4,9 @@ import ContactPanel from '@renderer/components/contact/ContactPanel.vue'
 import ContactPageLayout from '@renderer/components/layout/ContactPageLayout.vue'
 import ContactInfo from '@renderer/components/contact/ContactInfo.vue'
 import FadeTransition from '@renderer/components/misc/FadeTransition.vue'
+import { ChatInfo } from '@renderer/functions/types'
 
-const selectedContact = ref<{
-  type: 'friend' | 'group'
-  id: number
-} | null>(null)
+const selectedContact = ref<ChatInfo | null>(null)
 </script>
 
 <template>

@@ -14,10 +14,10 @@ const msgResult = ref('')
 const fetchMsg = async () => {
   if (!chatId.value) return
   if (isGroup.value.value) {
-    const res = await packagedGetter.getGroupMsgHistory(chatId.value, count.value)
+    const res = await packagedGetter.getMsg.group(chatId.value, count.value)
     msgResult.value = JSON.stringify(res, null, 2)
   } else {
-    const res = await packagedGetter.getFriendMsgHistory(chatId.value, count.value)
+    const res = await packagedGetter.getMsg.friend(chatId.value, count.value)
     msgResult.value = JSON.stringify(res, null, 2)
   }
 }

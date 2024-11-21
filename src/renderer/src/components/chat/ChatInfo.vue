@@ -15,16 +15,9 @@ const props = defineProps<{
 const showInfo = ref(false)
 
 const chat = computed(() => {
-  if (props.chatInfo?.type === 'friend') {
-    return runtimeData.user.value.contacts.friends.find(
-      (friend) => friend.user_id === props.chatInfo?.id
-    )
-  } else if (props.chatInfo?.type === 'group') {
-    return runtimeData.user.value.contacts.groups.find(
-      (group) => group.group_id === props.chatInfo?.id
-    )
-  }
-  return undefined
+  if (props.chatInfo) {
+    return runtimeData.findChat[props.chatInfo.type](props.chatInfo.id)
+  } else return undefined
 })
 
 const chatName = computed(() => {

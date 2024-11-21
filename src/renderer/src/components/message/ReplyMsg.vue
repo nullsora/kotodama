@@ -20,7 +20,7 @@ const renderShortMsg = ref('')
 
 const getOringinalMsg = async () => {
   const oriId = props.msg.data.id
-  const oriMsg = await packagedGetter.getMsg(oriId)
+  const oriMsg = await packagedGetter.getMsg.single(oriId)
   originalMsg.value = oriMsg.data
   renderShortMsg.value = (await msgListToShortMsg(oriMsg.data)) ?? '[引用消息不存在]'
 }

@@ -20,7 +20,7 @@ const playRecord = async () => {
       url = msg.data.path
     }
 
-    const buffer = await packagedGetter.getRecordBuffer(msg.data.url)
+    const buffer = await packagedGetter.cachedFile.recordBuffer.get(msg.data.url)
     await amr.value.initWithBlob(new Blob([buffer]))
 
     amr.value.play()

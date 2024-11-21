@@ -130,10 +130,20 @@ export type FriendsCategory = {
 
 // Runtime Data types
 
-export type Chat = {
-  type: 'group' | 'private'
-  data: Group | Friend
-  latestMsg?: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
+export type Chat =
+  | {
+      type: 'friend'
+      data: Friend
+      latestMsg?: PrivateMessage<AnyMessage>
+    }
+  | {
+      type: 'group'
+      data: Group
+      latestMsg?: GroupMessage<AnyMessage>
+    }
+export type ChatInfo = {
+  type: 'friend' | 'group'
+  id: number
 }
 
 export type UserSetting = {
@@ -161,7 +171,7 @@ export type UserSetting = {
 
 export type PrivateMsgChainNode = {
   type: 'private'
-  /** 最好是当天0:00的时间戳 / 1000 */
+  /** 当天0:00的时间戳 / 1000 */
   time: number
   messages: {
     sender: {
@@ -175,7 +185,7 @@ export type PrivateMsgChainNode = {
 
 export type GroupMsgChainNode = {
   type: 'group'
-  /** 最好是当天0:00的时间戳 / 1000 */
+  /** 当天0:00的时间戳 / 1000 */
   time: number
   messages: {
     sender: {

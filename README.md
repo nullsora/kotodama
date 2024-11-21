@@ -77,16 +77,12 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 ### 依赖
 
-这只是一个列出软件依赖和安装方法的例子。
-
-- pnpm
+- 安装pnpm _(可选)_
   ```sh
   npm install pnpm@latest -g
   ```
 
 ### 安装
-
-_下面是一个指导你的受众如何安装和配置你的应用的例子。这个模板不需要任何外部依赖或服务。_
 
 1. 克隆本仓库
    ```sh
@@ -107,14 +103,16 @@ _下面是一个指导你的受众如何安装和配置你的应用的例子。�
 
 ## 使用方法
 
-选择你的平台进行项目构建
+- 在使用之前，你需要有一个可用的Onebot后端，推荐[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)。
 
-```sh
-pnpm build:unpack
-pnpm build:win
-pnpm build:linux
-pnpm build:mac
-```
+- 选择你的平台进行项目构建
+
+  ```sh
+  pnpm build:unpack
+  pnpm build:win
+  pnpm build:linux
+  pnpm build:mac
+  ```
 
 <p align="right">(<a href="#top">返回顶部</a>)</p>
 
@@ -171,4 +169,4 @@ pnpm build:mac
 [issues-shield]: https://img.shields.io/github/issues/nullsora/kotodama.svg?style=for-the-badge
 [issues-url]: https://github.com/nullsora/kotodama/issues
 [license-shield]: https://img.shields.io/github/license/nullsora/kotodama.svg?style=for-the-badge
-[license-url]: https://github.com/nullsora/kotodama/blob/master/LICENSE
+[license-url]: https://github.com/nullsora/kotodama/blob/main/LICENSE

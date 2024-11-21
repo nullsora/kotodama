@@ -47,7 +47,7 @@ const getImg = async () => {
   // ) {
   //   return src
   // }
-  blob.value = await packagedGetter.getImgBlob(src)
+  blob.value = await packagedGetter.cachedFile.imgBlob.get(src)
   return URL.createObjectURL(blob.value)
 }
 

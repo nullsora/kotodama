@@ -9,7 +9,6 @@ import {
   SendingMessage
 } from '@renderer/functions/message/message_types'
 import { packagedGetter, packagedSender } from '@renderer/functions/packaged_api'
-import { Friend, Group } from '@renderer/functions/types'
 import FaceSelect from './FaceSelect.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
@@ -81,23 +80,23 @@ const sendMsg = async () => {
   if (!parseSender()) return
 
   // Send
-  const msgId = (await packagedSender.sendMessage(parseSender()!)).data.message_id
+  const msgId = (await packagedSender.msg.send(parseSender()!)).data.message_id
 
   // Update rendering
   let msg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
 
   if (props.chatInfo.type === 'friend') {
-    msg = (await packagedGetter.getMsg(msgId)).data as PrivateMessage<AnyMessage>
+    msg = (await packagedGetter.getMsg.single(msgId)).data as PrivateMessage<AnyMessage>
     ;(runtimeData.renderingMsgs.value as PrivateMessage<AnyMessage>[]).push(msg)
   } else {
-    msg = (await packagedGetter.getMsg(msgId)).data as GroupMessage<AnyMessage>
+    msg = (await packagedGetter.getMsg.single(msgId)).data as GroupMessage<AnyMessage>
     ;(runtimeData.renderingMsgs.value as GroupMessage<AnyMessage>[]).push(msg)
   }
 
-  const chat = runtimeData.user.value.contacts.showing.find((c) => {
-    if (c.type !== (props.chatInfo?.type === 'friend' ? 'private' : 'group')) return false
-    if (c.type === 'private') return (c.data as Friend).user_id === props.chatInfo?.id
-    else if (c.type === 'group') return (c.data as Group).group_id === props.chatInfo?.id
+  const chat = runtimeData.curContacts.showing.find((c) => {
+    if (c.type !== props.chatInfo?.type) return false
+    if (c.type === 'friend') return c.data.user_id === props.chatInfo?.id
+    else if (c.type === 'group') return c.data.group_id === props.chatInfo?.id
     return false
   })
 

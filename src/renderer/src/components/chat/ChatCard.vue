@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import { Chat, Friend, Group } from '@renderer/functions/types'
+import { Chat } from '@renderer/functions/types'
 import TextShortMsg from '../message/basic/TextShortMsg.vue'
 
 const props = defineProps<{ chat: Chat; selected: boolean }>()
 
 const getAvatarUrl = computed(() => {
-  if (props.chat.type === 'private') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${(props.chat.data as Friend).user_id}`
+  if (props.chat.type === 'friend') {
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${props.chat.data.user_id}`
   } else {
-    return `https://p.qlogo.cn/gh/${(props.chat.data as Group).group_id}/${(props.chat.data as Group).group_id}/640`
+    return `https://p.qlogo.cn/gh/${props.chat.data.group_id}/${props.chat.data.group_id}/640`
   }
 })
 
 const getName = computed(() => {
-  if (props.chat.type === 'private') {
-    return (props.chat.data as Friend).remark ?? (props.chat.data as Friend).nickname
+  if (props.chat.type === 'friend') {
+    return props.chat.data.remark === '' ? props.chat.data.nickname : props.chat.data.remark
   } else {
-    return (props.chat.data as Group).group_name
+    return props.chat.data.group_name
   }
 })
 
@@ -72,7 +72,7 @@ const parseTime = (time: number | undefined) => {
           <i
             class="chat-name w-4.2 h-4.2 align-mid pi"
             :class="
-              props.chat.type === 'private'
+              props.chat.type === 'friend'
                 ? 'i-fluent-chat-24-regular'
                 : 'i-fluent-chat-multiple-24-regular'
             "

@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
-import { Chat, Friend, Group } from '@renderer/functions/types'
+import { Chat, ChatInfo } from '@renderer/functions/types'
 import ContactCard from './ContactCard.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 
-const selectedContact = defineModel<{
-  type: 'friend' | 'group'
-  id: number
-} | null>('selectedContact')
+const selectedContact = defineModel<ChatInfo | null>('selectedContact')
 
 const selectedPanel = ref<'friends' | 'groups'>('friends')
 
@@ -30,11 +27,13 @@ const leaveAnimation = computed(() => {
 })
 
 const getSelected = (chat: Chat) => {
-  if (selectedContact.value?.type === 'friend') {
-    return selectedContact.value.id === (chat.data as Friend).user_id
-  } else if (selectedContact.value?.type === 'group') {
-    return selectedContact.value.id === (chat.data as Group).group_id
-  } else return false
+  if (chat.type === 'friend' && selectedContact.value?.type === 'friend') {
+    return selectedContact.value.id === chat.data.user_id
+  } else if (chat.type === 'group' && selectedContact.value?.type === 'group') {
+    return selectedContact.value.id === chat.data.group_id
+  } else {
+    return false
+  }
 }
 </script>
 
@@ -68,7 +67,7 @@ const getSelected = (chat: Chat) => {
         >
           <Accordion :value="[]" multiple>
             <AccordionPanel
-              v-for="(categories, index) in runtimeData.user.value.contacts.friendsCategories"
+              v-for="(categories, index) in runtimeData.curContacts.friendsCategories"
               :key="index"
               :value="index"
             >
@@ -84,8 +83,8 @@ const getSelected = (chat: Chat) => {
                   class="mb-2 w-full"
                 >
                   <ContactCard
-                    :contact="{ type: 'private', data: friend }"
-                    :selected="getSelected({ type: 'private', data: friend })"
+                    :contact="{ type: 'friend', data: friend }"
+                    :selected="getSelected({ type: 'friend', data: friend })"
                     @click="selectedContact = { type: 'friend', id: friend.user_id }"
                   />
                 </div>
@@ -99,7 +98,7 @@ const getSelected = (chat: Chat) => {
           class="w-full calc-height primary-border p-2 scrollbar scrollbar-w-1 scrollbar-rounded"
         >
           <ContactCard
-            v-for="group in runtimeData.user.value.contacts.groups"
+            v-for="group in runtimeData.curContacts.groups"
             :key="group.group_id"
             class="mb-2"
             :contact="{ type: 'group', data: group }"

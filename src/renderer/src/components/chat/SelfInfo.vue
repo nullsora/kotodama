@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, inject, useTemplateRef } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 
 const runtimeData = inject('runtimeData') as DataManager
@@ -16,9 +16,17 @@ const genderSymbol = computed(() => {
   } else return 'i-fluent-emoji-white-question-mark'
 })
 
-const menu = ref()
-const togglePopup = async (event: unknown) => {
-  menu.value.toggle(event)
+const menu = useTemplateRef('menu')
+const togglePopup = async (event: Event) => {
+  menu.value!.toggle(event)
+}
+
+const sendMsgToSelf = () => {
+  runtimeData.showingChat.value = {
+    type: 'friend',
+    id: runtimeData.userInfo.value.main.user_id
+  }
+  menu.value!.hide()
 }
 </script>
 
@@ -54,7 +62,13 @@ const togglePopup = async (event: unknown) => {
       <Divider />
       <div class="flex flex-row justify-between items-center gap-sm w-full">
         <Button class="w-full" size="small" severity="secondary" label="设置资料" />
-        <Button class="w-full" size="small" severity="primary" label="发消息" />
+        <Button
+          class="w-full"
+          size="small"
+          severity="primary"
+          label="发消息"
+          @click="sendMsgToSelf"
+        />
       </div>
     </template>
   </Menu>

@@ -89,10 +89,10 @@ const parseAtMsg = async (msg: string, sendGroupId?: number) => {
   let name: string
   try {
     if (sendGroupId) {
-      const info = (await packagedGetter.getGroupMemberInfo(sendGroupId, qq)).data
+      const info = (await packagedGetter.getInfo.groupMember(sendGroupId, qq)).data
       name = info.card === '' ? info.nickname : info.card
     } else {
-      name = (await packagedGetter.getStrangerInfo(qq)).data.nickname
+      name = (await packagedGetter.getInfo.stranger(qq)).data.nickname
     }
     return `@${name} `
   } catch (e) {

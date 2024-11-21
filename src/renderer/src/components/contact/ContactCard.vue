@@ -1,35 +1,40 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Friend, Group } from '@renderer/functions/types'
+import { Chat } from '@renderer/functions/types'
 
 const props = defineProps<{
-  contact: {
-    type: 'private' | 'group'
-    data: Friend | Group
-  }
+  contact: Chat
   selected: boolean
 }>()
 
 const avatarUrl = computed(() => {
-  if (props.contact.type === 'private') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${(props.contact.data as Friend).user_id}`
+  if (props.contact.type === 'friend') {
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${props.contact.data.user_id}`
   } else {
-    return `https://p.qlogo.cn/gh/${(props.contact.data as Group).group_id}/${(props.contact.data as Group).group_id}/640`
+    return `https://p.qlogo.cn/gh/${props.contact.data.group_id}/${props.contact.data.group_id}/640`
   }
 })
 const name = computed(() => {
-  if (props.contact.type === 'private') {
-    const nick = (props.contact.data as Friend).nickname
-    const remark = (props.contact.data as Friend).remark
-    return remark ? `${remark} (${nick})` : nick
+  if (props.contact.type === 'friend') {
+    const nick = props.contact.data.nickname
+    const remark = props.contact.data.remark
+    return remark !== '' ? `${remark} (${nick})` : nick
   } else {
-    return (props.contact.data as Group).group_name
+    return props.contact.data.group_name
   }
 })
 </script>
 
 <template>
-  <div v-ripple :class="{ selected: selected }" class="w-full primary-border contact-card p-2">
+  <div
+    v-ripple
+    :class="{
+      selected: selected,
+      'primary-border': contact.type === 'friend',
+      glassmorphism: contact.type === 'group'
+    }"
+    class="w-full contact-card p-2"
+  >
     <img :src="avatarUrl" class="w-10 h-10 rounded-full" crossorigin="anonymous" />
     <div class="flex flex-col justify-center items-start ml-2">
       <span class="text-sm">{{ name }}</span>

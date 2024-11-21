@@ -14,11 +14,11 @@ const getTargetName = async () => {
   if (props.msg.data.qq === 'all') return '全体成员'
   const qq = parseInt(props.msg.data.qq)
   if (props.sendGroupId) {
-    const info = (await packagedGetter.getGroupMemberInfo(props.sendGroupId, qq)).data
+    const info = (await packagedGetter.getInfo.groupMember(props.sendGroupId, qq)).data
     if (info) return info.card === '' ? info.nickname : info.card
-    else return (await packagedGetter.getStrangerInfo(qq)).data.nickname
+    else return (await packagedGetter.getInfo.stranger(qq)).data.nickname
   }
-  return (await packagedGetter.getStrangerInfo(qq)).data.nickname
+  return (await packagedGetter.getInfo.stranger(qq)).data.nickname
 }
 
 // watch props

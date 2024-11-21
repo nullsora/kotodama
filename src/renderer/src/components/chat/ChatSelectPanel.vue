@@ -14,26 +14,22 @@ const selectedChat = defineModel<{
 } | null>('selectedChat')
 
 const renderChats = computed(() => {
-  if (!props.filters) return runtimeData.user.value.contacts.showing
+  if (!props.filters) return runtimeData.curContacts.showing
 
   const renderer: Chat[] = []
-  for (const chat of runtimeData.user.value.contacts.showing) {
+  for (const chat of runtimeData.curContacts.showing) {
     if (
       props.filters.find((c) => {
-        if (c.type !== chat.type) return false
-
-        if (c.type === 'private')
-          return (c.data as Friend).user_id === (chat.data as Friend).user_id
-        else if (c.type === 'group')
-          return (c.data as Group).group_id === (chat.data as Group).group_id
-
-        return false
+        if (c.type === 'friend' && chat.type === 'friend')
+          return c.data.user_id === chat.data.user_id
+        else if (c.type === 'group' && chat.type === 'group')
+          return c.data.group_id === chat.data.group_id
+        else return false
       })
     ) {
       renderer.push(chat)
     }
   }
-  console.log(renderer)
   return renderer
 })
 
@@ -46,15 +42,15 @@ const getSelected = (chat: Chat) => {
 }
 
 const changeSelectedChat = (chat: Chat) => {
-  if (chat.type === 'private') {
+  if (chat.type === 'friend') {
     selectedChat.value = {
       type: 'friend',
-      id: (chat.data as Friend).user_id
+      id: chat.data.user_id
     }
   } else if (chat.type === 'group') {
     selectedChat.value = {
       type: 'group',
-      id: (chat.data as Group).group_id
+      id: chat.data.group_id
     }
   }
 }
@@ -62,7 +58,7 @@ const changeSelectedChat = (chat: Chat) => {
 
 <template>
   <div class="calc-height scrollbar scrollbar-w-1 scrollbar-rounded glassmorphism">
-    <div class="p-2 p-b-0">
+    <div class="p-2 pb-0">
       <ChatCard
         v-for="(contact, index) in renderChats"
         :key="index"
