@@ -1,13 +1,5 @@
 <div id="top"></div>
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![AGPL-3.0 License][license-shield]][license-url]
-
-
-
 <!-- 项目 LOGO -->
 <br />
 <div align="center">
@@ -16,6 +8,12 @@
   </a>
 
 <h3 align="center">Kotodama</h3>
+
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![AGPL-3.0 License][license-shield]][license-url]
 
   <p align="center">
     好看的 (?) 第三方Onebot客户端实现
@@ -30,8 +28,6 @@
     <a href="https://github.com/nullsora/kotodama/issues">请求新功能</a>
   </p>
 </div>
-
-
 
 <!-- 目录 -->
 <details>
@@ -57,27 +53,23 @@
   </ol>
 </details>
 
-
-
 <!-- 关于本项目 -->
+
 ## 关于本项目
 
-[![产品截图][product-screenshot]](https://example.com)
-
-Kotodama 是一个基于 Onebot 标准的第三方客户端实现。同样也是本人心中 IM 客户端应该有的形态。
+Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
-
 
 ### 构建工具
 
-* [Node.js](https://nodejs.org/)
-* [pnpm](https://pnpm.io/)
+- [Node.js](https://nodejs.org/)
+- [pnpm](https://pnpm.io/)
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
 
-
 <!-- 开始 -->
+
 ## 开始
 
 这是一份在本地构建项目的指导的例子。
@@ -86,7 +78,8 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。同样也是
 ### 依赖
 
 这只是一个列出软件依赖和安装方法的例子。
-* pnpm
+
+- pnpm
   ```sh
   npm install pnpm@latest -g
   ```
@@ -102,50 +95,48 @@ _下面是一个指导你的受众如何安装和配置你的应用的例子。�
 2. 安装依赖
    ```sh
     pnpm install
-    ```
+   ```
 3. 进行开发
-    ```sh
-    pnpm dev
-    ```
+   ```sh
+   pnpm dev
+   ```
 
 <p align="right">(<a href="#top">返回顶部</a>)</p>
 
-
-
 <!-- 使用方法 示例 -->
+
 ## 使用方法
 
 选择你的平台进行项目构建
-  ```sh
-  pnpm build:unpack
-  pnpm build:win
-  pnpm build:linux
-  pnpm build:mac
-  ```
+
+```sh
+pnpm build:unpack
+pnpm build:win
+pnpm build:linux
+pnpm build:mac
+```
 
 <p align="right">(<a href="#top">返回顶部</a>)</p>
 
-
-
 <!-- 特性支持 -->
+
 ## 特性支持
 
 - [ ] 基础功能
-    - [*] 连接 Onebot 服务器
-    - [ ] 消息接收和展示 (部分支持)
-    - [ ] 消息发送 (仅支持文字)
-    - [ ] 联系人管理，群管理等
-- [*] 个性化
-    - [*] Light / Dark Mode 切换
-    - [*] 自定义主题色 / 背景
+  - [x] 连接 Onebot 服务器
+  - [ ] 消息接收和展示 (部分支持)
+  - [ ] 消息发送 (仅支持文字)
+  - [ ] 联系人管理，群管理等
+- [x] 个性化
+  - [x] Light / Dark Mode 切换
+  - [x] 自定义主题色 / 背景
 
 到 [open issues](https://github.com/nullsora/kotodama/issues) 页查看所有请求的功能 （以及已知的问题）。
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
 
-
-
 <!-- 贡献 -->
+
 ## 贡献
 
 贡献让开源社区成为了一个非常适合学习、互相激励和创新的地方。你所做出的任何贡献都是**受人尊敬**的。
@@ -160,19 +151,17 @@ _下面是一个指导你的受众如何安装和配置你的应用的例子。�
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
 
-
-
 <!-- 许可证 -->
+
 ## 许可证
 
 根据 AGPL-3.0 许可证分发。打开 [LICENSE](LICENSE) 查看更多内容。
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
 
-
-
 <!-- MARKDOWN 链接 & 图片 -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/nullsora/kotodama.svg?style=for-the-badge
 [contributors-url]: https://github.com/nullsora/kotodama/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/nullsora/kotodama.svg?style=for-the-badge
@@ -182,5 +171,4 @@ _下面是一个指导你的受众如何安装和配置你的应用的例子。�
 [issues-shield]: https://img.shields.io/github/issues/nullsora/kotodama.svg?style=for-the-badge
 [issues-url]: https://github.com/nullsora/kotodama/issues
 [license-shield]: https://img.shields.io/github/license/nullsora/kotodama.svg?style=for-the-badge
-[license-url]: https://github.com/nullsora/kotodama/blob/master/LICENSE.txt
-[product-screenshot]: images/screenshot.png
+[license-url]: https://github.com/nullsora/kotodama/blob/master/LICENSE
