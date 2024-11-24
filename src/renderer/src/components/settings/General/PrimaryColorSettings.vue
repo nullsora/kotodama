@@ -2,7 +2,7 @@
 import { PrimaryColor } from '@renderer/functions/types'
 import { useConfigStore } from '@renderer/stores/ConfigStore'
 import { ref } from 'vue'
-import SettingItem from '../misc/SettingItem.vue'
+import SettingItem from '@renderer/components/misc/SettingItem.vue'
 
 const config = useConfigStore()
 

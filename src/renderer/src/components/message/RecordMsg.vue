@@ -1,43 +1,33 @@
 <script setup lang="ts">
 import { MessageTypes } from '@renderer/functions/message/message_types'
 import { packagedGetter } from '@renderer/functions/packaged_api'
-import BenzAMRRecorder from 'benz-amr-recorder'
-import { onBeforeUnmount, ref } from 'vue'
+import { ref } from 'vue'
 
 const { msg } = defineProps<{
   msg: MessageTypes['Record']
 }>()
 
-const amr = ref<BenzAMRRecorder | null>(null)
 const icon = ref('i-fluent-play-circle-24-regular')
+const blobUrl = ref('')
 
 const playRecord = async () => {
-  if (!amr.value) {
-    amr.value = new BenzAMRRecorder()
-
+  if (icon.value === 'i-fluent-play-circle-24-regular') {
+    icon.value = 'i-fluent-pause-circle-24-regular'
     let url = msg.data.url
-    if (url.startsWith('file://') && msg.data.path) {
+
+    if (url.startsWith('file') && msg.data.path) {
       url = msg.data.path
     }
 
-    const buffer = await packagedGetter.cachedFile.recordBuffer.get(msg.data.url)
-    await amr.value.initWithBlob(new Blob([buffer]))
+    const buffer = await packagedGetter.cachedFile.recordBuffer.get(url)
 
-    amr.value.play()
-    icon.value = 'i-fluent-pause-circle-24-regular'
-  } else stopRecord()
-}
+    blobUrl.value = URL.createObjectURL(new Blob([buffer], { type: 'audio/amr' }))
+    const audio = new Audio(blobUrl.value)
+    audio.play()
 
-const stopRecord = () => {
-  if (amr.value) {
-    amr.value.stop()
     icon.value = 'i-fluent-play-circle-24-regular'
   }
 }
-
-onBeforeUnmount(() => {
-  stopRecord()
-})
 </script>
 
 <template>

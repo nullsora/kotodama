@@ -95,7 +95,7 @@ const downloadFile = async () => {
   >
     <Avatar size="large" :icon="fileType" :style="avatarStyle" />
     <div class="flex flex-col">
-      <span class="truncate text-sm max-w-60">{{ props.msg.data.file }}</span>
+      <span class="truncate text-sm w-40">{{ props.msg.data.file }}</span>
       <span class="text-xs text-gray-500">{{ fileSize }}</span>
     </div>
   </div>

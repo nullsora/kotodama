@@ -2,6 +2,7 @@
 import { JsonInnerMsg, MessageTypes } from '@renderer/functions/message/message_types'
 import { computed } from 'vue'
 import AnnounceMsg from './special/AnnounceMsg.vue'
+import MsgImage from './basic/MsgImage.vue'
 
 const { msg } = defineProps<{
   msg: MessageTypes['JSON']
@@ -37,7 +38,7 @@ const getPreviewUrl = (meta) => {
     <AnnounceMsg v-if="key === 'mannounce'" :msg="value" />
     <div v-else class="w-80 share-card glassmorphism p-sm" @click="openInBrowser(value)">
       <div class="flex flex-row justify-start items-center gap-2">
-        <img class="w-15 h-15 rd-2" :src="getPreviewUrl(value)" crossorigin="anonymous" />
+        <MsgImage class="w-15 h-15" :skeleton-size="15" :src="getPreviewUrl(value)" />
         <div class="flex flex-col justify-start items-start gap-1">
           <span class="font-bold text-sm dark-gray-text">{{ value.title }}</span>
           <span class="text-xs gray-text">{{ value.desc }}</span>

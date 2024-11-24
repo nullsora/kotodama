@@ -65,30 +65,33 @@ const parseTime = (time: number | undefined) => {
 
 <template>
   <div v-ripple :class="{ selected: selected }" class="glassmorphism p-2 chat-card">
-    <div class="flex flex-row justify-start items-center gap-2">
+    <div class="w-full flex flex-row justify-start items-center gap-2">
       <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
-      <div class="flex flex-col justify-center items-start gap-0.3">
-        <div class="chat-name text-sm overflow-text">
-          <i
-            class="chat-name w-4.2 h-4.2 align-mid pi"
-            :class="
-              props.chat.type === 'friend'
-                ? 'i-fluent-chat-24-regular'
-                : 'i-fluent-chat-multiple-24-regular'
-            "
-          />
-          {{ getName }}
+      <div class="w-full flex flex-col justify-center items-start gap-0.3">
+        <div class="w-45.5 flex flex-row justify-between items-center gap-2">
+          <div class="chat-name text-sm overflow-text">
+            <i
+              class="chat-name w-4.2 h-4.2 align-mid pi"
+              :class="
+                props.chat.type === 'friend'
+                  ? 'i-fluent-chat-24-regular'
+                  : 'i-fluent-chat-multiple-24-regular'
+              "
+            />
+            {{ getName }}
+          </div>
+          <div :class="selected ? '' : ' text-gray-500'" class="text-xs whitespace-nowrap">
+            {{ parseTime(props.chat?.latestMsg?.time) }}
+          </div>
         </div>
-        <div :class="selected ? '' : 'short-msg'" class="text-sm overflow-text">
-          <Suspense>
-            <TextShortMsg :msg="props.chat.latestMsg" />
-          </Suspense>
+        <div class="w-45.5 flex flex-row justify-between items-center gap-2">
+          <div :class="selected ? '' : 'short-msg'" class="text-sm overflow-text">
+            <Suspense>
+              <TextShortMsg :msg="props.chat.latestMsg" />
+            </Suspense>
+          </div>
+          <div class="w-5" />
         </div>
-      </div>
-    </div>
-    <div class="flex flex-col justify-between items-center">
-      <div :class="selected ? '' : ' text-gray-500'" class="text-xs text-end">
-        {{ parseTime(props.chat?.latestMsg?.time) }}
       </div>
     </div>
   </div>
@@ -118,7 +121,6 @@ const parseTime = (time: number | undefined) => {
 }
 
 .overflow-text {
-  max-width: 7rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

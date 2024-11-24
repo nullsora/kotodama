@@ -119,6 +119,13 @@
   --p-dialog-color: var(--p-gray-100);
 }
 
+/*------------------ Popover ------------------*/
+.dark-mode .p-popover {
+  --p-popover-background: var(--p-gray-700);
+  --p-popover-border-color: var(--p-gray-600);
+  --p-popover-color: var(--p-gray-100);
+}
+
 /*------------------ Accordion ------------------*/
 .dark-mode .p-accordionheader {
   --p-accordion-header-background: var(--p-gray-800);

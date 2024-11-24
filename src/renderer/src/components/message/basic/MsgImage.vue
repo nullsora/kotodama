@@ -6,14 +6,18 @@ import ImgPreview from '@renderer/components/misc/ImgPreview.vue'
 const {
   src,
   showMenu = true,
-  preview = false
+  preview = false,
+  rounded = true,
+  skeletonSize = 60
 } = defineProps<{
   src: string
   showMenu?: boolean
   preview?: boolean
+  rounded?: boolean
+  skeletonSize?: number
 }>()
 
-const res = ref('')
+const blobUrl = defineModel<string>('blobUrl', { default: '' })
 const menu = ref()
 const showPreview = ref(false)
 
@@ -52,31 +56,37 @@ const getImg = async () => {
 }
 
 onMounted(async () => {
-  res.value = await getImg()
+  blobUrl.value = await getImg()
 })
 watch(
   () => src,
   async () => {
-    URL.revokeObjectURL(res.value)
-    res.value = ''
-    res.value = await getImg()
+    URL.revokeObjectURL(blobUrl.value)
+    blobUrl.value = ''
+    blobUrl.value = await getImg()
   }
 )
 </script>
 
 <template>
-  <div class="w-full">
+  <div>
     <img
-      v-if="res !== ''"
+      v-if="blobUrl !== ''"
       v-bind="$attrs"
-      :src="res"
-      class="rd-2"
+      :src="blobUrl"
+      :class="{ pointer: preview, 'rd-2': rounded }"
       aria-haspopup="true"
       @contextmenu="onImgRightClick"
-      @dblclick="showPreview = preview"
+      @click="showPreview = preview"
     />
-    <Skeleton v-else v-bind="$attrs" size="15rem" />
+    <Skeleton v-else v-bind="$attrs" :size="`${skeletonSize / 4}rem`" />
     <ContextMenu v-if="showMenu" ref="menu" :model="menuItems" />
-    <ImgPreview v-if="preview" v-model="showPreview" :src="res" />
+    <ImgPreview v-if="preview" v-model="showPreview" :images="[blobUrl]" />
   </div>
 </template>
+
+<style scoped>
+.pointer {
+  cursor: pointer;
+}
+</style>

@@ -1,7 +1,7 @@
 {
   "name": "kotodama",
   "version": "0.0.1",
-  "description": "An Onebot Client for Desktop",
+  "description": "A Third-party Client For Onebot (QQ)",
   "main": "./out/main/index.js",
   "author": "nullsora",
   "license": "AGPL-3.0-only",
@@ -43,7 +43,6 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/eslint-config-typescript": "^13.0.0",
-    "benz-amr-recorder": "^1.1.5",
     "electron": "^31.0.2",
     "electron-builder": "^24.13.3",
     "electron-vite": "^2.3.0",

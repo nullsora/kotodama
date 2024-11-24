@@ -53,7 +53,10 @@ const kotodama = {
     fetch: async (url: string, options?: RequestInit) =>
       await ipcRenderer.invoke('web:fetch', { url, options }),
     fetchBuffer: async (url: string, options?: RequestInit) =>
-      await ipcRenderer.invoke('web:fetchBlob', { url, options })
+      await ipcRenderer.invoke('web:fetchBuffer', { url, options })
+  },
+  file: {
+    getFileBuffer: async (path: string) => await ipcRenderer.invoke('file:getFileBuffer', { path })
   },
   crypto: {
     randomUUID

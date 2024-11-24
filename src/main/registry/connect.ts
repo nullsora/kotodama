@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain } from 'electron'
+import * as fs from 'fs/promises'
 import { Connector } from '../connection/connector'
 
 let connector: Connector | null = null
@@ -15,10 +16,13 @@ export default (window: BrowserWindow) => {
     return fetch(url, params)
   })
 
-  ipcMain.handle('web:fetchBlob', async (_event, { url, params }) => {
+  ipcMain.handle('web:fetchBuffer', async (_event, { url, params }) => {
     const res = await fetch(url, params)
-    const blob = await res.blob()
-    const buffer = await blob.arrayBuffer()
+    const buffer = await res.arrayBuffer()
     return buffer
+  })
+
+  ipcMain.handle('file:getFileBuffer', async (_event, { path }) => {
+    return await fs.readFile(path)
   })
 }

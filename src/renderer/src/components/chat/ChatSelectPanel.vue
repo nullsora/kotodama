@@ -57,8 +57,8 @@ const changeSelectedChat = (chat: Chat) => {
 </script>
 
 <template>
-  <div class="calc-height scrollbar scrollbar-w-1 scrollbar-rounded glassmorphism">
-    <div class="p-2 pb-0">
+  <div class="pr-0.5 glassmorphism">
+    <div class="calc-height scrollbar scrollbar-w-1 scrollbar-rounded p-2 pb-0">
       <ChatCard
         v-for="(contact, index) in renderChats"
         :key="index"

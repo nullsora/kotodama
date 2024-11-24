@@ -84,7 +84,7 @@ export const packagedGetter = {
 
         const fetchBuffer = async () => {
           // @ts-ignore allow window
-          const res = await window.kotodama.web.fetchBuffer(url)
+          const res = await window.kotodama.file.getFileBuffer(url)
           recordCache[url] = {
             buffer: res,
             savedTime: Date.now()

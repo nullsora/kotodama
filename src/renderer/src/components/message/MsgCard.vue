@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
+import { useConfigStore } from '@renderer/stores/ConfigStore'
 import { computed } from 'vue'
 import SendTime from './basic/SendTime.vue'
 import ImageMsg from './ImageMsg.vue'
@@ -11,6 +12,15 @@ import FileMsg from './FileMsg.vue'
 import XMLMsg from './XMLMsg.vue'
 import JsonMsg from './JsonMsg.vue'
 import RecordMsg from './RecordMsg.vue'
+import ImageGallery from './special/ImageGallery.vue'
+import UnsupportedMsg from './UnsupportedMsg.vue'
+
+type ImageGalleryMsg = {
+  type: 'gallery'
+  images: string[]
+}
+
+const config = useConfigStore()
 
 const {
   message,
@@ -23,6 +33,7 @@ const {
 }>()
 
 const msgComponents = {
+  gallery: ImageGallery,
   text: TextMsg,
   image: ImageMsg,
   mface: ImageMsg,
@@ -38,7 +49,36 @@ const msgComponents = {
 const renderOnlyList = ['image', 'mface', 'json']
 
 const messageList = computed(() => {
-  return message.message
+  if (!config.customSettings.message.useImageGallery) return message.message
+
+  const result: (AnyMessage | ImageGalleryMsg)[] = []
+  let imgGallery: ImageGalleryMsg = { type: 'gallery', images: [] }
+  let tempImgMsg: AnyMessage | null = null
+  for (const msg of message.message) {
+    if (msg.type === 'image') {
+      imgGallery.images.push(msg.data.url)
+      tempImgMsg = msg
+    } else {
+      if (imgGallery.images.length > 1) {
+        result.push(imgGallery)
+        imgGallery = { type: 'gallery', images: [] }
+      } else {
+        if (tempImgMsg) {
+          result.push(tempImgMsg)
+          tempImgMsg = null
+        }
+      }
+      result.push(msg)
+    }
+  }
+  if (imgGallery.images.length > 1) {
+    result.push(imgGallery)
+  } else {
+    if (tempImgMsg) {
+      result.push(tempImgMsg)
+    }
+  }
+  return result
 })
 
 const radius = computed(() => {
@@ -92,7 +132,7 @@ const checkOnly = computed(() => {
           :msg="msg"
           :send-group-id="message.message_type === 'group' ? message.group_id : undefined"
         />
-        <component :is="msgComponents[msg.type] ?? 'span'" v-else :msg="msg" />
+        <component :is="msgComponents[msg.type] ?? UnsupportedMsg" v-else :msg="msg" />
       </span>
     </div>
     <SendTime v-if="!reverse" :time="message.time" />

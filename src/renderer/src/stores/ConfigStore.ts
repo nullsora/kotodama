@@ -15,15 +15,21 @@ export const useConfigStore = defineStore('config', () => {
     name: 'Blue',
     code: PrimaryColor.Blue
   })
-  const themeSettings = ref<{
+  const customSettings = ref<{
     backgroundImage: {
       light: string
       dark: string
+    }
+    message: {
+      useImageGallery: boolean
     }
   }>({
     backgroundImage: {
       light: '',
       dark: ''
+    },
+    message: {
+      useImageGallery: true
     }
   })
 
@@ -38,7 +44,7 @@ export const useConfigStore = defineStore('config', () => {
       logLevel.value = parsedConfig.logLevel ?? logLevel.value
       accounts.value = parsedConfig.accounts ?? accounts.value
       primaryColor.value = parsedConfig.primaryColor ?? primaryColor.value
-      themeSettings.value = parsedConfig.themeSettings ?? themeSettings.value
+      customSettings.value = parsedConfig.customSettings ?? customSettings.value
 
       userSettings.value = parsedConfig.userSettings ?? userSettings.value
     }
@@ -67,10 +73,10 @@ export const useConfigStore = defineStore('config', () => {
   }
 
   const updateTheme = () => {
-    if (themeSettings.value.backgroundImage.light !== '') {
+    if (customSettings.value.backgroundImage.light !== '') {
       document.documentElement.style.setProperty(
         '--k-light-theme-bg',
-        themeSettings.value.backgroundImage.light
+        customSettings.value.backgroundImage.light
       )
     } else {
       document.documentElement.style.setProperty(
@@ -78,10 +84,10 @@ export const useConfigStore = defineStore('config', () => {
         'var(--k-light-theme-bg-default)'
       )
     }
-    if (themeSettings.value.backgroundImage.dark !== '') {
+    if (customSettings.value.backgroundImage.dark !== '') {
       document.documentElement.style.setProperty(
         '--k-dark-theme-bg',
-        themeSettings.value.backgroundImage.dark
+        customSettings.value.backgroundImage.dark
       )
     } else {
       document.documentElement.style.setProperty(
@@ -104,10 +110,13 @@ export const useConfigStore = defineStore('config', () => {
       name: 'Blue',
       code: PrimaryColor.Blue
     }
-    themeSettings.value = {
+    customSettings.value = {
       backgroundImage: {
         light: '',
         dark: ''
+      },
+      message: {
+        useImageGallery: true
       }
     }
   }
@@ -118,7 +127,7 @@ export const useConfigStore = defineStore('config', () => {
     logLevel,
     accounts,
     primaryColor,
-    themeSettings,
+    customSettings,
 
     userSettings,
 

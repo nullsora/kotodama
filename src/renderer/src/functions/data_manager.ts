@@ -169,9 +169,11 @@ export class DataManager {
         this.userConfigs.value[this.userIndex.value as number].connection = connection
       }
 
-      for (const chat of this.userConfigs.value[this.userIndex.value as number].contacts.showing) {
-        await this.updateLatestMessage(chat)
-      }
+      await Promise.all(
+        this.userConfigs.value[this.userIndex.value as number].contacts.showing.map((chat) =>
+          this.updateLatestMessage(chat)
+        )
+      )
 
       DataManager.sortChats(this.userConfigs.value[this.userIndex.value as number].contacts.showing)
     })
@@ -239,17 +241,6 @@ export class DataManager {
   }
 
   async pushNewMessage(message: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>) {
-    /*
-    共分为如下步骤，检查连接后：
-    检查消息类型
-    获取消息发送者信息
-    获取可能存在的聊天在显示列表中的索引
-    如果不存在则添加到显示列表
-    如果存在则更新最新消息
-    如果当前正在显示的聊天是这个聊天，则添加到渲染消息列表
-    最后对显示列表按时间进行排序
-    */
-
     this.checkWorking()
 
     const chatId = message.message_type === 'private' ? message.sender.user_id : message.group_id

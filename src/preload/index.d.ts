@@ -41,6 +41,9 @@ declare global {
         fetch(url: string, options?: RequestInit): Promise<Response>
         fetchBuffer(url: string, options?: RequestInit): Promise<ArrayBuffer>
       }
+      file: {
+        getFileBuffer(path: string): Promise<Buffer>
+      }
       crypto: {
         randomUUID(): UUID
       }
