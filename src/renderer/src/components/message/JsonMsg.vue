@@ -3,6 +3,7 @@ import { JsonInnerMsg, MessageTypes } from '@renderer/functions/message/message_
 import { computed } from 'vue'
 import AnnounceMsg from './special/AnnounceMsg.vue'
 import MsgImage from './basic/MsgImage.vue'
+import MiniAppMsg from './special/MiniAppMsg.vue'
 
 const { msg } = defineProps<{
   msg: MessageTypes['JSON']
@@ -12,11 +13,6 @@ const parsedMsg = computed(() => JSON.parse(msg.data.data) as JsonInnerMsg)
 
 const openInBrowser = (meta) => {
   if (meta.jumpUrl) window.open(meta.jumpUrl, '_blank')
-  else if (meta.qqdocurl) {
-    if (meta.qqdocurl.startsWith('http') || meta.qqdocurl.startsWith('https'))
-      window.open(meta.qqdocurl, '_blank')
-    else window.open(`https://${meta.qqdocurl}`, '_blank')
-  }
 }
 
 const getIconUrl = (meta) => {
@@ -31,14 +27,27 @@ const getPreviewUrl = (meta) => {
     else return `https://${meta.preview}`
   else return ''
 }
+
+enum JsonMsgTypes {
+  Annouce = 'mannounce',
+  Miniapp = 'miniapp'
+}
+
+const checkType = (msg: JsonInnerMsg, key: string | number) => {
+  if (key === JsonMsgTypes.Annouce) return JsonMsgTypes.Annouce
+  else if (msg.app.startsWith('com.tencent.miniapp') && key !== 'miniapp')
+    return JsonMsgTypes.Miniapp
+  else return ''
+}
 </script>
 
 <template>
   <div v-for="(value, key) in parsedMsg.meta" :key="key">
-    <AnnounceMsg v-if="key === 'mannounce'" :msg="value" />
-    <div v-else class="w-80 share-card glassmorphism p-sm" @click="openInBrowser(value)">
+    <AnnounceMsg v-if="checkType(parsedMsg, key) === JsonMsgTypes.Annouce" :msg="value" />
+    <MiniAppMsg v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.Miniapp" :msg="value" />
+    <div v-else class="w-80 share-msg-card glassmorphism p-sm" @click="openInBrowser(value)">
       <div class="flex flex-row justify-start items-center gap-2">
-        <MsgImage class="w-15 h-15" :skeleton-size="15" :src="getPreviewUrl(value)" />
+        <MsgImage class="w-15 h-15 object-cover" :skeleton-size="15" :src="getPreviewUrl(value)" />
         <div class="flex flex-col justify-start items-start gap-1">
           <span class="font-bold text-sm dark-gray-text">{{ value.title }}</span>
           <span class="text-xs gray-text">{{ value.desc }}</span>
@@ -59,25 +68,6 @@ const getPreviewUrl = (meta) => {
 </template>
 
 <style scoped>
-.share-card {
-  cursor: pointer;
-  border: 1px solid var(--p-gray-300);
-  box-shadow: rgba(180, 180, 180, 0.1) 0 0.1rem 0.1rem 0;
-}
-
-.share-card:hover {
-  box-shadow: rgba(142, 142, 142, 0.15) 0 0.5rem 0.5rem 0;
-}
-
-.dark-mode .share-card {
-  border: 1px solid var(--p-gray-700);
-  box-shadow: rgba(51, 51, 51, 0.1) 0 0.1rem 0.1rem 0;
-}
-
-.dark-mode .share-card:hover {
-  box-shadow: rgba(90, 90, 90, 0.15) 0 0.5rem 0.5rem 0;
-}
-
 .divider {
   height: 1px;
   background-color: var(--p-gray-300);

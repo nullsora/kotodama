@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { MessageTypes } from '@renderer/functions/message/message_types'
-import { computed } from 'vue'
+import { FileInfo, MessageTypes } from '@renderer/functions/message/message_types'
+import { packagedGetter } from '@renderer/functions/packaged_api'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
   msg: MessageTypes['File']
 }>()
+
+const info = ref<FileInfo>()
 
 const flieColorMap = [
   {
@@ -74,24 +77,26 @@ const avatarStyle = computed(() => {
   }
 })
 
-/*
 const downloadFile = async () => {
-  // Create download link
-  const link = document.createElement('a')
-  link.href = props.msg.data.url
-  link.download = props.msg.data.file
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+  info.value = (await packagedGetter.getMsg.downloadFile(props.msg.data.file_id)).data
 }
-  */
+
+const openFile = async () => {
+  if (props.msg.data.path === '') await downloadFile()
+  else await window.kotodama.window.openExternal(props.msg.data.path)
+  if (info.value?.file) {
+    // @ts-ignore allow window
+    console.log(info.value)
+    await window.kotodama.window.openExternal(info.value.file)
+  }
+}
 </script>
 
 <template>
   <div
     v-tooltip.top="props.msg.data.file"
-    type="text"
     class="file-message flex flex-row items-center gap-sm cursor-pointer"
+    @click="openFile"
   >
     <Avatar size="large" :icon="fileType" :style="avatarStyle" />
     <div class="flex flex-col">

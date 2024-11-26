@@ -106,7 +106,7 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 ## 使用方法
 
-- 在使用之前，你需要有一个可用的Onebot后端，推荐[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)。
+- 在使用之前，你需要有一个可用的Onebot后端。因为使用了一些非Onebot标准的API，推荐[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)。
 
 - 选择你的平台进行项目构建
 
@@ -131,7 +131,7 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
     - [x] 图片
     - [x] 动画表情
     - [ ] 语音
-    - [ ] 视频
+    - [x] 视频
     - [x] @某人
     - [ ] 猜拳
     - [ ] 骰子

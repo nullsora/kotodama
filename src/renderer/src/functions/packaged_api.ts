@@ -1,6 +1,12 @@
 import localforage from 'localforage'
 import Connector from './connector'
-import { PrivateMessage, AnyMessage, GroupMessage, SendingMessage } from './message/message_types'
+import {
+  PrivateMessage,
+  AnyMessage,
+  GroupMessage,
+  SendingMessage,
+  FileInfo
+} from './message/message_types'
 import { Friend, FriendsCategory, Group, GroupMember, MsgBody, Stranger, UserInfo } from './types'
 
 export const packagedGetter = {
@@ -192,6 +198,12 @@ export const packagedGetter = {
       })) as MsgBody<{
         messages: GroupMessage<AnyMessage>[]
       }>
+    },
+    downloadFile: async (fileId: string) => {
+      return (await Connector.fetch('get_file', 'getFile', {
+        file: fileId,
+        file_id: fileId
+      })) as MsgBody<FileInfo>
     }
   }
   /*

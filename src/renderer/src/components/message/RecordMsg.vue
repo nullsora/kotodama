@@ -31,8 +31,9 @@ const playRecord = async () => {
 </script>
 
 <template>
-  <div class="flex flex-row justify-start gap-2 items-start w-20 record-msg" @click="playRecord">
+  <div class="flex flex-row justify-start gap-2 items-start record-msg">
     <i class="w-5 h-5 align-mid pi" :class="icon" />
+    <span class="gray-text font-italic">暂不支持语音</span>
   </div>
 </template>
 

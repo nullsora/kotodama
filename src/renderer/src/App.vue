@@ -5,6 +5,7 @@ import localforage from 'localforage'
 
 import { useConfigStore } from './stores/ConfigStore'
 
+import FadeTransition from './components/misc/FadeTransition.vue'
 import TopBar from './components/main/TopBar.vue'
 import MainLayout from './components/layout/MainLayout.vue'
 
@@ -18,7 +19,6 @@ import { packagedGetter } from './functions/packaged_api'
 import { Pages } from './functions/types'
 import { DataManager } from './functions/data_manager'
 import ContactPage from './pages/ContactPage.vue'
-import FadeTransition from './components/misc/FadeTransition.vue'
 
 const config = useConfigStore()
 

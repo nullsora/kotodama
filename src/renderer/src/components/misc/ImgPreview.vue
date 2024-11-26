@@ -54,14 +54,14 @@ const onWheel = (event: WheelEvent) => {
 
 const startDrag = (event: MouseEvent) => {
   isDragging.value = true
-  dragStart.value.x = event.clientX - translate.value.x
-  dragStart.value.y = event.clientY - translate.value.y
+  dragStart.value.x = event.clientX - translate.value.x * scale.value
+  dragStart.value.y = event.clientY - translate.value.y * scale.value
 }
 
 const doDrag = (event: MouseEvent) => {
   if (!isDragging.value) return
-  translate.value.x = event.clientX - dragStart.value.x
-  translate.value.y = event.clientY - dragStart.value.y
+  translate.value.x = (event.clientX - dragStart.value.x) / scale.value
+  translate.value.y = (event.clientY - dragStart.value.y) / scale.value
 }
 
 const stopDrag = () => {
@@ -122,7 +122,12 @@ watchEffect(() => {
           text
           @click="scale = Math.min(scale + 0.1, 5)"
         />
-        <Tag :value="Math.floor(scale * 100) + '%'" severity="secondary" rounded />
+        <Tag
+          class="select-none"
+          :value="Math.floor(scale * 100) + '%'"
+          severity="secondary"
+          rounded
+        />
         <Button
           icon="i-fluent-zoom-out-24-regular w-6 h-6"
           severity="secondary"

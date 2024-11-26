@@ -22,26 +22,18 @@ const parseUrl = (path: string) => {
 </script>
 
 <template>
-  <div class="glassmorphism p-sm msg-shadow">
-    <div class="flex flex-col items-start gap-sm">
-      <div class="dark-gray-text font-bold">
-        <i class="w-5 h-5 align-mid primary-text pi i-fluent-megaphone-circle-24-regular" />
-        {{ title }}
-      </div>
-      <div class="gray-text text-sm">{{ content }}</div>
-      <div v-if="msg.pic.length > 0">
-        <MsgImage :src="parseUrl(msg.pic[0].url)" class="max-w-60 max-h-60" />
+  <div>
+    <div class="share-msg-card p-sm msg-shadow">
+      <div class="flex flex-col items-start gap-sm">
+        <div class="dark-gray-text font-bold">
+          <i class="w-5 h-5 align-mid primary-text pi i-fluent-megaphone-circle-24-regular" />
+          {{ title }}
+        </div>
+        <div class="gray-text text-sm">{{ content }}</div>
+        <div v-if="msg.pic.length > 0">
+          <MsgImage :src="parseUrl(msg.pic[0].url)" class="max-w-60 max-h-60" />
+        </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.msg-shadow {
-  box-shadow: rgba(180, 180, 180, 0.1) 0 0.1rem 0.1rem 0;
-}
-
-.dark-mode .msg-shadow {
-  box-shadow: rgba(51, 51, 51, 0.1) 0 0.1rem 0.1rem 0;
-}
-</style>

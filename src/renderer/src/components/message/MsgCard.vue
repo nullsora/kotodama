@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
 import { useConfigStore } from '@renderer/stores/ConfigStore'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import SendTime from './basic/SendTime.vue'
 import ImageMsg from './ImageMsg.vue'
 import AtMsg from './AtMsg.vue'
@@ -14,6 +14,7 @@ import JsonMsg from './JsonMsg.vue'
 import RecordMsg from './RecordMsg.vue'
 import ImageGallery from './special/ImageGallery.vue'
 import UnsupportedMsg from './UnsupportedMsg.vue'
+import VideoMsg from './VideoMsg.vue'
 
 type ImageGalleryMsg = {
   type: 'gallery'
@@ -32,12 +33,15 @@ const {
   position?: 'start' | 'end' | 'mid' | 'single'
 }>()
 
+const hover = ref(false)
+
 const msgComponents = {
   gallery: ImageGallery,
   text: TextMsg,
   image: ImageMsg,
   mface: ImageMsg,
   record: RecordMsg,
+  video: VideoMsg,
   at: AtMsg,
   reply: ReplyMsg,
   face: FaceMsg,
@@ -46,7 +50,12 @@ const msgComponents = {
   json: JsonMsg
 }
 
-const renderOnlyList = ['image', 'mface', 'json']
+const renderOnlyList = ['image', 'mface', 'json', 'video']
+
+const showSendTime = computed(() => {
+  if (config.customSettings.message.alwaysShowTimestamp) return true
+  return hover.value
+})
 
 const messageList = computed(() => {
   if (!config.customSettings.message.useImageGallery) return message.message
@@ -111,8 +120,12 @@ const checkOnly = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-row justify-start items-end gap-1">
-    <SendTime v-if="reverse" :time="message.time" />
+  <div
+    class="flex flex-row justify-start items-end gap-1"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+  >
+    <SendTime v-if="reverse && showSendTime" :time="message.time" />
     <div v-if="checkOnly">
       <component :is="msgComponents[messageList[0].type]" :msg="messageList[0]" />
     </div>
@@ -135,7 +148,7 @@ const checkOnly = computed(() => {
         <component :is="msgComponents[msg.type] ?? UnsupportedMsg" v-else :msg="msg" />
       </span>
     </div>
-    <SendTime v-if="!reverse" :time="message.time" />
+    <SendTime v-if="!reverse && showSendTime" :time="message.time" />
   </div>
 </template>
 

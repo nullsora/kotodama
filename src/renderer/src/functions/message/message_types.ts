@@ -111,6 +111,13 @@ export type AnyMessage =
   | FileMessage
   | MarkdownMessage
 
+export type FileInfo = {
+  file: string
+  url: string
+  file_size: string
+  file_name: string
+}
+
 type TextMessage = {
   type: 'text'
   data: {
@@ -170,6 +177,8 @@ type VideoMessage = {
   data: {
     file: string
     url: string
+    file_size: string
+    path?: string
   }
 }
 
@@ -318,4 +327,23 @@ export type GroupAnnounceMsg = {
   title: string
   tw: number
   uin: number
+}
+
+export type MiniAppMsg = {
+  appid: string
+  preview: string
+  shareTemplateData: Record<string, unknown>
+  gamePointsUrl: string
+  gamePoints: string
+  url: string
+  appType: number
+  desc: string
+  title: string
+  scene: number
+  host: { uin: number; nick: string }
+  icon: string
+  shareTemplateId: string
+  qqdocurl: string
+  showLittleTail: string
+  shareOrigin: number
 }

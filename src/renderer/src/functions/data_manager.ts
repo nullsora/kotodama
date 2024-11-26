@@ -283,6 +283,13 @@ export class DataManager {
       }
     }
 
+    const curChatType = this.showingChat.value?.type === 'friend' ? 'private' : 'group'
+
+    if (curChatType === message.message_type && chatId === this.showingChat.value?.id) {
+      // @ts-ignore this will be right
+      this.renderingMsgs.value.push(message)
+    }
+
     DataManager.sortChats(this.curContacts.showing)
   }
 }

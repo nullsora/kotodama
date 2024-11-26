@@ -54,6 +54,7 @@ declare module 'vue' {
     Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']
     MessageSettings: typeof import('./src/components/settings/Message/MessageSettings.vue')['default']
+    MiniAppMsg: typeof import('./src/components/message/special/MiniAppMsg.vue')['default']
     MsgCard: typeof import('./src/components/message/MsgCard.vue')['default']
     MsgImage: typeof import('./src/components/message/basic/MsgImage.vue')['default']
     MsgPanel: typeof import('./src/components/chat/MsgPanel.vue')['default']
@@ -80,6 +81,7 @@ declare module 'vue' {
     TopBar: typeof import('./src/components/main/TopBar.vue')['default']
     UnsupportedMsg: typeof import('./src/components/message/UnsupportedMsg.vue')['default']
     UserAvatar: typeof import('./src/components/message/basic/UserAvatar.vue')['default']
+    VideoMsg: typeof import('./src/components/message/VideoMsg.vue')['default']
     XMLMsg: typeof import('./src/components/message/XMLMsg.vue')['default']
   }
   export interface ComponentCustomProperties {

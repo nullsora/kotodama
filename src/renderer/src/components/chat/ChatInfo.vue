@@ -62,7 +62,7 @@ const avartarUrl = computed(() => {
           <div class="info-card w-full p-sm gap-sm primary-border flex flex-row items-center">
             <img :src="avartarUrl" class="w-12 h-12 rounded-full" crossorigin="anonymous" />
             <div class="flex flex-col justify-center items-start gap-1">
-              <div class="max-w-55 whitespace-nowrap overflow-hidden text-ellipsis">
+              <div class="max-w-55 truncate">
                 {{ chatName.name }}
               </div>
               <Tag class="chat-id" severity="secondary" :value="chatInfo?.id" rounded />

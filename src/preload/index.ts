@@ -12,7 +12,8 @@ const kotodama = {
     },
     close: async () => await ipcRenderer.invoke('window:close'),
 
-    openNewWindow: async (url: string) => await ipcRenderer.invoke('window:openNewWindow', { url })
+    openNewWindow: async (url: string) => await ipcRenderer.invoke('window:openNewWindow', { url }),
+    openExternal: async (url: string) => await ipcRenderer.invoke('window:openExternal', { url })
   },
   onebot: {
     connect: async (url: string, token: string) =>

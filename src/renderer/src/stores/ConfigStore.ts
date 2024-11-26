@@ -15,23 +15,28 @@ export const useConfigStore = defineStore('config', () => {
     name: 'Blue',
     code: PrimaryColor.Blue
   })
+
+  const defaultCustomSettings = {
+    backgroundImage: {
+      light: '',
+      dark: ''
+    },
+    message: {
+      alwaysShowTimestamp: true,
+      useImageGallery: true
+    }
+  }
+
   const customSettings = ref<{
     backgroundImage: {
       light: string
       dark: string
     }
     message: {
+      alwaysShowTimestamp: boolean
       useImageGallery: boolean
     }
-  }>({
-    backgroundImage: {
-      light: '',
-      dark: ''
-    },
-    message: {
-      useImageGallery: true
-    }
-  })
+  }>(defaultCustomSettings)
 
   const userSettings = ref<UserSetting[]>([])
 
@@ -110,15 +115,7 @@ export const useConfigStore = defineStore('config', () => {
       name: 'Blue',
       code: PrimaryColor.Blue
     }
-    customSettings.value = {
-      backgroundImage: {
-        light: '',
-        dark: ''
-      },
-      message: {
-        useImageGallery: true
-      }
-    }
+    customSettings.value = defaultCustomSettings
   }
 
   return {

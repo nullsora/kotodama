@@ -118,7 +118,7 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0.3rem;
+  padding: 0.3rem 0.4rem;
   border-radius: 3rem;
 }
 
