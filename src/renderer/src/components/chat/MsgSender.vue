@@ -1,26 +1,116 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import debounce from 'lodash.debounce'
+import { computed, inject, Ref, VNode, h, ref, watch } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { faceMap, findFromFaceMap } from '@renderer/functions/face_map'
 import {
   AnyMessage,
   GroupMessage,
+  MessageTypes,
   PrivateMessage,
   SendingMessage
 } from '@renderer/functions/message/message_types'
 import { packagedGetter, packagedSender } from '@renderer/functions/packaged_api'
 import FaceSelect from './FaceSelect.vue'
+import AtMsg from '../message/AtMsg.vue'
+import FaceMsg from '../message/FaceMsg.vue'
+import ReplyMsg from '../message/ReplyMsg.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
+const sendText = inject('sendText') as Ref<string>
 
-const props = defineProps<{
+const { chatInfo } = defineProps<{
   chatInfo: {
     type: 'friend' | 'group'
     id: number
   } | null
 }>()
 
-const sendText = ref('')
+const handler = {
+  parse: {
+    reply: (id: number): MessageTypes['Reply'] => {
+      return {
+        type: 'reply',
+        data: { id }
+      }
+    },
+    at: (id: string): MessageTypes['At'] => {
+      return {
+        type: 'at',
+        data: { qq: id }
+      }
+    },
+    face: (face: string): MessageTypes['QQFace'] => {
+      return {
+        type: 'face',
+        data: { id: parseInt(face) }
+      }
+    },
+    rps: (): MessageTypes['Rps'] => {
+      return {
+        type: 'rps',
+        data: {}
+      }
+    },
+    dice: (): MessageTypes['Dice'] => {
+      return {
+        type: 'dice',
+        data: {}
+      }
+    },
+    text: (text: string): MessageTypes['Text'] => {
+      return {
+        type: 'text',
+        data: { text }
+      }
+    }
+  }
+}
+
+const renderMsgs = ref<SendingMessage>()
+
+const renderer = computed(() => {
+  if (!renderMsgs.value) return h('span', '')
+  const res: VNode[] = []
+  for (const msg of renderMsgs.value.messages) {
+    switch (msg.type) {
+      case 'text':
+        res.push(
+          h('span', { class: 'text-sm whitespace-pre-wrap max-w-100 break-words' }, msg.data.text)
+        )
+        break
+      case 'at':
+        res.push(
+          h(AtMsg, {
+            msg,
+            sendGroupId: chatInfo?.type === 'group' ? chatInfo.id : undefined
+          })
+        )
+        break
+      case 'reply':
+        res.push(h(ReplyMsg, { msg }))
+        break
+      case 'face':
+        res.push(h(FaceMsg, { msg }))
+        break
+      case 'rps':
+        res.push(
+          h('i', {
+            class: 'pi i-fluent-emoji-raised-fist-light w-5 h-5 align-mid'
+          })
+        )
+        break
+      case 'dice':
+        res.push(
+          h('i', {
+            class: 'pi i-fluent-emoji-game-die w-5 h-5 align-mid'
+          })
+        )
+        break
+    }
+  }
+  return () => res
+})
 
 const invalid = computed(() => sendText.value.length === 0)
 
@@ -29,7 +119,7 @@ const watchKeydown = (e: KeyboardEvent) => {
 }
 
 const selectFace = (id: number | string) => {
-  if (typeof id === 'number') {
+  if (faceMap[id]) {
     sendText.value += `[/${faceMap[id]}]`
   } else {
     sendText.value += `[/${id}]`
@@ -37,7 +127,7 @@ const selectFace = (id: number | string) => {
 }
 
 const parseSender = () => {
-  if (!props.chatInfo) return
+  if (!chatInfo) return
 
   const parser: AnyMessage[] = []
 
@@ -54,28 +144,40 @@ const parseSender = () => {
       }
       start = i
       // match '[/xxx]'
-      while (sendText.value[i] !== ']') i++
+      let msg: AnyMessage
+
+      while (i < sendText.value.length && sendText.value[i] !== ']') {
+        i++
+        // if meets another '[/'
+        if (sendText.value[i] === '[' && sendText.value[i + 1] === '/') {
+          parser.push(handler.parse.text(sendText.value.slice(start, i)))
+          start = i
+          continue
+        }
+      }
+      if (i >= sendText.value.length) {
+        parser.push(handler.parse.text(sendText.value.slice(start)))
+        break
+      }
+
       const matchVal = sendText.value.slice(start + 2, i)
 
       const magicFace = ['rps', 'dice']
 
       const face = findFromFaceMap(matchVal)
-      if (face) {
-        parser.push({
-          type: 'face',
-          data: { id: parseInt(face) }
-        })
+      if (matchVal.startsWith('R:')) {
+        msg = handler.parse.reply(parseInt(matchVal.slice(2)))
+      } else if (matchVal.startsWith('@')) {
+        msg = handler.parse.at(matchVal.slice(1))
+      } else if (face) {
+        msg = handler.parse.face(face)
       } else if (magicFace.includes(matchVal)) {
-        parser.push({
-          type: matchVal as 'rps' | 'dice',
-          data: {}
-        })
+        msg = handler.parse[matchVal as 'rps' | 'dice']()
       } else {
-        parser.push({
-          type: 'text',
-          data: { text: sendText.value.slice(start, i + 1) }
-        })
+        msg = handler.parse.text(sendText.value.slice(start, i + 1))
       }
+
+      parser.push(msg)
       start = i + 1
     }
     i++
@@ -89,23 +191,24 @@ const parseSender = () => {
   }
 
   return {
-    type: props.chatInfo.type === 'friend' ? 'private' : 'group',
-    id: props.chatInfo.id,
+    type: chatInfo.type === 'friend' ? 'private' : 'group',
+    id: chatInfo.id,
     messages: parser
   } as SendingMessage
 }
 
 const sendMsg = async () => {
-  if (!props.chatInfo) return
-  if (!parseSender()) return
+  if (!chatInfo) return
+  const sender = parseSender()
+  if (!sender) return
 
   // Send
-  const msgId = (await packagedSender.msg.send(parseSender()!)).data.message_id
+  const msgId = (await packagedSender.msg.send(sender)).data.message_id
 
   // Update rendering
   let msg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
 
-  if (props.chatInfo.type === 'friend') {
+  if (chatInfo.type === 'friend') {
     msg = (await packagedGetter.getMsg.single(msgId)).data as PrivateMessage<AnyMessage>
     ;(runtimeData.renderingMsgs.value as PrivateMessage<AnyMessage>[]).push(msg)
   } else {
@@ -114,9 +217,9 @@ const sendMsg = async () => {
   }
 
   const chat = runtimeData.curContacts.showing.find((c) => {
-    if (c.type !== props.chatInfo?.type) return false
-    if (c.type === 'friend') return c.data.user_id === props.chatInfo?.id
-    else if (c.type === 'group') return c.data.group_id === props.chatInfo?.id
+    if (c.type !== chatInfo?.type) return false
+    if (c.type === 'friend') return c.data.user_id === chatInfo?.id
+    else if (c.type === 'group') return c.data.group_id === chatInfo?.id
     return false
   })
 
@@ -124,6 +227,12 @@ const sendMsg = async () => {
 
   sendText.value = ''
 }
+
+const update = debounce(() => {
+  renderMsgs.value = parseSender()
+}, 600)
+
+watch(sendText, update)
 </script>
 
 <template>
@@ -142,5 +251,29 @@ const sendMsg = async () => {
       :disabled="invalid"
       @click="sendMsg"
     />
+    <div v-if="sendText !== ''" class="msg-preview flex flex-col items-end gap-1">
+      <div class="gray-text text-xs">消息预览</div>
+      <div class="max-w-100">
+        <renderer />
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.msg-preview {
+  position: fixed;
+  right: 0.5rem;
+  bottom: 3.5rem;
+  z-index: 100;
+
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  background-color: var(--p-primary-200);
+}
+
+.dark-mode .msg-preview {
+  background-color: var(--p-primary-500);
+  color: var(--p-gray-100);
+}
+</style>

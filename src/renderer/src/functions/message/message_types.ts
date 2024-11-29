@@ -63,6 +63,19 @@ export interface GroupMessage<MessageContent> extends BaseMessage<MessageContent
   } | null
 }
 
+export type ForwardMessageContent = {
+  messages: {
+    content: AnyMessage[]
+    sender: {
+      user_id: number
+      nickname: string
+    }
+    time: number
+    message_format: 'string' | 'array'
+    message_type: 'group' | 'private'
+  }[]
+}
+
 export type SendingMessage = {
   type: 'group' | 'private'
   id: number

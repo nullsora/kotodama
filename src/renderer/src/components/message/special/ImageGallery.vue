@@ -20,7 +20,6 @@ const splitedImg = computed(() => {
   for (let i = 0; i < totalImages; i += imagesPerRow) {
     result.push(msg.images.slice(i, Math.min(i + imagesPerRow, totalImages)))
   }
-  console.log(result)
   return result
 })
 

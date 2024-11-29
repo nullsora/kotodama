@@ -92,7 +92,7 @@ const parsedMsgChain = computed(() => {
   } else return []
 })
 
-const checkSenderSelf = (node) => {
+const checkSenderSelf = (node: { sender: { user_id: unknown } }) => {
   const senderId = node.sender.user_id
   return senderId === runtimeData.userInfo.value.main.user_id
 }
@@ -201,14 +201,18 @@ watch(
     <div v-if="msgHistoryList.length > 0">
       <div v-for="(msgChainNode, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
         <div class="w-full flex flex-row justify-center items-center">
-          <Tag class="format-day" rounded :value="formateDay(msgChainNode.time)" />
+          <Tag class="format-day m-sm select-none" rounded :value="formateDay(msgChainNode.time)" />
         </div>
         <div v-for="(msgSingleNode, index) in msgChainNode.messages" :key="index">
           <div
             class="flex flex-row items-end mb-sm"
             :class="checkSenderSelf(msgSingleNode) ? 'justify-end' : 'justify-start'"
           >
-            <UserAvatar v-if="!checkSenderSelf(msgSingleNode)" :id="msgSingleNode.sender.user_id" />
+            <UserAvatar
+              v-if="!checkSenderSelf(msgSingleNode)"
+              :id="msgSingleNode.sender.user_id"
+              :type="chatInfo?.type"
+            />
             <div
               class="flex flex-col justify-end gap-1"
               :class="checkSenderSelf(msgSingleNode) ? 'items-end' : 'items-start'"
@@ -225,13 +229,14 @@ watch(
                 <MsgCard
                   :reverse="checkSenderSelf(msgSingleNode)"
                   :position="getPosition(msgSingleNode.data, msgIndex)"
-                  :message="msg"
+                  :full-msg="msg"
                 />
               </div>
             </div>
             <UserAvatar
               v-if="checkSenderSelf(msgSingleNode)"
               :id="msgSingleNode.sender.user_id"
+              :type="chatInfo?.type"
               position="right"
             />
           </div>

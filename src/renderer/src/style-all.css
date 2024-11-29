@@ -100,10 +100,14 @@
 /*------------------ Context Menu ------------------*/
 .p-contextmenu {
   min-width: 8rem !important;
+  backdrop-filter: blur(14px);
+  --p-contextmenu-background: rgba(255, 255, 255, 0.55);
+  --p-contextmenu-border-color: var(--p-slate-100);
 }
 
 .dark-mode .p-contextmenu {
-  --p-contextmenu-background: var(--p-gray-800);
+  backdrop-filter: blur(14px);
+  --p-contextmenu-background: rgba(31, 41, 55, 0.65);
   --p-contextmenu-border-color: var(--p-gray-700);
   --p-contextmenu-item-color: var(--p-gray-100);
 

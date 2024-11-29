@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
 import { useConfigStore } from '@renderer/stores/ConfigStore'
-import { computed, ref } from 'vue'
+import { computed, inject, Ref, ref, useTemplateRef } from 'vue'
 import SendTime from './basic/SendTime.vue'
 import ImageMsg from './ImageMsg.vue'
 import AtMsg from './AtMsg.vue'
@@ -17,6 +17,8 @@ import UnsupportedMsg from './UnsupportedMsg.vue'
 import VideoMsg from './VideoMsg.vue'
 import RpsMsg from './RpsMsg.vue'
 import DiceMsg from './DiceMsg.vue'
+import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
+import ForwardMsg from './ForwardMsg.vue'
 
 type ImageGalleryMsg = {
   type: 'gallery'
@@ -24,18 +26,66 @@ type ImageGalleryMsg = {
 }
 
 const config = useConfigStore()
+const sendText = inject('sendText') as Ref<string>
+
+const menu = useTemplateRef('menu')
 
 const {
-  message,
+  baseMsg,
+  extra: extInfo,
+  fullMsg,
   reverse = false,
-  position = 'mid'
-} = defineProps<{
-  message: GroupMessage<AnyMessage> | PrivateMessage<AnyMessage>
-  reverse?: boolean
-  position?: 'start' | 'end' | 'mid' | 'single'
-}>()
+  position = 'mid',
+  showMenu = true
+} = defineProps<
+  | {
+      baseMsg: AnyMessage[]
+      extra: {
+        message_type: 'friend' | 'group'
+        time: number
+        message_id?: number
+        group_id?: number
+      }
+      fullMsg?: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
+      reverse?: boolean
+      position?: 'start' | 'end' | 'mid' | 'single'
+      showMenu?: boolean
+    }
+  | {
+      baseMsg?: AnyMessage[]
+      extra?: {
+        message_type: 'friend' | 'group'
+        time: number
+        message_id?: number
+        group_id?: number
+      }
+      fullMsg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>
+      reverse?: boolean
+      position?: 'start' | 'end' | 'mid' | 'single'
+      showMenu?: boolean
+    }
+>()
 
 const hover = ref(false)
+const menuItems = ref([
+  {
+    label: '复制',
+    icon: 'i-fluent-copy-24-regular w-4 h-4',
+    command: async () => {
+      if (fullMsg) {
+        const text = await msgListToShortMsg(fullMsg)
+        if (text) navigator.clipboard.writeText(text)
+      }
+    }
+  },
+  {
+    label: '引用',
+    icon: 'i-fluent-comment-quote-24-regular w-4 h-4',
+    command: () => {
+      sendText.value = `[/R: ${extra.value.message_id}]${sendText.value}`
+    }
+  }
+])
 
 const msgComponents = {
   gallery: ImageGallery,
@@ -48,13 +98,22 @@ const msgComponents = {
   rps: RpsMsg,
   dice: DiceMsg,
   reply: ReplyMsg,
+  forward: ForwardMsg,
   face: FaceMsg,
   file: FileMsg,
   xml: XMLMsg,
   json: JsonMsg
 }
 
-const renderOnlyList = ['image', 'mface', 'rps', 'dice', 'json', 'video']
+const renderOnlyList = ['image', 'mface', 'rps', 'dice', 'json', 'video', 'forward']
+
+const message = computed(() => {
+  return baseMsg ?? fullMsg!.message
+})
+
+const extra = computed(() => {
+  return extInfo ?? fullMsg!
+})
 
 const showSendTime = computed(() => {
   if (config.customSettings.message.alwaysShowTimestamp) return true
@@ -62,12 +121,12 @@ const showSendTime = computed(() => {
 })
 
 const messageList = computed(() => {
-  if (!config.customSettings.message.useImageGallery) return message.message
+  if (!config.customSettings.message.useImageGallery) return message.value
 
   const result: (AnyMessage | ImageGalleryMsg)[] = []
   let imgGallery: ImageGalleryMsg = { type: 'gallery', images: [] }
   let tempImgMsg: AnyMessage | null = null
-  for (const msg of message.message) {
+  for (const msg of message.value) {
     if (msg.type === 'image') {
       imgGallery.images.push(msg.data.url)
       tempImgMsg = msg
@@ -115,17 +174,22 @@ const radius = computed(() => {
 })
 
 const checkOnly = computed(() => {
-  return message.message.length === 1 && renderOnlyList.includes(message.message[0].type)
+  return message.value.length === 1 && renderOnlyList.includes(message.value[0].type)
 })
 </script>
 
 <template>
   <div
     class="flex flex-row justify-start items-end gap-1"
+    @contextmenu="
+      (event) => {
+        if (showMenu) menu?.toggle(event)
+      }
+    "
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
-    <SendTime v-if="reverse && showSendTime" :time="message.time" />
+    <SendTime v-if="reverse && showSendTime" :time="extra.time" />
     <div v-if="checkOnly">
       <component :is="msgComponents[messageList[0].type]" :msg="messageList[0]" />
     </div>
@@ -143,12 +207,13 @@ const checkOnly = computed(() => {
         <AtMsg
           v-if="msg.type === 'at'"
           :msg="msg"
-          :send-group-id="message.message_type === 'group' ? message.group_id : undefined"
+          :send-group-id="extra.message_type === 'group' ? extra.group_id : undefined"
         />
         <component :is="msgComponents[msg.type] ?? UnsupportedMsg" v-else :msg="msg" />
       </span>
     </div>
-    <SendTime v-if="!reverse && showSendTime" :time="message.time" />
+    <SendTime v-if="!reverse && showSendTime" :time="extra.time" />
+    <ContextMenu ref="menu" :model="menuItems" />
   </div>
 </template>
 

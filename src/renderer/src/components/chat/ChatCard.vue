@@ -69,7 +69,7 @@ const parseTime = (time: number | undefined) => {
       <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
       <div class="w-full flex flex-col justify-center items-start gap-0.3">
         <div class="w-45.5 flex flex-row justify-between items-center gap-2">
-          <div class="chat-name text-sm overflow-text">
+          <div class="chat-name text-sm truncate">
             <i
               class="chat-name w-4.2 h-4.2 align-mid pi"
               :class="
@@ -85,7 +85,7 @@ const parseTime = (time: number | undefined) => {
           </div>
         </div>
         <div class="w-45.5 flex flex-row justify-between items-center gap-2">
-          <div :class="selected ? '' : 'short-msg'" class="text-sm overflow-text">
+          <div :class="selected ? '' : 'short-msg'" class="text-sm truncate">
             <Suspense>
               <TextShortMsg :msg="props.chat.latestMsg" />
             </Suspense>
@@ -118,12 +118,6 @@ const parseTime = (time: number | undefined) => {
 
 .dark-mode .short-msg {
   color: var(--p-gray-400);
-}
-
-.overflow-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .chat-card:hover {

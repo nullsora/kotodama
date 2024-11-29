@@ -11,17 +11,17 @@ const { msg } = defineProps<{
 
 const parsedMsg = computed(() => JSON.parse(msg.data.data) as JsonInnerMsg)
 
-const openInBrowser = (meta) => {
+const openInBrowser = (meta: { jumpUrl: string | URL | undefined }) => {
   if (meta.jumpUrl) window.open(meta.jumpUrl, '_blank')
 }
 
-const getIconUrl = (meta) => {
+const getIconUrl = (meta: { source_icon: string; icon: string }) => {
   if (meta.source_icon) return meta.source_icon
   else if (meta.icon) return meta.icon
   else return ''
 }
 
-const getPreviewUrl = (meta) => {
+const getPreviewUrl = (meta: { preview: string }) => {
   if (meta.preview)
     if (meta.preview.startsWith('http') || meta.preview.startsWith('https')) return meta.preview
     else return `https://${meta.preview}`
@@ -54,7 +54,7 @@ const checkType = (msg: JsonInnerMsg, key: string | number) => {
         </div>
       </div>
       <div class="divider" />
-      <div class="flex flex-row justify-between items-start gap-2">
+      <div class="flex flex-row justify-start items-center gap-1">
         <img
           v-if="value.icon || value.source_icon"
           class="w-4 h-4 rd-0.5"

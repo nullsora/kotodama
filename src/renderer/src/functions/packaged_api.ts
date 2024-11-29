@@ -5,7 +5,8 @@ import {
   AnyMessage,
   GroupMessage,
   SendingMessage,
-  FileInfo
+  FileInfo,
+  ForwardMessageContent
 } from './message/message_types'
 import { Friend, FriendsCategory, Group, GroupMember, MsgBody, Stranger, UserInfo } from './types'
 
@@ -200,6 +201,11 @@ export const packagedGetter = {
       })) as MsgBody<{
         messages: GroupMessage<AnyMessage>[]
       }>
+    },
+    forward: async (forwardId: string) => {
+      return (await Connector.fetch('get_forward_msg', 'getForwardMsg', {
+        message_id: forwardId
+      })) as MsgBody<ForwardMessageContent>
     },
     downloadFile: async (fileId: string) => {
       return (await Connector.fetch('get_file', 'getFile', {

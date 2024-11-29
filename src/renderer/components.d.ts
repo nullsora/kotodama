@@ -41,6 +41,7 @@ declare module 'vue' {
     FadeTransition: typeof import('./src/components/misc/FadeTransition.vue')['default']
     FileMsg: typeof import('./src/components/message/FileMsg.vue')['default']
     FloatLabel: typeof import('primevue/floatlabel')['default']
+    ForwardMsg: typeof import('./src/components/message/ForwardMsg.vue')['default']
     GeneralSettings: typeof import('./src/components/settings/General/GeneralSettings.vue')['default']
     GetMsgHistory: typeof import('./src/components/misc/debug/GetMsgHistory.vue')['default']
     IconField: typeof import('primevue/iconfield')['default']

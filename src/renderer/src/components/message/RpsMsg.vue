@@ -21,5 +21,7 @@ const msgIcon = computed(() => {
 </script>
 
 <template>
-  <i :class="msgIcon" class="pi w-15 h-15" />
+  <div>
+    <i :class="msgIcon" class="pi w-15 h-15" />
+  </div>
 </template>

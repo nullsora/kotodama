@@ -11,7 +11,7 @@ const panel = useTemplateRef('panel')
 const currentPage = ref(0)
 
 const toggle = (event: Event) => {
-  panel.value!.toggle(event)
+  if (panel.value) panel.value.toggle(event)
 }
 
 const getFaceImg = (id: number) => {
@@ -32,8 +32,8 @@ const getFaceImg = (id: number) => {
           text
           @click="
             (event) => {
-              toggle(event)
               emit('select', index)
+              toggle(event)
             }
           "
         >
@@ -50,8 +50,8 @@ const getFaceImg = (id: number) => {
           text
           @click="
             (event) => {
-              toggle(event)
               emit('select', 'rps')
+              toggle(event)
             }
           "
         />
@@ -62,8 +62,8 @@ const getFaceImg = (id: number) => {
           text
           @click="
             (event) => {
-              toggle(event)
               emit('select', 'dice')
+              toggle(event)
             }
           "
         />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+import { computed, inject, provide, ref, watch } from 'vue'
 
 import Sidebar from '@renderer/components/chat/Sidebar.vue'
 import ChatSelectPanel from '@renderer/components/chat/ChatSelectPanel.vue'
@@ -12,13 +12,24 @@ const runtimeData = inject('runtimeData') as DataManager
 
 const selectedGroupId = ref(-1)
 
-const getRenderContacts = computed(() => {
+const sendText = ref('')
+
+const renderContacts = computed(() => {
   if (selectedGroupId.value === -1) {
     return undefined
   } else {
     return runtimeData.user.value.contactGroups[selectedGroupId.value].chats
   }
 })
+
+watch(
+  () => runtimeData.showingChat.value,
+  () => {
+    sendText.value = ''
+  }
+)
+
+provide('sendText', sendText)
 </script>
 
 <template>
@@ -29,7 +40,7 @@ const getRenderContacts = computed(() => {
     <template #contacts>
       <ChatSelectPanel
         v-model:selected-chat="runtimeData.showingChat.value"
-        :filters="getRenderContacts"
+        :filters="renderContacts"
       />
     </template>
     <template #chat>

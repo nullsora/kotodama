@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, useTemplateRef, watch } from 'vue'
 import { packagedGetter } from '@renderer/functions/packaged_api'
 import ImgPreview from '@renderer/components/misc/ImgPreview.vue'
 
@@ -18,7 +18,7 @@ const {
 }>()
 
 const blobUrl = defineModel<string>('blobUrl', { default: '' })
-const menu = ref()
+const menu = useTemplateRef('menu')
 const showPreview = ref(false)
 
 const blob = ref<Blob>()
@@ -26,7 +26,7 @@ const blob = ref<Blob>()
 const menuItems = ref([
   {
     label: '复制图片',
-    icon: 'i-fluent-copy-24-regular',
+    icon: 'i-fluent-copy-24-regular w-4 h-4',
     command: async () => {
       try {
         if (!blob.value) return
@@ -40,7 +40,7 @@ const menuItems = ref([
 ])
 
 const onImgRightClick = (e: MouseEvent) => {
-  if (showMenu) menu.value.show(e)
+  if (showMenu) menu.value!.show(e)
 }
 
 const getImg = async () => {

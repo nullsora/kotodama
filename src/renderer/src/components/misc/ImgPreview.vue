@@ -169,6 +169,7 @@ watchEffect(() => {
 <style scoped>
 .modal {
   position: fixed;
+  z-index: 9999;
   top: 0;
   left: 0;
   width: 100%;

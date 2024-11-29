@@ -2,7 +2,38 @@ import { faceMap } from '../face_map'
 import { packagedGetter } from '../packaged_api'
 import { AnyMessage, GroupMessage, JsonInnerMsg, PrivateMessage } from './message_types'
 
-const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
+const parseAtMsg = async (msg: string, sendGroupId?: number) => {
+  if (msg.includes('全体成员') || msg.includes('all')) {
+    return '@全体成员 '
+  }
+  const qq = parseInt(msg)
+  let name: string
+  try {
+    if (sendGroupId) {
+      const info = (await packagedGetter.getInfo.groupMember(sendGroupId, qq)).data
+      name = info.card === '' ? info.nickname : info.card
+    } else {
+      name = (await packagedGetter.getInfo.stranger(qq)).data.nickname
+    }
+    return `@${name} `
+  } catch (e) {
+    console.log(qq)
+    return '@全体成员 '
+  }
+}
+
+const parseRps = (rpsRes: '1' | '2' | '3') => {
+  switch (rpsRes) {
+    case '1':
+      return '布'
+    case '2':
+      return '剪刀'
+    case '3':
+      return '石头'
+  }
+}
+
+export const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
   let shortMsg = ''
   switch (msg.type) {
     case 'text':
@@ -80,37 +111,6 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       console.log(msg)
   }
   return shortMsg
-}
-
-const parseAtMsg = async (msg: string, sendGroupId?: number) => {
-  if (msg.includes('全体成员') || msg.includes('all')) {
-    return '@全体成员 '
-  }
-  const qq = parseInt(msg)
-  let name: string
-  try {
-    if (sendGroupId) {
-      const info = (await packagedGetter.getInfo.groupMember(sendGroupId, qq)).data
-      name = info.card === '' ? info.nickname : info.card
-    } else {
-      name = (await packagedGetter.getInfo.stranger(qq)).data.nickname
-    }
-    return `@${name} `
-  } catch (e) {
-    console.log(qq)
-    return '@全体成员 '
-  }
-}
-
-const parseRps = (rpsRes: '1' | '2' | '3') => {
-  switch (rpsRes) {
-    case '1':
-      return '布'
-    case '2':
-      return '剪刀'
-    case '3':
-      return '石头'
-  }
 }
 
 export const msgListToShortMsg = async (

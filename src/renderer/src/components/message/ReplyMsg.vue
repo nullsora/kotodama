@@ -51,6 +51,8 @@ watch(props, getOringinalMsg)
         <MsgImage
           class="max-w-50 max-h-50"
           :src="(originalMsg?.message[0] as MessageTypes['Image']).data.url"
+          :show-menu="false"
+          :skeleton-size="50"
         />
       </Suspense>
     </div>
@@ -71,7 +73,8 @@ watch(props, getOringinalMsg)
 }
 
 .dark-mode .reply-msg {
-  background-image: linear-gradient(300deg, var(--p-primary-600) 0%, var(--p-gray-700) 80%);
+  background-color: var(--p-primary-900);
+  border-left-color: var(--p-primary-500);
 }
 
 .reply-msg-sender {
