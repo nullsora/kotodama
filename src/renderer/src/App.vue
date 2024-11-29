@@ -30,7 +30,7 @@ onMounted(() => {
   config.loadFromStorage()
   runtimeData.watchConnect()
   packagedGetter.cachedFile.imgBlob.clear()
-  packagedGetter.cachedFile.recordBuffer.clear()
+  packagedGetter.cachedFile.recordBlob.clear()
 
   config.$subscribe(
     async (_mutation, state) => {

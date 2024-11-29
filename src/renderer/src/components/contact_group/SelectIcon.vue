@@ -56,7 +56,7 @@ const iconList = [
 ]
 
 const showIcon = computed(() => {
-  return iconClass.value ? iconClass.value : 'i-fluent-color-library-24'
+  return (iconClass.value ? iconClass.value : 'i-fluent-color-library-24') + ' w-6 h-6'
 })
 
 const toggleShowSelect = (event: Event) => {
@@ -65,28 +65,27 @@ const toggleShowSelect = (event: Event) => {
 </script>
 
 <template>
-  <Button text rounded severity="secondary" @click="toggleShowSelect">
-    <i class="text-size-6" :class="showIcon" />
-  </Button>
-  <Popover ref="popover">
-    <div class="h-50 scrollbar scrollbar-w-1 scrollbar-rounded">
-      <div class="grid grid-cols-6 gap-2">
-        <Button
-          v-for="(icon, index) in iconList"
-          :key="index"
-          severity="secondary"
-          text
-          rounded
-          @click="
-            (event) => {
-              iconClass = icon
-              toggleShowSelect(event)
-            }
-          "
-        >
-          <i class="text-size-6" :class="icon" />
-        </Button>
+  <div>
+    <Button text rounded severity="secondary" :icon="showIcon" @click="toggleShowSelect" />
+    <Popover ref="popover">
+      <div class="h-50 scrollbar scrollbar-w-1 scrollbar-rounded">
+        <div class="grid grid-cols-6 gap-2">
+          <Button
+            v-for="(icon, index) in iconList"
+            :key="index"
+            :icon="icon + ' w-6 h-6'"
+            severity="secondary"
+            text
+            rounded
+            @click="
+              (event) => {
+                iconClass = icon
+                toggleShowSelect(event)
+              }
+            "
+          />
+        </div>
       </div>
-    </div>
-  </Popover>
+    </Popover>
+  </div>
 </template>

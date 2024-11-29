@@ -28,8 +28,12 @@ const watchKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter' && e.ctrlKey) sendMsg()
 }
 
-const selectFace = (id: number) => {
-  sendText.value += `[/${faceMap[id]}]`
+const selectFace = (id: number | string) => {
+  if (typeof id === 'number') {
+    sendText.value += `[/${faceMap[id]}]`
+  } else {
+    sendText.value += `[/${id}]`
+  }
 }
 
 const parseSender = () => {
@@ -51,11 +55,20 @@ const parseSender = () => {
       start = i
       // match '[/xxx]'
       while (sendText.value[i] !== ']') i++
-      const face = findFromFaceMap(sendText.value.slice(start + 2, i))
+      const matchVal = sendText.value.slice(start + 2, i)
+
+      const magicFace = ['rps', 'dice']
+
+      const face = findFromFaceMap(matchVal)
       if (face) {
         parser.push({
           type: 'face',
           data: { id: parseInt(face) }
+        })
+      } else if (magicFace.includes(matchVal)) {
+        parser.push({
+          type: matchVal as 'rps' | 'dice',
+          data: {}
         })
       } else {
         parser.push({
@@ -66,6 +79,13 @@ const parseSender = () => {
       start = i + 1
     }
     i++
+  }
+
+  if (start !== i) {
+    parser.push({
+      type: 'text',
+      data: { text: sendText.value.slice(start, i) }
+    })
   }
 
   return {

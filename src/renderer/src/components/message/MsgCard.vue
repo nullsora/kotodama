@@ -15,6 +15,8 @@ import RecordMsg from './RecordMsg.vue'
 import ImageGallery from './special/ImageGallery.vue'
 import UnsupportedMsg from './UnsupportedMsg.vue'
 import VideoMsg from './VideoMsg.vue'
+import RpsMsg from './RpsMsg.vue'
+import DiceMsg from './DiceMsg.vue'
 
 type ImageGalleryMsg = {
   type: 'gallery'
@@ -43,6 +45,8 @@ const msgComponents = {
   record: RecordMsg,
   video: VideoMsg,
   at: AtMsg,
+  rps: RpsMsg,
+  dice: DiceMsg,
   reply: ReplyMsg,
   face: FaceMsg,
   file: FileMsg,
@@ -50,7 +54,7 @@ const msgComponents = {
   json: JsonMsg
 }
 
-const renderOnlyList = ['image', 'mface', 'json', 'video']
+const renderOnlyList = ['image', 'mface', 'rps', 'dice', 'json', 'video']
 
 const showSendTime = computed(() => {
   if (config.customSettings.message.alwaysShowTimestamp) return true
@@ -71,21 +75,17 @@ const messageList = computed(() => {
       if (imgGallery.images.length > 1) {
         result.push(imgGallery)
         imgGallery = { type: 'gallery', images: [] }
-      } else {
-        if (tempImgMsg) {
-          result.push(tempImgMsg)
-          tempImgMsg = null
-        }
+      } else if (tempImgMsg) {
+        result.push(tempImgMsg)
+        tempImgMsg = null
       }
       result.push(msg)
     }
   }
   if (imgGallery.images.length > 1) {
     result.push(imgGallery)
-  } else {
-    if (tempImgMsg) {
-      result.push(tempImgMsg)
-    }
+  } else if (tempImgMsg) {
+    result.push(tempImgMsg)
   }
   return result
 })

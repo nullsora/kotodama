@@ -74,11 +74,12 @@ export const packagedGetter = {
         }
       }
     },
-    recordBuffer: {
+    recordBlob: {
       get: async (url: string) => {
+        const ext = url.split('.').pop()
         let recordCache = await localforage.getItem<{
           [url: string]: {
-            buffer: ArrayBuffer
+            blob: Blob
             savedTime: number
           }
         }>('record-cache')
@@ -88,33 +89,34 @@ export const packagedGetter = {
           await localforage.setItem('record-cache', recordCache)
         }
 
-        const fetchBuffer = async () => {
+        const fetchBlob = async () => {
           // @ts-ignore allow window
           const res = await window.kotodama.file.getFileBuffer(url)
+          const blob = new Blob([res], { type: `audio/${ext ?? 'mpeg'}` })
           recordCache[url] = {
-            buffer: res,
+            blob: blob,
             savedTime: Date.now()
           }
           await localforage.setItem('record-cache', recordCache)
-          return res
+          return blob
         }
 
-        const recordBuffer = recordCache?.[url]?.buffer
-        if (recordBuffer) {
+        const recordBlob = recordCache?.[url]?.blob
+        if (recordBlob) {
           const nowDate = Date.now()
           if (nowDate - recordCache[url].savedTime < 1000 * 60 * 60 * 24) {
-            return recordBuffer
+            return recordBlob
           } else {
             delete recordCache[url]
             await localforage.setItem('record-cache', recordCache)
-            return await fetchBuffer()
+            return await fetchBlob()
           }
-        } else return await fetchBuffer()
+        } else return await fetchBlob()
       },
       clear: async (all: boolean = false) => {
         let recordCache = await localforage.getItem<{
           [url: string]: {
-            buffer: ArrayBuffer
+            blob: Blob
             savedTime: number
           }
         }>('record-cache')
@@ -203,6 +205,13 @@ export const packagedGetter = {
       return (await Connector.fetch('get_file', 'getFile', {
         file: fileId,
         file_id: fileId
+      })) as MsgBody<FileInfo>
+    },
+    parseRecord: async (fileId: string, format: 'wav' | 'mp3' | 'amr' = 'mp3') => {
+      return (await Connector.fetch('get_record', 'getRecord', {
+        file: fileId,
+        file_id: fileId,
+        out_format: format
       })) as MsgBody<FileInfo>
     }
   }

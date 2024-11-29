@@ -86,7 +86,6 @@ const openFile = async () => {
   else await window.kotodama.window.openExternal(props.msg.data.path)
   if (info.value?.file) {
     // @ts-ignore allow window
-    console.log(info.value)
     await window.kotodama.window.openExternal(info.value.file)
   }
 }

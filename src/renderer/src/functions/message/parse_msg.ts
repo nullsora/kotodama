@@ -1,3 +1,4 @@
+import { faceMap } from '../face_map'
 import { packagedGetter } from '../packaged_api'
 import { AnyMessage, GroupMessage, JsonInnerMsg, PrivateMessage } from './message_types'
 
@@ -8,7 +9,7 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = msg.data.text
       break
     case 'face':
-      shortMsg = '[表情]'
+      shortMsg = `[${faceMap[msg.data.id] ?? '表情'}]`
       break
     case 'image':
       if (
@@ -35,10 +36,10 @@ const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = await parseAtMsg(msg.data.qq, groupId)
       break
     case 'rps':
-      shortMsg = '[猜拳]'
+      shortMsg = `[猜拳: ${parseRps(msg.data.result!)}]`
       break
     case 'dice':
-      shortMsg = '[骰子]'
+      shortMsg = `[骰子: ${msg.data.result}点]`
       break
     case 'shake':
       shortMsg = '[窗口抖动]'
@@ -98,6 +99,17 @@ const parseAtMsg = async (msg: string, sendGroupId?: number) => {
   } catch (e) {
     console.log(qq)
     return '@全体成员 '
+  }
+}
+
+const parseRps = (rpsRes: '1' | '2' | '3') => {
+  switch (rpsRes) {
+    case '1':
+      return '布'
+    case '2':
+      return '剪刀'
+    case '3':
+      return '石头'
   }
 }
 

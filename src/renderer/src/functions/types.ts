@@ -48,6 +48,9 @@ export type Group = {
   group_name: string
   member_count: number
   max_member_count: number
+
+  group_momo?: string
+  group_create_time?: number
 }
 
 export type Stranger = {
@@ -55,6 +58,13 @@ export type Stranger = {
   nickname: string
   sex: 'male' | 'female' | 'unknown'
   age: number
+
+  qid?: string
+  level?: number
+  login_days?: number
+  reg_time?: number
+  long_nick?: string
+  city?: string
 }
 
 export type Friend = {
@@ -191,9 +201,12 @@ export type GroupMsgChainNode = {
     sender: {
       user_id: number
       nickname: string
-      sex: 'male' | 'female' | 'unknown'
+      /** 群名片 */
       card?: string
+      /** 群头衔 */
+      title?: string
       role: 'owner' | 'admin' | 'member'
+      sex: 'male' | 'female' | 'unknown'
     }
     data: GroupMessage<AnyMessage>[]
   }[]

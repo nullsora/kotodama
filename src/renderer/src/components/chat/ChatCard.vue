@@ -127,7 +127,7 @@ const parseTime = (time: number | undefined) => {
 }
 
 .chat-card:hover {
-  background-color: var(--p-gray-50);
+  background-color: var(--p-gray-100);
 }
 
 .dark-mode .chat-card:hover {
@@ -136,11 +136,13 @@ const parseTime = (time: number | undefined) => {
 
 .chat-card.selected {
   background-color: var(--p-primary-500);
+  border-color: var(--p-primary-500);
   color: white;
 }
 
 .chat-card.selected:hover {
-  background-color: var(--p-primary-500);
+  background-color: var(--p-primary-400);
+  border-color: var(--p-primary-400);
   color: white;
 }
 </style>

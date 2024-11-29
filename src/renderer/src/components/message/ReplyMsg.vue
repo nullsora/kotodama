@@ -54,7 +54,7 @@ watch(props, getOringinalMsg)
         />
       </Suspense>
     </div>
-    <div v-else class="text-xs msg-content">
+    <div v-else class="text-xs msg-content max-w-90">
       {{ renderShortMsg }}
     </div>
   </div>

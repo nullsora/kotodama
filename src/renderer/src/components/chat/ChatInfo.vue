@@ -59,7 +59,7 @@ const avartarUrl = computed(() => {
     <Teleport defer to=".chat-panel">
       <Transition enter-active-class="slide-in-right" leave-active-class="slide-out-right">
         <div v-if="showInfo" class="chat-info-modal scrollbar scrollbar-w-1 scrollbar-rounded">
-          <div class="info-card w-full p-sm gap-sm primary-border flex flex-row items-center">
+          <div class="info-card w-full p-sm gap-sm flex flex-row items-center">
             <img :src="avartarUrl" class="w-12 h-12 rounded-full" crossorigin="anonymous" />
             <div class="flex flex-col justify-center items-start gap-1">
               <div class="max-w-55 truncate">
@@ -68,9 +68,7 @@ const avartarUrl = computed(() => {
               <Tag class="chat-id" severity="secondary" :value="chatInfo?.id" rounded />
             </div>
           </div>
-          <div
-            class="info-card w-full mt-sm p-sm gap-sm primary-border flex flex-col justify-center"
-          >
+          <div class="info-card w-full mt-sm p-sm gap-sm flex flex-col justify-center">
             <!--群聊成员-->
             <div v-if="props.chatInfo?.type === 'group'">
               <div class="text-sm">群聊成员</div>
@@ -107,33 +105,37 @@ const avartarUrl = computed(() => {
 
 .chat-info-modal {
   position: absolute;
-  top: 3rem;
+  bottom: 0;
   right: 0;
 
   width: 22.5rem;
-  height: calc(100vh - 7.5rem);
+  height: calc(100vh - 7.4rem);
 
   box-shadow: -0.3rem 0 1rem rgba(0, 0, 0, 0.1);
   border-left: 1px solid #e2e8f0;
   border-radius: 0 0 0.5rem 0;
 
-  background-color: var(--p-gray-100);
+  background-color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
 
   padding: 0.875rem;
 }
 
 .dark-mode .chat-info-modal {
   border-left: 1px solid var(--p-gray-700);
-  background-color: var(--p-gray-800);
+  background-color: rgba(31, 41, 55, 0.65);
 }
 
 .info-card {
   background-color: white;
+  border: 1px solid var(--p-slate-200);
+  border-radius: 0.5rem;
 }
 
 .dark-mode .info-card {
   background-color: var(--p-gray-700);
   color: white;
+  border: 1px solid var(--p-gray-600);
 }
 
 .chat-id {

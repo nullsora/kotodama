@@ -8,6 +8,7 @@ import { GroupMsgChainNode, PrivateMsgChainNode } from '@renderer/functions/type
 
 import MsgCard from '../message/MsgCard.vue'
 import UserAvatar from '../message/basic/UserAvatar.vue'
+import SpecialTitle from '../message/basic/SpecialTitle.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 
@@ -198,32 +199,39 @@ watch(
     @scroll="handleScroll"
   >
     <div v-if="msgHistoryList.length > 0">
-      <div v-for="(msgChainDate, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
+      <div v-for="(msgChainNode, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
         <div class="w-full flex flex-row justify-center items-center">
-          <Tag class="format-day" rounded :value="formateDay(msgChainDate.time)" />
+          <Tag class="format-day" rounded :value="formateDay(msgChainNode.time)" />
         </div>
-        <div v-for="(msgChainNode, index) in msgChainDate.messages" :key="index">
+        <div v-for="(msgSingleNode, index) in msgChainNode.messages" :key="index">
           <div
             class="flex flex-row items-end mb-sm"
-            :class="checkSenderSelf(msgChainNode) ? 'justify-end' : 'justify-start'"
+            :class="checkSenderSelf(msgSingleNode) ? 'justify-end' : 'justify-start'"
           >
-            <UserAvatar v-if="!checkSenderSelf(msgChainNode)" :id="msgChainNode.sender.user_id" />
+            <UserAvatar v-if="!checkSenderSelf(msgSingleNode)" :id="msgSingleNode.sender.user_id" />
             <div
               class="flex flex-col justify-end gap-1"
-              :class="checkSenderSelf(msgChainNode) ? 'items-end' : 'items-start'"
+              :class="checkSenderSelf(msgSingleNode) ? 'items-end' : 'items-start'"
             >
-              <div class="text-gray-500 text-xs">{{ getSenderName(msgChainDate, index) }}</div>
-              <div v-for="(msg, msgIndex) in msgChainNode.data" :key="msgIndex">
+              <div class="flex items-center gap-1">
+                <div class="text-gray-500 text-xs">{{ getSenderName(msgChainNode, index) }}</div>
+                <SpecialTitle
+                  v-if="msgChainNode.type === 'group'"
+                  :role="msgChainNode.messages[index].sender.role"
+                  :title="msgChainNode.messages[index].sender.title"
+                />
+              </div>
+              <div v-for="(msg, msgIndex) in msgSingleNode.data" :key="msgIndex">
                 <MsgCard
-                  :reverse="checkSenderSelf(msgChainNode)"
-                  :position="getPosition(msgChainNode.data, msgIndex)"
+                  :reverse="checkSenderSelf(msgSingleNode)"
+                  :position="getPosition(msgSingleNode.data, msgIndex)"
                   :message="msg"
                 />
               </div>
             </div>
             <UserAvatar
-              v-if="checkSenderSelf(msgChainNode)"
-              :id="msgChainNode.sender.user_id"
+              v-if="checkSenderSelf(msgSingleNode)"
+              :id="msgSingleNode.sender.user_id"
               position="right"
             />
           </div>

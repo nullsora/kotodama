@@ -36,16 +36,19 @@ export interface PrivateMessage<MessageContent> extends BaseMessage<MessageConte
 
 export interface GroupMessage<MessageContent> extends BaseMessage<MessageContent> {
   message_type: 'group'
-  /** 消息子类型，正常消息是 `normal`，匿名消息是 `anonymous`，系统提示（如「管理员已禁止群内匿名聊天」）是 `notice` */
 
   sender: {
     user_id: number
     nickname: string
+    /** 群名片 */
     card?: string
+    /** 群头衔 */
+    title?: string
     role: 'owner' | 'admin' | 'member'
     sex: 'male' | 'female' | 'unknown'
   }
 
+  /** 消息子类型，正常消息是 `normal`，匿名消息是 `anonymous`，系统提示（如「管理员已禁止群内匿名聊天」）是 `notice` */
   sub_type: 'normal' | 'anonymous' | 'notice'
 
   group_id: number
@@ -193,13 +196,17 @@ type AtMessage = {
 /** 猜拳魔法表情 */
 type RpsMessage = {
   type: 'rps'
-  data: Record<string, never>
+  data: {
+    result?: '1' | '2' | '3'
+  }
 }
 
 /** 掷骰子魔法表情 */
 type DiceMessage = {
   type: 'dice'
-  data: Record<string, never>
+  data: {
+    result?: '1' | '2' | '3' | '4' | '5' | '6'
+  }
 }
 
 /** 窗口抖动（戳一戳） */
