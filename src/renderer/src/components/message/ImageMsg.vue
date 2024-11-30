@@ -3,20 +3,20 @@ import { MessageTypes } from '@renderer/functions/message/message_types'
 import { computed } from 'vue'
 import MsgImage from './basic/MsgImage.vue'
 
-const props = defineProps<{
+const { msg } = defineProps<{
   msg: MessageTypes['Image'] | MessageTypes['MFace']
 }>()
 
 const imageUrl = computed(
-  () => props.msg.data.url //.replace('https://multimedia.nt.qq.com.cn', '/api/qq_image')
+  () => msg.data.url //.replace('https://multimedia.nt.qq.com.cn', '/api/qq_image')
 )
 
 const isFace = computed(() => {
-  if (props.msg.type === 'mface') return true
+  if (msg.type === 'mface') return true
 
-  if (props.msg.data.file === 'marketface') return true
-  else if (props.msg.data.sub_type) return true
-  else if (props.msg.data.subType) return true
+  if (msg.data.file === 'marketface') return true
+  else if (msg.data.sub_type) return true
+  else if (msg.data.subType) return true
   else return false
 })
 

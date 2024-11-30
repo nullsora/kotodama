@@ -2,25 +2,25 @@
 import { computed } from 'vue'
 import { Chat } from '@renderer/functions/types'
 
-const props = defineProps<{
+const { contact } = defineProps<{
   contact: Chat
   selected: boolean
 }>()
 
 const avatarUrl = computed(() => {
-  if (props.contact.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${props.contact.data.user_id}`
+  if (contact.type === 'friend') {
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${contact.data.user_id}`
   } else {
-    return `https://p.qlogo.cn/gh/${props.contact.data.group_id}/${props.contact.data.group_id}/640`
+    return `https://p.qlogo.cn/gh/${contact.data.group_id}/${contact.data.group_id}/640`
   }
 })
 const name = computed(() => {
-  if (props.contact.type === 'friend') {
-    const nick = props.contact.data.nickname
-    const remark = props.contact.data.remark
+  if (contact.type === 'friend') {
+    const nick = contact.data.nickname
+    const remark = contact.data.remark
     return remark !== '' ? `${remark} (${nick})` : nick
   } else {
-    return props.contact.data.group_name
+    return contact.data.group_name
   }
 })
 </script>

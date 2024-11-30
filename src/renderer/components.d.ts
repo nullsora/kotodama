@@ -52,6 +52,7 @@ declare module 'vue' {
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
     JsonMsg: typeof import('./src/components/message/JsonMsg.vue')['default']
+    LocationMsg: typeof import('./src/components/message/special/LocationMsg.vue')['default']
     MainLayout: typeof import('./src/components/layout/MainLayout.vue')['default']
     Menu: typeof import('primevue/menu')['default']
     Message: typeof import('primevue/message')['default']

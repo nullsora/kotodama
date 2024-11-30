@@ -12,7 +12,7 @@ import SpecialTitle from '../message/basic/SpecialTitle.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 
-const props = defineProps<{
+const { chatInfo } = defineProps<{
   chatInfo: {
     type: 'friend' | 'group'
     id: number
@@ -23,7 +23,7 @@ const msgPanel = useTemplateRef('msgPanel')
 
 // 将历史消息转为消息链
 const parsedMsgChain = computed(() => {
-  if (props.chatInfo?.type === 'friend') {
+  if (chatInfo?.type === 'friend') {
     const msgChain: PrivateMsgChainNode[] = []
     let curIndex = -1
     for (const msg of msgHistoryList.value) {
@@ -56,7 +56,7 @@ const parsedMsgChain = computed(() => {
       }
     }
     return msgChain
-  } else if (props.chatInfo?.type === 'group') {
+  } else if (chatInfo?.type === 'group') {
     const msgChain: GroupMsgChainNode[] = []
     let curIndex = -1
     for (const msg of msgHistoryList.value) {
@@ -144,14 +144,10 @@ const getPosition = (
 
 const updateMsgHistory = async (append: boolean = false, count: number = 30) => {
   const _count = !append ? count : msgHistoryList.value.length + count
-  if (props.chatInfo?.type === 'friend') {
-    msgHistoryList.value = (
-      await packagedGetter.getMsg.friend(props.chatInfo.id, _count)
-    ).data.messages
-  } else if (props.chatInfo?.type === 'group') {
-    msgHistoryList.value = (
-      await packagedGetter.getMsg.group(props.chatInfo.id, _count)
-    ).data.messages
+  if (chatInfo?.type === 'friend') {
+    msgHistoryList.value = (await packagedGetter.getMsg.friend(chatInfo.id, _count)).data.messages
+  } else if (chatInfo?.type === 'group') {
+    msgHistoryList.value = (await packagedGetter.getMsg.group(chatInfo.id, _count)).data.messages
   }
 }
 
@@ -168,7 +164,7 @@ const handleScroll = async (e: Event) => {
 }
 
 const updateComponent = async () => {
-  if (props.chatInfo) {
+  if (chatInfo) {
     await updateMsgHistory()
     await nextTick(() => {
       if (msgPanel.value) {
@@ -179,7 +175,7 @@ const updateComponent = async () => {
 }
 
 onMounted(updateComponent)
-watch(props, updateComponent)
+watch(() => chatInfo, updateComponent)
 
 // 高度更新时，若原本在底部，则滚动到底部
 watch(

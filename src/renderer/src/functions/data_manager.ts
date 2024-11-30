@@ -10,7 +10,12 @@ export class DataManager {
   private static instance: DataManager
 
   private static sortChats(chats: Chat[]) {
-    return chats.sort((a, b) => (b?.latestMsg?.time ?? 0) - (a?.latestMsg?.time ?? 0))
+    return chats.sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1
+      if (!a.pinned && b.pinned) return 1
+
+      return (b?.latestMsg?.time ?? 0) - (a?.latestMsg?.time ?? 0)
+    })
   }
 
   static getInstance(): DataManager {
@@ -238,6 +243,11 @@ export class DataManager {
     }
     chat.latestMsg = latestMsg
     return latestMsg
+  }
+
+  async sortShowingChats() {
+    this.checkWorking()
+    DataManager.sortChats(this.curContacts.showing)
   }
 
   async pushNewMessage(message: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>) {

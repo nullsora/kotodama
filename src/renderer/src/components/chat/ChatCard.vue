@@ -1,29 +1,44 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 
 import { Chat } from '@renderer/functions/types'
 import TextShortMsg from '../message/basic/TextShortMsg.vue'
 
-const props = defineProps<{ chat: Chat; selected: boolean }>()
+const menu = useTemplateRef('menu')
+
+const { chat } = defineProps<{ chat: Chat; selected: boolean }>()
+const emit = defineEmits<{
+  pinChat: []
+}>()
+
+const menuItems = computed(() => [
+  {
+    label: chat.pinned ? '取消置顶' : '置顶聊天',
+    icon: chat.pinned ? 'i-fluent-pin-off-24-regular' : 'i-fluent-pin-24-regular',
+    command: () => {
+      emit('pinChat')
+    }
+  }
+])
 
 const getAvatarUrl = computed(() => {
-  if (props.chat.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${props.chat.data.user_id}`
+  if (chat.type === 'friend') {
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${chat.data.user_id}`
   } else {
-    return `https://p.qlogo.cn/gh/${props.chat.data.group_id}/${props.chat.data.group_id}/640`
+    return `https://p.qlogo.cn/gh/${chat.data.group_id}/${chat.data.group_id}/640`
   }
 })
 
 const getName = computed(() => {
-  if (props.chat.type === 'friend') {
-    return props.chat.data.remark === '' ? props.chat.data.nickname : props.chat.data.remark
+  if (chat.type === 'friend') {
+    return chat.data.remark === '' ? chat.data.nickname : chat.data.remark
   } else {
-    return props.chat.data.group_name
+    return chat.data.group_name
   }
 })
 
 const parseTime = (time: number | undefined) => {
-  if (!time) return props.chat?.latestMsg
+  if (!time) return chat?.latestMsg
   const date = new Date(time * 1000)
   const currentTime = new Date()
 
@@ -64,7 +79,12 @@ const parseTime = (time: number | undefined) => {
 </script>
 
 <template>
-  <div v-ripple :class="{ selected: selected }" class="glassmorphism p-2 chat-card">
+  <div
+    v-ripple
+    :class="{ selected: selected, pinned: chat.pinned }"
+    class="glassmorphism p-2 chat-card"
+    @contextmenu="(event) => menu?.toggle(event)"
+  >
     <div class="w-full flex flex-row justify-start items-center gap-2">
       <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
       <div class="w-full flex flex-col justify-center items-start gap-0.3">
@@ -73,7 +93,7 @@ const parseTime = (time: number | undefined) => {
             <i
               class="chat-name w-4.2 h-4.2 align-mid pi"
               :class="
-                props.chat.type === 'friend'
+                chat.type === 'friend'
                   ? 'i-fluent-chat-24-regular'
                   : 'i-fluent-chat-multiple-24-regular'
               "
@@ -81,19 +101,22 @@ const parseTime = (time: number | undefined) => {
             {{ getName }}
           </div>
           <div :class="selected ? '' : ' text-gray-500'" class="text-xs whitespace-nowrap">
-            {{ parseTime(props.chat?.latestMsg?.time) }}
+            {{ parseTime(chat?.latestMsg?.time) }}
           </div>
         </div>
         <div class="w-45.5 flex flex-row justify-between items-center gap-2">
           <div :class="selected ? '' : 'short-msg'" class="text-sm truncate">
             <Suspense>
-              <TextShortMsg :msg="props.chat.latestMsg" />
+              <TextShortMsg :msg="chat.latestMsg" />
             </Suspense>
           </div>
-          <div class="w-5" />
+          <div class="w-5 dark-gray-text">
+            <i v-if="chat.pinned" class="w-4 h-4 align-mid pi i-fluent-pin-24-regular" />
+          </div>
         </div>
       </div>
     </div>
+    <ContextMenu ref="menu" :model="menuItems" />
   </div>
 </template>
 
@@ -108,24 +131,16 @@ const parseTime = (time: number | undefined) => {
   -webkit-user-select: none;
 }
 
-.dark-mode .chat-name {
-  color: white;
-}
-
-.short-msg {
-  color: var(--p-gray-500);
-}
-
-.dark-mode .short-msg {
-  color: var(--p-gray-400);
-}
-
 .chat-card:hover {
   background-color: var(--p-gray-100);
 }
 
 .dark-mode .chat-card:hover {
   background-color: var(--p-gray-700);
+}
+
+.chat-card.pinned {
+  backdrop-filter: brightness(0.7);
 }
 
 .chat-card.selected {
@@ -138,5 +153,17 @@ const parseTime = (time: number | undefined) => {
   background-color: var(--p-primary-400);
   border-color: var(--p-primary-400);
   color: white;
+}
+
+.dark-mode .chat-name {
+  color: white;
+}
+
+.short-msg {
+  color: var(--p-gray-500);
+}
+
+.dark-mode .short-msg {
+  color: var(--p-gray-400);
 }
 </style>

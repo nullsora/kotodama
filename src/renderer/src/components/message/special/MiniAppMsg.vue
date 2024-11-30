@@ -22,19 +22,17 @@ const openInBrowser = () => {
 </script>
 
 <template>
-  <div>
-    <div class="w-80 share-msg-card p-sm" @click="openInBrowser">
-      <div>
-        <div class="font-bold dark-gray-text truncate">
-          {{ msg.desc }}
-        </div>
-        <MsgImage :src="previewUrl" :show-menu="false" class="mt-2 w-full" />
+  <div class="w-80 share-msg-card p-sm" @click="openInBrowser">
+    <div>
+      <div class="font-bold dark-gray-text truncate">
+        {{ msg.desc }}
       </div>
-      <div class="divider" />
-      <div class="flex flex-row justify-start items-center gap-1">
-        <img class="w-4 h-4 rd-0.5" :src="msg.icon" crossorigin="anonymous" />
-        <span class="text-xs dark-gray-text">{{ msg.title }}</span>
-      </div>
+      <MsgImage :src="previewUrl" :show-menu="false" class="mt-2 w-full" />
+    </div>
+    <div class="divider" />
+    <div class="flex flex-row justify-start items-center gap-1">
+      <img class="w-4 h-4 rd-0.5" :src="msg.icon" crossorigin="anonymous" />
+      <span class="text-xs dark-gray-text">{{ msg.title }}</span>
     </div>
   </div>
 </template>

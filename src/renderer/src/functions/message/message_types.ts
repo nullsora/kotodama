@@ -367,3 +367,15 @@ export type MiniAppMsg = {
   showLittleTail: string
   shareOrigin: number
 }
+
+export type LocationMsg = {
+  address: string
+  enum_relation_type: number
+  from: string
+  from_account: number
+  id: string
+  lat: string
+  lng: string
+  name: string
+  uint64_peer_account: number
+}

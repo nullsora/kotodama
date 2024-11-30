@@ -145,11 +145,15 @@ export type Chat =
       type: 'friend'
       data: Friend
       latestMsg?: PrivateMessage<AnyMessage>
+      pinned?: boolean
+      archived?: boolean
     }
   | {
       type: 'group'
       data: Group
       latestMsg?: GroupMessage<AnyMessage>
+      pinned?: boolean
+      archived?: boolean
     }
 export type ChatInfo = {
   type: 'friend' | 'group'

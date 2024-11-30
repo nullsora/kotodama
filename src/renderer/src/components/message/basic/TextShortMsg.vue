@@ -6,13 +6,13 @@ import { DataManager } from '@renderer/functions/data_manager'
 
 const runtimeData = inject('runtimeData') as DataManager
 
-const props = defineProps<{ msg?: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage> }>()
+const { msg } = defineProps<{ msg?: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage> }>()
 
 const getName = computed(() => {
-  if (props.msg?.message_type === 'private') {
+  if (msg?.message_type === 'private') {
     return ''
-  } else if (props.msg?.message_type === 'group') {
-    return props.msg.sender.card === '' ? props.msg.sender.nickname : props.msg.sender.card
+  } else if (msg?.message_type === 'group') {
+    return msg.sender.card === '' ? msg.sender.nickname : msg.sender.card
   } else return ''
 })
 
@@ -22,25 +22,25 @@ const getMsgContent = async () => {
   const sender = getName.value
   const prefix = sender === '' ? '' : sender + ': '
 
-  if (props.msg?.message.length === 0)
+  if (msg?.message.length === 0)
     return `${
-      props.msg.sender.user_id === runtimeData.userInfo.value.main.user_id ? '你' : sender + ' '
+      msg.sender.user_id === runtimeData.userInfo.value.main.user_id ? '你' : sender + ' '
     }撤回了一条消息`
 
   let showMsg = ''
-  if (props.msg?.message) showMsg = (await msgListToShortMsg(props.msg)) ?? ''
+  if (msg?.message) showMsg = (await msgListToShortMsg(msg)) ?? ''
 
   return `${prefix}${showMsg}`
 }
 
-shortMsg.value = await getMsgContent()
+const updateShortMsg = async () => {
+  shortMsg.value = await getMsgContent()
+}
 
-onMounted(async () => {
-  shortMsg.value = await getMsgContent()
-})
-watch(props, async () => {
-  shortMsg.value = await getMsgContent()
-})
+await updateShortMsg()
+
+onMounted(updateShortMsg)
+watch(() => msg, updateShortMsg)
 </script>
 
 <template>

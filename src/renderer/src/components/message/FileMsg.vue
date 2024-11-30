@@ -3,7 +3,7 @@ import { FileInfo, MessageTypes } from '@renderer/functions/message/message_type
 import { packagedGetter } from '@renderer/functions/packaged_api'
 import { computed, ref } from 'vue'
 
-const props = defineProps<{
+const { msg } = defineProps<{
   msg: MessageTypes['File']
 }>()
 
@@ -33,7 +33,7 @@ const flieColorMap = [
 ]
 
 const fileType = computed(() => {
-  const file = props.msg.data.file
+  const file = msg.data.file
   const ext = file.split('.').pop()?.toLowerCase()
   if (!ext) return 'i-fluent-document-24-regular'
   if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) return 'i-fluent-image-24-regular'
@@ -49,7 +49,7 @@ const fileType = computed(() => {
 })
 
 const fileSize = computed(() => {
-  const size = parseInt(props.msg.data.file_size)
+  const size = parseInt(msg.data.file_size)
   if (size < 1024) return `${size}B`
   if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)}KB`
   if (size < 1024 * 1024 * 1024) return `${(size / 1024 / 1024).toFixed(2)}MB`
@@ -57,14 +57,14 @@ const fileSize = computed(() => {
 })
 
 const bgColor = computed(() => {
-  const ext = props.msg.data.file.split('.').pop()?.toLowerCase()
+  const ext = msg.data.file.split('.').pop()?.toLowerCase()
   if (!ext) return 'var(--p-gray-300)'
   const color = flieColorMap.find((item) => item.selector.includes(ext))
   return color ? color.bg : 'var(--p-gray-300)'
 })
 
 const iconColor = computed(() => {
-  const ext = props.msg.data.file.split('.').pop()?.toLowerCase()
+  const ext = msg.data.file.split('.').pop()?.toLowerCase()
   if (!ext) return 'var(--p-gray-800)'
   const color = flieColorMap.find((item) => item.selector.includes(ext))
   return color ? color.color : 'var(--p-gray-800)'
@@ -78,12 +78,12 @@ const avatarStyle = computed(() => {
 })
 
 const downloadFile = async () => {
-  info.value = (await packagedGetter.getMsg.downloadFile(props.msg.data.file_id)).data
+  info.value = (await packagedGetter.getMsg.downloadFile(msg.data.file_id)).data
 }
 
 const openFile = async () => {
-  if (props.msg.data.path === '') await downloadFile()
-  else await window.kotodama.window.openExternal(props.msg.data.path)
+  if (msg.data.path === '') await downloadFile()
+  else await window.kotodama.window.openExternal(msg.data.path)
   if (info.value?.file) {
     // @ts-ignore allow window
     await window.kotodama.window.openExternal(info.value.file)
@@ -93,13 +93,13 @@ const openFile = async () => {
 
 <template>
   <div
-    v-tooltip.top="props.msg.data.file"
+    v-tooltip.top="msg.data.file"
     class="file-message flex flex-row items-center gap-sm cursor-pointer"
     @click="openFile"
   >
     <Avatar size="large" :icon="fileType" :style="avatarStyle" />
     <div class="flex flex-col">
-      <span class="truncate text-sm w-40">{{ props.msg.data.file }}</span>
+      <span class="truncate text-sm w-40">{{ msg.data.file }}</span>
       <span class="text-xs text-gray-500">{{ fileSize }}</span>
     </div>
   </div>

@@ -5,7 +5,7 @@ import { Friend, Group } from '@renderer/functions/types'
 
 const runtimeData = inject('runtimeData') as DataManager
 
-const props = defineProps<{
+const { chatInfo } = defineProps<{
   chatInfo: {
     type: 'friend' | 'group'
     id: number
@@ -15,20 +15,20 @@ const props = defineProps<{
 const showInfo = ref(false)
 
 const chat = computed(() => {
-  if (props.chatInfo) {
-    return runtimeData.findChat[props.chatInfo.type](props.chatInfo.id)
+  if (chatInfo) {
+    return runtimeData.findChat[chatInfo.type](chatInfo.id)
   } else return undefined
 })
 
 const chatName = computed(() => {
-  if (props.chatInfo?.type === 'friend') {
+  if (chatInfo?.type === 'friend') {
     return {
       name:
         (chat.value as Friend)?.remark === ''
           ? (chat.value as Friend)?.nickname
           : (chat.value as Friend)?.remark
     }
-  } else if (props.chatInfo?.type === 'group') {
+  } else if (chatInfo?.type === 'group') {
     return {
       name: (chat.value as Group)?.group_name,
       memberCount: (chat.value as Group)?.member_count
@@ -38,10 +38,10 @@ const chatName = computed(() => {
 })
 
 const avartarUrl = computed(() => {
-  if (props.chatInfo?.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${props.chatInfo.id}`
-  } else if (props.chatInfo?.type === 'group') {
-    return `https://p.qlogo.cn/gh/${props.chatInfo.id}/${props.chatInfo.id}/640`
+  if (chatInfo?.type === 'friend') {
+    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${chatInfo.id}`
+  } else if (chatInfo?.type === 'group') {
+    return `https://p.qlogo.cn/gh/${chatInfo.id}/${chatInfo.id}/640`
   } else return ''
 })
 </script>
@@ -70,7 +70,7 @@ const avartarUrl = computed(() => {
           </div>
           <div class="info-card w-full mt-sm p-sm gap-sm flex flex-col justify-center">
             <!--群聊成员-->
-            <div v-if="props.chatInfo?.type === 'group'">
+            <div v-if="chatInfo?.type === 'group'">
               <div class="text-sm">群聊成员</div>
               <div class="flex flex-row flex-wrap gap-1"></div>
             </div>

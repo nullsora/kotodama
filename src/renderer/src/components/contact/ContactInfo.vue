@@ -6,45 +6,45 @@ import { ChatInfo, Friend, Group, Pages } from '@renderer/functions/types'
 const runtimeData = inject('runtimeData') as DataManager
 const currentPage = inject('currentPage') as Ref<Pages>
 
-const props = defineProps<{
+const { contact } = defineProps<{
   contact: ChatInfo | null
 }>()
 
 const contactObj = computed(() => {
-  if (props.contact?.type === 'friend') {
-    return runtimeData.curContacts.friends.find((friend) => friend.user_id === props.contact?.id)
-  } else if (props.contact?.type === 'group') {
-    return runtimeData.curContacts.groups.find((group) => group.group_id === props.contact?.id)
+  if (contact?.type === 'friend') {
+    return runtimeData.curContacts.friends.find((friend) => friend.user_id === contact?.id)
+  } else if (contact?.type === 'group') {
+    return runtimeData.curContacts.groups.find((group) => group.group_id === contact?.id)
   }
   return null
 })
 
 const contactName = computed(() => {
-  if (props.contact?.type === 'friend') {
+  if (contact?.type === 'friend') {
     return (contactObj.value as Friend)?.nickname
-  } else if (props.contact?.type === 'group') {
+  } else if (contact?.type === 'group') {
     return (contactObj.value as Group)?.group_name
   }
   return ''
 })
 
 const avatarUrl = computed(() => {
-  if (props.contact?.type === 'friend') {
+  if (contact?.type === 'friend') {
     return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${(contactObj.value as Friend).user_id}`
-  } else if (props.contact?.type === 'group') {
+  } else if (contact?.type === 'group') {
     return `https://p.qlogo.cn/gh/${(contactObj.value as Group).group_id}/${(contactObj.value as Group).group_id}/640`
   } else return ''
 })
 
 const jumpToMsg = async () => {
-  if (props.contact?.type === 'friend') {
-    await runtimeData.addToList.private(props.contact.id)
+  if (contact?.type === 'friend') {
+    await runtimeData.addToList.private(contact.id)
     currentPage.value = Pages.Chat
-    runtimeData.showingChat.value = { type: 'friend', id: props.contact.id }
-  } else if (props.contact?.type === 'group') {
-    await runtimeData.addToList.group(props.contact.id)
+    runtimeData.showingChat.value = { type: 'friend', id: contact.id }
+  } else if (contact?.type === 'group') {
+    await runtimeData.addToList.group(contact.id)
     currentPage.value = Pages.Chat
-    runtimeData.showingChat.value = { type: 'group', id: props.contact.id }
+    runtimeData.showingChat.value = { type: 'group', id: contact.id }
   }
 }
 </script>

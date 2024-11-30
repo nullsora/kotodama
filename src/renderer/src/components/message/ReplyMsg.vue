@@ -11,7 +11,7 @@ import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
 import { packagedGetter } from '@renderer/functions/packaged_api'
 import MsgImage from './basic/MsgImage.vue'
 
-const props = defineProps<{
+const { msg } = defineProps<{
   msg: MessageTypes['Reply']
 }>()
 
@@ -19,7 +19,7 @@ const originalMsg = ref<PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>>()
 const renderShortMsg = ref('')
 
 const getOringinalMsg = async () => {
-  const oriId = props.msg.data.id
+  const oriId = msg.data.id
   const oriMsg = await packagedGetter.getMsg.single(oriId)
   originalMsg.value = oriMsg.data
   renderShortMsg.value = (await msgListToShortMsg(oriMsg.data)) ?? '[引用消息不存在]'
@@ -40,7 +40,7 @@ const getName = computed(() => {
 })
 
 onMounted(getOringinalMsg)
-watch(props, getOringinalMsg)
+watch(() => msg, getOringinalMsg)
 </script>
 
 <template>

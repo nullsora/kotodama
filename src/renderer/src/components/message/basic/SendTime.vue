@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-const props = defineProps<{ time: number }>()
+const { time } = defineProps<{ time: number }>()
 
 const parsedTime = computed(() => {
-  const date = new Date(props.time * 1000)
+  const date = new Date(time * 1000)
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
 })
 </script>

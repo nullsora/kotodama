@@ -3,7 +3,7 @@ import ChatInfo from './ChatInfo.vue'
 import MsgPanel from './MsgPanel.vue'
 import MsgSender from './MsgSender.vue'
 
-const props = defineProps<{
+const { chatInfo } = defineProps<{
   chatInfo: {
     type: 'friend' | 'group'
     id: number
@@ -13,10 +13,10 @@ const props = defineProps<{
 
 <template>
   <div class="w-full h-full chat-panel glassmorphism">
-    <div v-if="props.chatInfo" class="w-full flex flex-col justify-start items-center">
-      <ChatInfo class="w-full" :chat-info="props.chatInfo" />
-      <MsgPanel :chat-info="props.chatInfo" />
-      <MsgSender :chat-info="props.chatInfo" />
+    <div v-if="chatInfo" class="w-full flex flex-col justify-start items-center">
+      <ChatInfo class="w-full" :chat-info="chatInfo" />
+      <MsgPanel :chat-info="chatInfo" />
+      <MsgSender :chat-info="chatInfo" />
     </div>
     <div v-else class="w-full h-full rd-2" />
   </div>

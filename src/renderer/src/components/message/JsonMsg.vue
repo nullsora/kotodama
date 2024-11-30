@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import AnnounceMsg from './special/AnnounceMsg.vue'
 import MsgImage from './basic/MsgImage.vue'
 import MiniAppMsg from './special/MiniAppMsg.vue'
+import LocationMsg from './special/LocationMsg.vue'
 
 const { msg } = defineProps<{
   msg: MessageTypes['JSON']
@@ -30,13 +31,15 @@ const getPreviewUrl = (meta: { preview: string }) => {
 
 enum JsonMsgTypes {
   Annouce = 'mannounce',
-  Miniapp = 'miniapp'
+  Miniapp = 'miniapp',
+  Location = 'location'
 }
 
 const checkType = (msg: JsonInnerMsg, key: string | number) => {
   if (key === JsonMsgTypes.Annouce) return JsonMsgTypes.Annouce
   else if (msg.app.startsWith('com.tencent.miniapp') && key !== 'miniapp')
     return JsonMsgTypes.Miniapp
+  else if (msg.view === 'LocationShare') return JsonMsgTypes.Location
   else return ''
 }
 </script>
@@ -45,6 +48,7 @@ const checkType = (msg: JsonInnerMsg, key: string | number) => {
   <div v-for="(value, key) in parsedMsg.meta" :key="key">
     <AnnounceMsg v-if="checkType(parsedMsg, key) === JsonMsgTypes.Annouce" :msg="value" />
     <MiniAppMsg v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.Miniapp" :msg="value" />
+    <LocationMsg v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.Location" :msg="value" />
     <div v-else class="w-80 share-msg-card glassmorphism p-sm" @click="openInBrowser(value)">
       <div class="flex flex-row justify-start items-center gap-2">
         <MsgImage class="w-15 h-15 object-cover" :skeleton-size="15" :src="getPreviewUrl(value)" />

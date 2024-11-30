@@ -4,7 +4,7 @@ import { DataManager } from '@renderer/functions/data_manager'
 import { Chat, Friend, Group } from '@renderer/functions/types'
 import ChatCard from './ChatCard.vue'
 
-const props = defineProps<{ filters?: Chat[] }>()
+const { filters } = defineProps<{ filters?: Chat[] }>()
 
 const runtimeData = inject('runtimeData') as DataManager
 
@@ -14,12 +14,12 @@ const selectedChat = defineModel<{
 } | null>('selectedChat')
 
 const renderChats = computed(() => {
-  if (!props.filters) return runtimeData.curContacts.showing
+  if (!filters) return runtimeData.curContacts.showing
 
   const renderer: Chat[] = []
   for (const chat of runtimeData.curContacts.showing) {
     if (
-      props.filters.find((c) => {
+      filters.find((c) => {
         if (c.type === 'friend' && chat.type === 'friend')
           return c.data.user_id === chat.data.user_id
         else if (c.type === 'group' && chat.type === 'group')
@@ -41,7 +41,7 @@ const getSelected = (chat: Chat) => {
   } else return false
 }
 
-const changeSelectedChat = (chat: Chat) => {
+const changeSelectedChat = async (chat: Chat) => {
   if (chat.type === 'friend') {
     selectedChat.value = {
       type: 'friend',
@@ -52,6 +52,23 @@ const changeSelectedChat = (chat: Chat) => {
       type: 'group',
       id: chat.data.group_id
     }
+  }
+  await runtimeData.updateLatestMessage(chat)
+  await runtimeData.sortShowingChats()
+}
+
+const togglePin = (chat: Chat) => {
+  const chatIndex = runtimeData.curContacts.showing.findIndex((c) => {
+    if (c.type === 'friend' && chat.type === 'friend') return c.data.user_id === chat.data.user_id
+    else if (c.type === 'group' && chat.type === 'group')
+      return c.data.group_id === chat.data.group_id
+    else return false
+  })
+  if (chatIndex !== -1) {
+    if (runtimeData.curContacts.showing[chatIndex].pinned)
+      delete runtimeData.curContacts.showing[chatIndex].pinned
+    else runtimeData.curContacts.showing[chatIndex].pinned = true
+    runtimeData.sortShowingChats()
   }
 }
 </script>
@@ -66,6 +83,7 @@ const changeSelectedChat = (chat: Chat) => {
         :selected="getSelected(contact)"
         class="mb-2"
         @click="changeSelectedChat(contact)"
+        @pin-chat="togglePin(contact)"
       />
     </div>
   </div>

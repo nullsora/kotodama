@@ -9,7 +9,7 @@ import ContactCard from '../contact/ContactCard.vue'
 const runtimeData = inject('runtimeData') as DataManager
 
 const show = defineModel<boolean>('show')
-const props = defineProps<{
+const { edit } = defineProps<{
   edit?: {
     edit: boolean
     index: number
@@ -63,8 +63,8 @@ const quit = () => {
 }
 
 const submitGroup = async () => {
-  if (props.edit?.edit) {
-    runtimeData.user.value.contactGroups[props.edit.index] = {
+  if (edit?.edit) {
+    runtimeData.user.value.contactGroups[edit.index] = {
       name: newContactGroupInfo.value.name,
       iconClass: newContactGroupInfo.value.iconClass,
       chats: newContactGroupInfo.value.chats
@@ -89,23 +89,23 @@ const submitGroup = async () => {
 }
 
 onMounted(() => {
-  if (props.edit?.edit) {
+  if (edit?.edit) {
     newContactGroupInfo.value = {
-      name: runtimeData.user.value.contactGroups[props.edit.index].name,
-      iconClass: runtimeData.user.value.contactGroups[props.edit.index].iconClass,
-      chats: runtimeData.user.value.contactGroups[props.edit.index].chats
+      name: runtimeData.user.value.contactGroups[edit.index].name,
+      iconClass: runtimeData.user.value.contactGroups[edit.index].iconClass,
+      chats: runtimeData.user.value.contactGroups[edit.index].chats
     }
   }
 })
 
 watch(
-  () => props.edit,
+  () => edit,
   () => {
-    if (props.edit?.edit) {
+    if (edit?.edit) {
       newContactGroupInfo.value = {
-        name: runtimeData.user.value.contactGroups[props.edit.index].name,
-        iconClass: runtimeData.user.value.contactGroups[props.edit.index].iconClass,
-        chats: runtimeData.user.value.contactGroups[props.edit.index].chats
+        name: runtimeData.user.value.contactGroups[edit.index].name,
+        iconClass: runtimeData.user.value.contactGroups[edit.index].iconClass,
+        chats: runtimeData.user.value.contactGroups[edit.index].chats
       }
     }
   }

@@ -3,7 +3,7 @@ import { Pages } from '@renderer/functions/types'
 import { computed, ref } from 'vue'
 const kotodama = window.kotodama
 
-const props = defineProps<{ title?: string; showMenu: boolean }>()
+defineProps<{ title?: string; showMenu: boolean }>()
 const darkMode = defineModel<boolean>('darkMode')
 const currentPage = defineModel<string>('currentPage')
 
@@ -44,7 +44,7 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
 
 <template>
   <div class="draggable topbar glassmorphism">
-    <Tag rounded severity="primary" :value="props.title ?? 'Kotodama'" />
+    <Tag rounded severity="primary" :value="title ?? 'Kotodama'" />
     <div v-if="showMenu" class="non-drag topbar-menu">
       <Button
         class="menu-btn"
