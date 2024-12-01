@@ -108,6 +108,11 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 - 在使用之前，你需要有一个可用的Onebot后端。因为使用了一些非Onebot标准的API，推荐[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)。
 
+- 构建icon
+  ```sh
+  pnpm build:icon
+  ```
+
 - 选择你的平台进行项目构建
 
   ```sh

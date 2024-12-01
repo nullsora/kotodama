@@ -15,6 +15,7 @@ function createWindow(): void {
     title: 'Kotodama',
     show: false,
     frame: false,
+    icon: join(__dirname, '../../resources/icon.png'),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -35,7 +36,7 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

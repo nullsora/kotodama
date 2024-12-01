@@ -281,7 +281,9 @@ type ForwardMessage = {
   type: 'forward'
   data: {
     /** 合并转发消息ID */
-    id: string
+    id: string | number
+    /** (Napcat) 消息内容 */
+    content?: PrivateMessage<AnyMessage>[] | GroupMessage<AnyMessage>[]
   }
 }
 
