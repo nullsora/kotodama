@@ -27,7 +27,7 @@ export const packagedGetter = {
         }
 
         const fetchBlob = async () => {
-          // @ts-ignore allow window
+          // @ts-ignore - window is defined in preload
           const res = await window.kotodama.web.fetchBuffer(url)
           const blob = new Blob([res], { type: 'image/png' })
           imgCache[url] = {

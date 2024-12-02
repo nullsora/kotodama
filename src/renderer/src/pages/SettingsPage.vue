@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import DebugWS from '@renderer/components/misc/DebugWS.vue'
 import GeneralSettings from '@renderer/components/settings/General/GeneralSettings.vue'
 import MessageSettings from '@renderer/components/settings/Message/MessageSettings.vue'
+import About from '@renderer/components/settings/About.vue'
 
 const currentSettingItem = ref('General')
 
@@ -43,14 +44,27 @@ const menuItems = ref([
 </script>
 
 <template>
-  <div class="flex flex-row h-full p-2">
+  <div class="flex h-full p-2">
     <div class="flex-1 w-full mr-2">
-      <Menu class="h-full" :model="menuItems" />
+      <Menu class="h-full flex flex-col justify-between" :model="menuItems">
+        <template #end>
+          <div class="pl-sm pr-sm"><div class="divider" /></div>
+          <div
+            v-ripple
+            class="flex justify-start items-center gap-2.5 m-sm select-none rd-2 p-2"
+            @click="currentSettingItem = 'About'"
+          >
+            <i class="gray-text i-fluent-info-24-regular w-5 h-5 align-mid" />
+            <span class="dark-gray-text">关于</span>
+          </div>
+        </template>
+      </Menu>
     </div>
     <div class="flex-3 w-full">
       <GeneralSettings v-if="currentSettingItem === 'General'" />
       <MessageSettings v-else-if="currentSettingItem === 'Message'" />
       <DebugWS v-else-if="currentSettingItem === 'WS'" />
+      <About v-else-if="currentSettingItem === 'About'" />
     </div>
     <Toast position="bottom-right" group="br" />
     <ConfirmPopup />

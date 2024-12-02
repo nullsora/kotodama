@@ -86,6 +86,7 @@ export type MessageTypes = {
   Text: TextMessage
   QQFace: QQFaceMessage
   Image: ImageMessage
+  SendingImage: SendingImageMessage
   MFace: MFaceMessage
   Record: RecordMessage
   Video: VideoMessage
@@ -109,6 +110,7 @@ export type AnyMessage =
   | TextMessage
   | QQFaceMessage
   | ImageMessage
+  | SendingImageMessage
   | MFaceMessage
   | RecordMessage
   | VideoMessage
@@ -154,7 +156,7 @@ type ImageMessage = {
     /** 图片文件名 */
     file: string
     /** 图片类型, 如果是闪照则为`'flash'`, 否则无此项 */
-    type: 'flash' | undefined
+    type?: 'flash'
     /** 非零为表情 */
     sub_type?: number
     /** 非零为表情 */
@@ -163,6 +165,13 @@ type ImageMessage = {
     url: string
     file_size?: string
     file_unique?: string
+  }
+}
+
+type SendingImageMessage = {
+  type: 'image'
+  data: {
+    file: string
   }
 }
 
@@ -326,7 +335,7 @@ export type JsonInnerMsg = {
   app: string
   bizsrc: string
   meta: {
-    // @ts-ignore 未知类型
+    // @ts-ignore I need any
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any
   }

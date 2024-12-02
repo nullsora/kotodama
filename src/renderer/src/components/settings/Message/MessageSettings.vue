@@ -17,5 +17,8 @@ const config = useConfigStore()
     >
       <ToggleSwitch v-model="config.customSettings.message.useImageGallery" />
     </SettingItem>
+    <SettingItem class="mt-sm" title="使用霞鹜文楷" description="消息内容将以霞鹜文楷展示">
+      <ToggleSwitch v-model="config.customSettings.message.useLxgw" />
+    </SettingItem>
   </div>
 </template>

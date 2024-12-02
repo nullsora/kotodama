@@ -15,8 +15,7 @@ function createWindow(): void {
     title: 'Kotodama',
     show: false,
     frame: false,
-    icon: join(__dirname, '../../resources/icon.png'),
-    ...(process.platform === 'linux' ? { icon } : {}),
+    icon: icon,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false

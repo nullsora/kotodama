@@ -85,10 +85,10 @@ const parseTime = (time: number | undefined) => {
     class="glassmorphism p-2 chat-card"
     @contextmenu="(event) => menu?.toggle(event)"
   >
-    <div class="w-full flex flex-row justify-start items-center gap-2">
+    <div class="w-full flex justify-start items-center gap-2">
       <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
       <div class="w-full flex flex-col justify-center items-start gap-0.3">
-        <div class="w-45.5 flex flex-row justify-between items-center gap-2">
+        <div class="w-45.5 flex justify-between items-center gap-2">
           <div class="chat-name text-sm truncate">
             <i
               class="chat-name w-4.2 h-4.2 align-mid pi"
@@ -104,7 +104,7 @@ const parseTime = (time: number | undefined) => {
             {{ parseTime(chat?.latestMsg?.time) }}
           </div>
         </div>
-        <div class="w-45.5 flex flex-row justify-between items-center gap-2">
+        <div class="w-45.5 flex justify-between items-center gap-2">
           <div :class="selected ? '' : 'short-msg'" class="text-sm truncate">
             <Suspense>
               <TextShortMsg :msg="chat.latestMsg" />

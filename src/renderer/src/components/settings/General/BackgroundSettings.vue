@@ -22,7 +22,7 @@ const reset = () => {
         <InputText v-model="config.customSettings.backgroundImage.dark" class="w-80" />
         <Tag class="text-lg">深色模式背景</Tag>
       </div>
-      <div class="flex flex-row justify-end items-center gap-sm">
+      <div class="flex justify-end items-center gap-sm">
         <Button label="重置" severity="secondary" @click="reset" />
         <Button label="更新" @click="config.updateTheme" />
       </div>

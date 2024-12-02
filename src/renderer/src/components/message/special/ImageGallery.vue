@@ -47,7 +47,7 @@ const openPreview = (index: number) => {
 <template>
   <div>
     <div v-for="(row, index) in splitedImg" :key="index" ref="urls" class="mb-1">
-      <div class="flex flex-row justify-between gap-1">
+      <div class="flex justify-between gap-1">
         <div v-for="(img, i) in row" :key="i">
           <MsgImage
             v-model:blob-url="blobUrls[getPreIndex(index, i)]"

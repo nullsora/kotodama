@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import localforage from 'localforage'
 
 import { LogLevel } from '@renderer/functions/logger'
 import { PrimaryColor, UserSetting } from '@renderer/functions/types'
@@ -23,25 +22,18 @@ export const useConfigStore = defineStore('config', () => {
     },
     message: {
       alwaysShowTimestamp: true,
-      useImageGallery: true
+      useImageGallery: true,
+      useLxgw: false
     }
   }
 
-  const customSettings = ref<{
-    backgroundImage: {
-      light: string
-      dark: string
-    }
-    message: {
-      alwaysShowTimestamp: boolean
-      useImageGallery: boolean
-    }
-  }>(defaultCustomSettings)
+  const customSettings = ref(defaultCustomSettings)
 
   const userSettings = ref<UserSetting[]>([])
 
   const loadFromStorage = async () => {
-    const config: string | null = await localforage.getItem('config')
+    // @ts-ignore - window is defined in preload
+    const config: string = await window.kotodama.file.getConfig()
     if (config) {
       const parsedConfig = JSON.parse(config)
       windowTitle.value = parsedConfig.windowTitle ?? windowTitle.value

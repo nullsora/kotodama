@@ -37,7 +37,7 @@ const updatePrimaryColor = () => {
     <div class="flex items-center">
       <Select v-model="config.primaryColor" :options="primaryColors" option-label="name">
         <template #value="{ value }">
-          <div class="flex flex-row items-center gap-2">
+          <div class="flex items-center gap-2">
             <div
               class="w-4 h-4 rd-full"
               :style="{ backgroundColor: `var(--p-${value.code}-500)` }"
@@ -46,7 +46,7 @@ const updatePrimaryColor = () => {
           </div>
         </template>
         <template #option="{ option }">
-          <div class="flex flex-row items-center gap-2">
+          <div class="flex items-center gap-2">
             <div
               class="w-4 h-4 rd-full"
               :style="{ backgroundColor: `var(--p-${option.code}-500)` }"

@@ -60,7 +60,7 @@ const sendMsgToSelf = () => {
     </template>
     <template #end>
       <Divider />
-      <div class="flex flex-row justify-between items-center gap-sm w-full">
+      <div class="flex justify-between items-center gap-sm w-full">
         <Button class="w-full" size="small" severity="secondary" label="设置资料" />
         <Button
           class="w-full"

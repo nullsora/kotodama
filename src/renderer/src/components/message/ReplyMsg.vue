@@ -10,6 +10,7 @@ import {
 import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
 import { packagedGetter } from '@renderer/functions/packaged_api'
 import MsgImage from './basic/MsgImage.vue'
+import { checkImgFace } from '@renderer/functions/message/check_img_face'
 
 const { msg } = defineProps<{
   msg: MessageTypes['Reply']
@@ -26,7 +27,18 @@ const getOringinalMsg = async () => {
 }
 
 const onlyImage = computed(() => {
-  return originalMsg.value?.message.length === 1 && originalMsg.value?.message[0].type === 'image'
+  return (
+    originalMsg.value?.message.length === 1 &&
+    (originalMsg.value?.message[0].type === 'image' ||
+      originalMsg.value?.message[0].type === 'mface')
+  )
+})
+
+const imgClass = computed(() => {
+  if (!onlyImage.value) return ''
+
+  const msg = originalMsg.value!.message[0] as MessageTypes['Image'] | MessageTypes['MFace']
+  return checkImgFace(msg) ? 'max-w-20 max-h-20' : 'max-w-50 max-h-50'
 })
 
 const getName = computed(() => {
@@ -46,10 +58,10 @@ watch(() => msg, getOringinalMsg)
 <template>
   <div class="flex flex-col justify-start gap-2 items-start reply-msg">
     <div class="reply-msg-sender text-xs font-bold">{{ getName }}</div>
-    <div v-if="onlyImage" class="flex flex-row justify-start gap-2 items-center">
+    <div v-if="onlyImage" class="flex justify-start gap-2 items-center">
       <Suspense>
         <MsgImage
-          class="max-w-50 max-h-50"
+          :class="imgClass"
           :src="(originalMsg?.message[0] as MessageTypes['Image']).data.url"
           :show-menu="false"
           :skeleton-size="50"

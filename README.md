@@ -108,6 +108,11 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 - 在使用之前，你需要有一个可用的Onebot后端。因为使用了一些非Onebot标准的API，推荐[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)。
 
+  同时，你需要在Onebot后端中启用ws正向连接。
+
+  > [!WARNING]
+  > 使用最新 (9.9.16.x) 版本的 QQ 配合 LiteloaderQQNT 出现了[强制下线现象](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues/1032)，谨慎升级QQ。
+
 - 构建icon
   ```sh
   pnpm build:icon

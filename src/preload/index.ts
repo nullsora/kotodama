@@ -57,6 +57,8 @@ const kotodama = {
       await ipcRenderer.invoke('web:fetchBuffer', { url, options })
   },
   file: {
+    getConfig: async () => await ipcRenderer.invoke('file:getConfig'),
+    saveConfig: async (config: string) => await ipcRenderer.invoke('file:saveConfig', { config }),
     getFileBuffer: async (path: string) => await ipcRenderer.invoke('file:getFileBuffer', { path })
   },
   crypto: {

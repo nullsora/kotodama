@@ -30,17 +30,9 @@ const openInBrowser = () => {
       <MsgImage :src="previewUrl" :show-menu="false" class="mt-2 w-full" />
     </div>
     <div class="divider" />
-    <div class="flex flex-row justify-start items-center gap-1">
+    <div class="flex justify-start items-center gap-1">
       <img class="w-4 h-4 rd-0.5" :src="msg.icon" crossorigin="anonymous" />
       <span class="text-xs dark-gray-text">{{ msg.title }}</span>
     </div>
   </div>
 </template>
-
-<style scoped>
-.divider {
-  height: 1px;
-  background-color: var(--p-gray-300);
-  margin: 0.5rem 0;
-}
-</style>

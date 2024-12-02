@@ -28,7 +28,7 @@ const fetchMsg = async () => {
     <template #title> Get History Message </template>
     <template #content>
       <SelectButton v-model="isGroup" :options="selectGroup" option-label="label" />
-      <div class="flex flex-row justify-center items-center w-full mt-2">
+      <div class="flex justify-center items-center w-full mt-2">
         <InputNumber
           v-model="chatId"
           :use-grouping="false"
@@ -37,7 +37,7 @@ const fetchMsg = async () => {
         />
         <InputNumber v-model="count" class="w-full ml-1" placeholder="count" />
       </div>
-      <div class="flex flex-row justify-between items-center w-full mt-2">
+      <div class="flex justify-between items-center w-full mt-2">
         <Button class="flex-1 mr-1" label="Clear" severity="success" @click="msgResult = ''" />
         <Button class="flex-1" icon="i-fluent-send-24-regular" label="Send" @click="fetchMsg" />
       </div>

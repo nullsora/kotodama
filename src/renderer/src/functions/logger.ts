@@ -1,5 +1,3 @@
-import localforage from 'localforage'
-
 export enum LogLevel {
   DEBUG = 'DEBUG',
   UI = 'UI',
@@ -10,7 +8,14 @@ export enum LogLevel {
 }
 
 export const getLogLevel = async (): Promise<LogLevel> => {
-  const config: string = (await localforage.getItem('config')) ?? '{ logLevel: "DEBUG" }'
+  // @ts-ignore - window is defined in preload
+  const config: string = await window.kotodama.file.getConfig()
+  let logLevel = LogLevel.DEBUG
+  try {
+    logLevel = JSON.parse(config).logLevel
+  } catch (e) {
+    logLevel = LogLevel.DEBUG
+  }
   return JSON.parse(config).logLevel
 }
 
@@ -56,8 +61,14 @@ export class Logger {
   }
 
   private async log(type: LogLevel, message: string, data: unknown) {
-    const config: string = (await localforage.getItem('config')) ?? '{ logLevel: "DEBUG" }'
-    const logLevel = JSON.parse(config).logLevel
+    // @ts-ignore - window is defined in preload
+    const config: string = await window.kotodama.file.getConfig()
+    let logLevel = LogLevel.DEBUG
+    try {
+      logLevel = JSON.parse(config).logLevel
+    } catch (e) {
+      logLevel = LogLevel.DEBUG
+    }
 
     if (logLevel === LogLevel.DEBUG) {
       this.printLog(type, message, data)

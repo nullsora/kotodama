@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, provide, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import localforage from 'localforage'
 
 import { useConfigStore } from './stores/ConfigStore'
 
@@ -39,7 +38,8 @@ onMounted(() => {
       } else {
         document.body.classList.remove('dark-mode')
       }
-      await localforage.setItem('config', JSON.stringify(state))
+      // @ts-ignore - window is defined in preload
+      await window.kotodama.file.saveConfig(JSON.stringify(state, null, 2))
     },
     { detached: true }
   )

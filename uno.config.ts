@@ -20,6 +20,14 @@ export default defineConfig({
         'border-radius': '0.5rem',
         border: '1px solid var(--p-slate-100)'
       }
+    ],
+    [
+      'divider',
+      {
+        height: '1px',
+        margin: '0.5rem 0',
+        'background-color': 'var(--p-gray-300)'
+      }
     ]
   ]
 })

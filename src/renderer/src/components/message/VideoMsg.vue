@@ -20,11 +20,11 @@ const downloadFile = async () => {
 const openVideo = async () => {
   if (msg.data.path) {
     try {
-      // @ts-ignore allow window
+      // @ts-ignore - window is defined in preload
       await window.kotodama.window.openExternal(msg.data.path)
     } catch (e) {
       await downloadFile()
-      // @ts-ignore allow window
+      // @ts-ignore - window is defined in preload
       await window.kotodama.window.openExternal(msg.data.path)
     }
   }
@@ -33,7 +33,7 @@ const openVideo = async () => {
 
 <template>
   <div class="share-msg-card p-sm" @click="openVideo">
-    <div class="flex flex-row items-center">
+    <div class="flex items-center">
       <Avatar size="large" icon="i-fluent-video-24-regular" />
       <div class="flex flex-col gap-2 ml-sm">
         <span class="font-bold text-sm dark-gray-text">查看视频{{ fileSize }}</span>

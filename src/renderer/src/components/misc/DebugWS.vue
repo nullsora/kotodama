@@ -29,7 +29,7 @@ const fetchResult = async () => {
             <InputText v-model="echo" class="w-full mb-2" placeholder="Echo" />
           </div>
 
-          <div class="flex flex-row justify-between items-center w-full mb-2">
+          <div class="flex justify-between items-center w-full mb-2">
             <Button class="flex-1 mr-1" label="Clear" severity="success" @click="result = ''" />
             <Button
               class="flex-1"

@@ -13,7 +13,7 @@ const searchInAMap = () => {
 
 <template>
   <div class="w-80 share-msg-card glassmorphism p-sm" @click="searchInAMap">
-    <div class="flex flex-row justify-start items-center gap-2">
+    <div class="flex justify-start items-center gap-2">
       <div class="h-15 h-15 flex justify-center items-center">
         <i class="pi i-fluent-emoji-round-pushpin w-10 h-10" />
       </div>
@@ -23,16 +23,8 @@ const searchInAMap = () => {
       </div>
     </div>
     <div class="divider" />
-    <div class="flex flex-row justify-start items-center gap-1">
+    <div class="flex justify-start items-center gap-1">
       <span class="text-xs dark-gray-text">位置分享</span>
     </div>
   </div>
 </template>
-
-<style scoped>
-.divider {
-  height: 1px;
-  background-color: var(--p-gray-300);
-  margin: 0.5rem 0;
-}
-</style>

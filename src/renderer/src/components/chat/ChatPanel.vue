@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useConfigStore } from '@renderer/stores/ConfigStore'
 import ChatInfo from './ChatInfo.vue'
 import MsgPanel from './MsgPanel.vue'
 import MsgSender from './MsgSender.vue'
+
+const config = useConfigStore()
 
 const { chatInfo } = defineProps<{
   chatInfo: {
@@ -12,7 +15,10 @@ const { chatInfo } = defineProps<{
 </script>
 
 <template>
-  <div class="w-full h-full chat-panel glassmorphism">
+  <div
+    class="w-full h-full chat-panel glassmorphism"
+    :class="{ lxgw: config.customSettings.message.useLxgw }"
+  >
     <div v-if="chatInfo" class="w-full flex flex-col justify-start items-center">
       <ChatInfo class="w-full" :chat-info="chatInfo" />
       <MsgPanel :chat-info="chatInfo" />

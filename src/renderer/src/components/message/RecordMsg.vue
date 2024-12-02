@@ -68,7 +68,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-20 flex flex-row justify-start gap-2 items-start record-msg" @click="togglePlay">
+  <div class="w-20 flex justify-start gap-2 items-start record-msg" @click="togglePlay">
     <i class="w-5 h-5 align-mid pi" :class="icon" />
   </div>
 </template>

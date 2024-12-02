@@ -106,7 +106,7 @@ watchEffect(() => {
         :style="imgStyle"
         @mousedown="startDrag"
       />
-      <div class="flex flex-row items-center justify-center glassmorphism p-2 gap-sm toolbar">
+      <div class="flex items-center justify-center glassmorphism p-2 gap-sm toolbar">
         <Button
           v-if="images.length > 1"
           icon="i-fluent-chevron-left-24-regular w-6 h-6"

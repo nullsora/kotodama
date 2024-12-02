@@ -176,16 +176,6 @@ const updateComponent = async () => {
 
 onMounted(updateComponent)
 watch(() => chatInfo, updateComponent)
-
-// 高度更新时，若原本在底部，则滚动到底部
-watch(
-  () => msgPanel.value?.scrollHeight,
-  () => {
-    if (msgPanel.value) {
-      msgPanel.value.scrollTop = msgPanel.value.scrollHeight
-    }
-  }
-)
 </script>
 
 <template>
@@ -196,12 +186,12 @@ watch(
   >
     <div v-if="msgHistoryList.length > 0">
       <div v-for="(msgChainNode, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
-        <div class="w-full flex flex-row justify-center items-center">
+        <div class="w-full flex justify-center items-center">
           <Tag class="format-day m-sm select-none" rounded :value="formateDay(msgChainNode.time)" />
         </div>
         <div v-for="(msgSingleNode, index) in msgChainNode.messages" :key="index">
           <div
-            class="flex flex-row items-end mb-sm"
+            class="flex items-end mb-sm"
             :class="checkSenderSelf(msgSingleNode) ? 'justify-end' : 'justify-start'"
           >
             <UserAvatar

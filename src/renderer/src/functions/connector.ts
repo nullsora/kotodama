@@ -1,7 +1,7 @@
 import { Logger } from './logger'
 import { Parser } from './message/parser'
 
-// @ts-ignore allow window
+// @ts-ignore - window is defined in preload
 const { onebot, crypto } = window.kotodama
 
 const Connector = {

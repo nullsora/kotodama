@@ -15,8 +15,9 @@ import App from './App.vue'
 import 'primeicons/primeicons.css'
 import 'virtual:uno.css'
 
-import './animation.css'
-import './style-all.css'
+import './style/animation.css'
+import './style/style-all.css'
+import './style/lxgw.css'
 
 const app = createApp(App)
 

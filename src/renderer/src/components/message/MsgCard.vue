@@ -180,7 +180,8 @@ const checkOnly = computed(() => {
 
 <template>
   <div
-    class="flex flex-row justify-start items-end gap-1"
+    class="flex justify-start items-end gap-1"
+    :class="{ lxgw: config.customSettings.message.useLxgw }"
     @contextmenu="
       (event) => {
         if (showMenu) menu?.toggle(event)

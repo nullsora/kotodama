@@ -4,7 +4,7 @@ import { packagedGetter } from './packaged_api'
 import { Chat, UserSetting } from './types'
 
 export class DataManager {
-  // @ts-ignore allow window
+  // @ts-ignore - window is defined in preload
   private static onebot = window.kotodama.onebot
 
   private static instance: DataManager

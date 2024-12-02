@@ -85,7 +85,7 @@ const openFile = async () => {
   if (msg.data.path === '') await downloadFile()
   else await window.kotodama.window.openExternal(msg.data.path)
   if (info.value?.file) {
-    // @ts-ignore allow window
+    // @ts-ignore - window is defined in preload
     await window.kotodama.window.openExternal(info.value.file)
   }
 }
@@ -94,7 +94,7 @@ const openFile = async () => {
 <template>
   <div
     v-tooltip.top="msg.data.file"
-    class="file-message flex flex-row items-center gap-sm cursor-pointer"
+    class="file-message flex items-center gap-sm cursor-pointer"
     @click="openFile"
   >
     <Avatar size="large" :icon="fileType" :style="avatarStyle" />

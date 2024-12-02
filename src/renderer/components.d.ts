@@ -7,12 +7,14 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    About: typeof import('./src/components/settings/About.vue')['default']
     Accordion: typeof import('primevue/accordion')['default']
     AccordionContent: typeof import('primevue/accordioncontent')['default']
     AccordionHeader: typeof import('primevue/accordionheader')['default']
     AccordionPanel: typeof import('primevue/accordionpanel')['default']
     AnnounceMsg: typeof import('./src/components/message/special/AnnounceMsg.vue')['default']
     AtMsg: typeof import('./src/components/message/AtMsg.vue')['default']
+    Attachments: typeof import('./src/components/chat/sender/Attachments.vue')['default']
     AtTag: typeof import('./src/components/message/basic/AtTag.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     BackgroundSettings: typeof import('./src/components/settings/General/BackgroundSettings.vue')['default']
@@ -37,7 +39,7 @@ declare module 'vue' {
     DiceMsg: typeof import('./src/components/message/DiceMsg.vue')['default']
     Divider: typeof import('primevue/divider')['default']
     FaceMsg: typeof import('./src/components/message/FaceMsg.vue')['default']
-    FaceSelect: typeof import('./src/components/chat/FaceSelect.vue')['default']
+    FaceSelect: typeof import('./src/components/chat/sender/FaceSelect.vue')['default']
     FadeTransition: typeof import('./src/components/misc/FadeTransition.vue')['default']
     FileMsg: typeof import('./src/components/message/FileMsg.vue')['default']
     FloatLabel: typeof import('primevue/floatlabel')['default']
@@ -63,6 +65,7 @@ declare module 'vue' {
     MsgCard: typeof import('./src/components/message/MsgCard.vue')['default']
     MsgImage: typeof import('./src/components/message/basic/MsgImage.vue')['default']
     MsgPanel: typeof import('./src/components/chat/MsgPanel.vue')['default']
+    MsgPreview: typeof import('./src/components/chat/sender/MsgPreview.vue')['default']
     MsgSender: typeof import('./src/components/chat/MsgSender.vue')['default']
     OverlayBadge: typeof import('primevue/overlaybadge')['default']
     Popover: typeof import('primevue/popover')['default']
