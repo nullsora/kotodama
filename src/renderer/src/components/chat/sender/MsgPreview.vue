@@ -37,6 +37,28 @@ const renderer = computed(() => {
       case 'face':
         res.push(h(FaceMsg, { msg: message }))
         break
+      case 'image':
+        res.push(
+          h(
+            'span',
+            {
+              class: 'text-sm primary-text'
+            },
+            '[图片]'
+          )
+        )
+        break
+      case 'file':
+        res.push(
+          h(
+            'span',
+            {
+              class: 'text-sm primary-text'
+            },
+            '[文件]'
+          )
+        )
+        break
       case 'rps':
         res.push(
           h('i', {

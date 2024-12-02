@@ -25,13 +25,25 @@ const { chatInfo } = defineProps<{
   } | null
 }>()
 
+const imgExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
+
 const handler = {
   image: {
-    judge: (text: string) => text.startsWith('I:A:'),
+    judge: (text: string) => text.startsWith('IA:'),
     parse: (attachId: string): MessageTypes['SendingImage'] => {
-      const url = attachments.value[parseInt(attachId.slice(4))]
+      const url = attachments.value[parseInt(attachId.slice(3))]
       return {
         type: 'image',
+        data: { file: url }
+      }
+    }
+  },
+  file: {
+    judge: (text: string) => text.startsWith('FA:'),
+    parse: (attachId: string): MessageTypes['SendingFile'] => {
+      const url = attachments.value[parseInt(attachId.slice(3))]
+      return {
+        type: 'file',
         data: { file: url }
       }
     }
@@ -94,11 +106,59 @@ const handler = {
 
 const renderMsgs = ref<SendingMessage>()
 const attachments = ref<string[]>([])
+const dragOn = ref(false)
+
+const inputClass = computed(() => {
+  return {
+    'drag-on': dragOn.value
+  }
+})
 
 const invalid = computed(() => sendText.value.length === 0)
 
 const watchKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter' && e.ctrlKey) sendMsg()
+}
+
+const handleDragover = (e: DragEvent) => {
+  e.preventDefault()
+  dragOn.value = true
+}
+
+const handleDragleave = (e: DragEvent) => {
+  e.preventDefault()
+  dragOn.value = false
+}
+
+const handleDrop = (e: DragEvent) => {
+  e.preventDefault()
+  dragOn.value = false
+  const files = e.dataTransfer?.files
+  if (files && files.length > 0) {
+    const path = files[0].path
+    attachments.value.push(path)
+    const ext = path.split('.').pop()
+    if (imgExt.includes(ext!)) sendText.value += `[/IA:${attachments.value.length - 1}]`
+    else sendText.value += `[/FA:${attachments.value.length - 1}]`
+  }
+}
+
+const handlePaste = (e: ClipboardEvent) => {
+  const items = e.clipboardData?.items
+  if (!items) return
+  /*
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].kind === 'file') {
+      const file = items[i].getAsFile()
+      if (!file) continue
+      const path = URL.createObjectURL(file)
+      attachments.value.push(path)
+      const ext = file.name.split('.').pop()
+      if (imgExt.includes(ext!)) sendText.value += `[/IA:${attachments.value.length - 1}]`
+      else sendText.value += `[/FA:${attachments.value.length - 1}]`
+    }
+  }
+    */
 }
 
 const parseSender = () => {
@@ -191,6 +251,7 @@ const sendMsg = async () => {
   if (chat) chat.latestMsg = msg
 
   sendText.value = ''
+  attachments.value = []
 }
 
 const update = debounce(() => {
@@ -198,6 +259,13 @@ const update = debounce(() => {
 }, 600)
 
 watch(sendText, update)
+
+watch(
+  () => chatInfo?.id,
+  () => {
+    attachments.value = []
+  }
+)
 </script>
 
 <template>
@@ -205,8 +273,13 @@ watch(sendText, update)
     <Attachments v-model="attachments" />
     <InputText
       v-model="sendText"
+      :class="inputClass"
       class="flex-1 h-10 scrollbar scrollbar-w-1 scrollbar-rounded"
       @keydown="watchKeydown"
+      @dragover="handleDragover"
+      @dragleave="handleDragleave"
+      @drop="handleDrop"
+      @paste="handlePaste"
     />
     <FaceSelect />
     <Button
@@ -241,5 +314,9 @@ watch(sendText, update)
 .dark-mode .msg-preview {
   background-color: var(--p-primary-500);
   color: var(--p-gray-100);
+}
+
+.drag-on {
+  --p-inputtext-border-color: var(--p-green-500);
 }
 </style>

@@ -86,7 +86,6 @@ export type MessageTypes = {
   Text: TextMessage
   QQFace: QQFaceMessage
   Image: ImageMessage
-  SendingImage: SendingImageMessage
   MFace: MFaceMessage
   Record: RecordMessage
   Video: VideoMessage
@@ -104,13 +103,15 @@ export type MessageTypes = {
   JSON: JSONMessage
   File: FileMessage
   Markdown: MarkdownMessage
+
+  SendingImage: SendingImageMessage
+  SendingFile: SendingFileMessage
 }
 
 export type AnyMessage =
   | TextMessage
   | QQFaceMessage
   | ImageMessage
-  | SendingImageMessage
   | MFaceMessage
   | RecordMessage
   | VideoMessage
@@ -128,6 +129,8 @@ export type AnyMessage =
   | JSONMessage
   | FileMessage
   | MarkdownMessage
+  | SendingImageMessage
+  | SendingFileMessage
 
 export type FileInfo = {
   file: string
@@ -319,6 +322,13 @@ type FileMessage = {
     file_unique: string
     path: string
     url: string
+  }
+}
+
+type SendingFileMessage = {
+  type: 'file'
+  data: {
+    file: string
   }
 }
 

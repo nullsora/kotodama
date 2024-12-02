@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
+import {
+  AnyMessage,
+  GroupMessage,
+  MessageTypes,
+  PrivateMessage
+} from '@renderer/functions/message/message_types'
 import { useConfigStore } from '@renderer/stores/ConfigStore'
 import { computed, inject, Ref, ref, useTemplateRef } from 'vue'
 import SendTime from './basic/SendTime.vue'
@@ -128,7 +133,7 @@ const messageList = computed(() => {
   let tempImgMsg: AnyMessage | null = null
   for (const msg of message.value) {
     if (msg.type === 'image') {
-      imgGallery.images.push(msg.data.url)
+      imgGallery.images.push((msg as MessageTypes['Image']).data.url)
       tempImgMsg = msg
     } else {
       if (imgGallery.images.length > 1) {

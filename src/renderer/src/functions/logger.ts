@@ -16,7 +16,7 @@ export const getLogLevel = async (): Promise<LogLevel> => {
   } catch (e) {
     logLevel = LogLevel.DEBUG
   }
-  return JSON.parse(config).logLevel
+  return logLevel
 }
 
 export class Logger {

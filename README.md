@@ -110,8 +110,8 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
   同时，你需要在Onebot后端中启用ws正向连接。
 
-  > [!WARNING]
-  > 使用最新 (9.9.16.x) 版本的 QQ 配合 LiteloaderQQNT 出现了[强制下线现象](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues/1032)，谨慎升级QQ。
+> [!WARNING]
+> 使用最新 (9.9.16.x) 版本的 QQ 配合 LiteloaderQQNT 出现了[强制下线现象](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues/1032)，谨慎升级QQ。
 
 - 构建icon
   ```sh
@@ -162,7 +162,7 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
   - [ ] 消息发送
     - [x] 文本
     - [x] QQ表情
-    - [ ] 图片
+    - [x] 图片
     - [ ] 动画表情
     - [ ] 语音
     - [ ] 视频
@@ -177,7 +177,7 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
     - [ ] 聊天记录
     - [ ] ~~XML消息~~
     - [ ] JSON消息
-    - [ ] 文件
+    - [x] 文件
     - [ ] Markdown
 - [x] 个性化
   - [x] Light / Dark Mode 切换
