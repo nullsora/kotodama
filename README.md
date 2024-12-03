@@ -114,6 +114,7 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 > 使用最新 (9.9.16.x) 版本的 QQ 配合 LiteloaderQQNT 出现了[强制下线现象](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues/1032)，谨慎升级QQ。
 
 - 构建icon
+
   ```sh
   pnpm build:icon
   ```
@@ -224,3 +225,4 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 [issues-url]: https://github.com/nullsora/kotodama/issues
 [license-shield]: https://img.shields.io/github/license/nullsora/kotodama.svg?style=for-the-badge
 [license-url]: https://github.com/nullsora/kotodama/blob/main/LICENSE
+

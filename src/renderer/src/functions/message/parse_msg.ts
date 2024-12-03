@@ -1,12 +1,6 @@
 import { faceMap } from '../face_map'
 import { packagedGetter } from '../packaged_api'
-import {
-  AnyMessage,
-  GroupMessage,
-  JsonInnerMsg,
-  MessageTypes,
-  PrivateMessage
-} from './message_types'
+import { AnyMessage, GroupMessage, JsonInnerMsg, PrivateMessage } from './message_types'
 
 const parseAtMsg = async (msg: string, sendGroupId?: number) => {
   if (msg.includes('全体成员') || msg.includes('all')) {
@@ -52,8 +46,8 @@ export const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       if (
         (() => {
           if (msg.data.file === 'marketface') return true
-          else if ((msg as MessageTypes['Image']).data.sub_type) return true
-          else if ((msg as MessageTypes['Image']).data.subType) return true
+          else if (msg.data.sub_type) return true
+          else if (msg.data.subType) return true
           else return false
         })()
       )
@@ -132,4 +126,18 @@ export const msgListToShortMsg = async (
     )
   }
   return shortMsg
+}
+
+export const getSenderName = ({
+  message_type,
+  sender
+}: {
+  message_type: 'private' | 'group'
+  sender: { nickname: string; card?: string }
+}) => {
+  return message_type === 'private'
+    ? sender.nickname
+    : sender.card && sender.card !== ''
+      ? sender.card
+      : sender.nickname
 }

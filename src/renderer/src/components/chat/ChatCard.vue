@@ -100,12 +100,12 @@ const parseTime = (time: number | undefined) => {
             />
             {{ getName }}
           </div>
-          <div :class="selected ? '' : ' text-gray-500'" class="text-xs whitespace-nowrap">
+          <div :class="{ 'text-gray-500': !selected }" class="text-xs whitespace-nowrap">
             {{ parseTime(chat?.latestMsg?.time) }}
           </div>
         </div>
         <div class="w-45.5 flex justify-between items-center gap-2">
-          <div :class="selected ? '' : 'short-msg'" class="text-sm truncate">
+          <div :class="{ 'short-msg': !selected }" class="text-sm truncate">
             <Suspense>
               <TextShortMsg :msg="chat.latestMsg" />
             </Suspense>

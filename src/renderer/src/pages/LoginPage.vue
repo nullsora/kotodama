@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue'
 
 import { Logger } from '@renderer/functions/logger'
-import { useConfigStore } from '@renderer/stores/ConfigStore'
+import { useConfigStore } from '@renderer/stores/config_store'
 import Connector from '@renderer/functions/connector'
 
 const config = useConfigStore()

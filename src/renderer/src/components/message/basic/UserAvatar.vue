@@ -39,7 +39,7 @@ const menuItems = ref([
   <div class="avatar">
     <div
       v-bind="$attrs"
-      :class="`avatar ${position === 'right' ? 'ml-2' : 'mr-2'}`"
+      :class="position === 'right' ? 'ml-2' : 'mr-2'"
       @contextmenu="handleRightClick"
     >
       <img :src="url" class="w-8.5 h-8.5 rd-full" crossorigin="anonymous" />

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SettingItem from '@renderer/components/misc/SettingItem.vue'
-import { useConfigStore } from '@renderer/stores/ConfigStore'
+import { useConfigStore } from '@renderer/stores/config_store'
 
 const config = useConfigStore()
 </script>

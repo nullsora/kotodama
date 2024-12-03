@@ -1,29 +1,27 @@
 <script setup lang="ts">
-import {
-  AnyMessage,
-  GroupMessage,
-  MessageTypes,
-  PrivateMessage
-} from '@renderer/functions/message/message_types'
-import { useConfigStore } from '@renderer/stores/ConfigStore'
+import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
+import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
+import { useConfigStore } from '@renderer/stores/config_store'
+
 import { computed, inject, Ref, ref, useTemplateRef } from 'vue'
-import SendTime from './basic/SendTime.vue'
-import ImageMsg from './ImageMsg.vue'
+
 import AtMsg from './AtMsg.vue'
-import ReplyMsg from './ReplyMsg.vue'
-import TextMsg from './TextMsg.vue'
+import DiceMsg from './DiceMsg.vue'
 import FaceMsg from './FaceMsg.vue'
 import FileMsg from './FileMsg.vue'
-import XMLMsg from './XMLMsg.vue'
+import ForwardMsg from './ForwardMsg.vue'
+import ImageMsg from './ImageMsg.vue'
 import JsonMsg from './JsonMsg.vue'
 import RecordMsg from './RecordMsg.vue'
-import ImageGallery from './special/ImageGallery.vue'
+import ReplyMsg from './ReplyMsg.vue'
+import RpsMsg from './RpsMsg.vue'
+import TextMsg from './TextMsg.vue'
 import UnsupportedMsg from './UnsupportedMsg.vue'
 import VideoMsg from './VideoMsg.vue'
-import RpsMsg from './RpsMsg.vue'
-import DiceMsg from './DiceMsg.vue'
-import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
-import ForwardMsg from './ForwardMsg.vue'
+import XMLMsg from './XMLMsg.vue'
+
+import SendTime from './basic/SendTime.vue'
+import ImageGallery from './special/ImageGallery.vue'
 
 type ImageGalleryMsg = {
   type: 'gallery'
@@ -133,7 +131,7 @@ const messageList = computed(() => {
   let tempImgMsg: AnyMessage | null = null
   for (const msg of message.value) {
     if (msg.type === 'image') {
-      imgGallery.images.push((msg as MessageTypes['Image']).data.url)
+      imgGallery.images.push(msg.data.url)
       tempImgMsg = msg
     } else {
       if (imgGallery.images.length > 1) {

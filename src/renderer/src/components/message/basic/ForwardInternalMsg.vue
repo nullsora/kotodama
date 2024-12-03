@@ -5,7 +5,7 @@ import {
   MessageTypes,
   PrivateMessage
 } from '@renderer/functions/message/message_types'
-import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
+import { getSenderName, msgListToShortMsg } from '@renderer/functions/message/parse_msg'
 import { computed, onMounted, ref, watch } from 'vue'
 import MsgCard from '../MsgCard.vue'
 import UserAvatar from './UserAvatar.vue'
@@ -34,12 +34,7 @@ const parsedMsgChain = computed(() => {
       msgChain[curIndex].messages.push(item)
     } else {
       curIndex++
-      const name =
-        item.message_type === 'private'
-          ? item.sender.nickname
-          : item.sender.card && item.sender.card !== ''
-            ? item.sender.card
-            : item.sender.nickname
+      const name = getSenderName(item)
 
       msgChain[curIndex] = {
         sender: {
@@ -57,12 +52,7 @@ const parsedMsgChain = computed(() => {
 const updateContent = async () => {
   renderShortMsg.value = []
   for (const item of msg.data.content!.slice(0, 3)) {
-    const name =
-      item.message_type === 'private'
-        ? item.sender.nickname
-        : item.sender.card && item.sender.card !== ''
-          ? item.sender.card
-          : item.sender.nickname
+    const name = getSenderName(item)
     renderShortMsg.value.push(name + ': ' + ((await msgListToShortMsg(item)) ?? ''))
   }
 }

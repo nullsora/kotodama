@@ -2,7 +2,7 @@
 import { onMounted, provide, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 
-import { useConfigStore } from './stores/ConfigStore'
+import { useConfigStore } from './stores/config_store'
 
 import FadeTransition from './components/misc/FadeTransition.vue'
 import TopBar from './components/main/TopBar.vue'
@@ -38,8 +38,7 @@ onMounted(() => {
       } else {
         document.body.classList.remove('dark-mode')
       }
-      // @ts-ignore - window is defined in preload
-      await window.kotodama.file.saveConfig(JSON.stringify(state, null, 2))
+      await config.saveToStorage()
     },
     { detached: true }
   )

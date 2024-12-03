@@ -2,7 +2,7 @@
 import SettingItem from '@renderer/components/misc/SettingItem.vue'
 import BackgroundSettings from '@renderer/components/settings/General/BackgroundSettings.vue'
 import PrimaryColorSettings from '@renderer/components/settings/General/PrimaryColorSettings.vue'
-import { useConfigStore } from '@renderer/stores/ConfigStore'
+import { useConfigStore } from '@renderer/stores/config_store'
 import localforage from 'localforage'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'

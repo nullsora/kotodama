@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PrimaryColor } from '@renderer/functions/types'
-import { useConfigStore } from '@renderer/stores/ConfigStore'
+import { useConfigStore } from '@renderer/stores/config_store'
 import { ref } from 'vue'
 import SettingItem from '@renderer/components/misc/SettingItem.vue'
 

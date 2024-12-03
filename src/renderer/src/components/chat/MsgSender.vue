@@ -6,9 +6,9 @@ import { findFromFaceMap } from '@renderer/functions/face_map'
 import {
   AnyMessage,
   GroupMessage,
-  MessageTypes,
   PrivateMessage,
-  SendingMessage
+  SendingMessage,
+  SendingMessageTypes
 } from '@renderer/functions/message/message_types'
 import { packagedGetter, packagedSender } from '@renderer/functions/packaged_api'
 import FaceSelect from './sender/FaceSelect.vue'
@@ -30,7 +30,7 @@ const imgExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
 const handler = {
   image: {
     judge: (text: string) => text.startsWith('IA:'),
-    parse: (attachId: string): MessageTypes['SendingImage'] => {
+    parse: (attachId: string): SendingMessageTypes['Image'] => {
       const url = attachments.value[parseInt(attachId.slice(3))]
       return {
         type: 'image',
@@ -40,7 +40,7 @@ const handler = {
   },
   file: {
     judge: (text: string) => text.startsWith('FA:'),
-    parse: (attachId: string): MessageTypes['SendingFile'] => {
+    parse: (attachId: string): SendingMessageTypes['File'] => {
       const url = attachments.value[parseInt(attachId.slice(3))]
       return {
         type: 'file',
@@ -50,7 +50,7 @@ const handler = {
   },
   reply: {
     judge: (text: string) => text.startsWith('R:'),
-    parse: (id: string): MessageTypes['Reply'] => {
+    parse: (id: string): SendingMessageTypes['Reply'] => {
       return {
         type: 'reply',
         data: { id: parseInt(id.slice(2)) }
@@ -59,7 +59,7 @@ const handler = {
   },
   at: {
     judge: (text: string) => text.startsWith('@'),
-    parse: (id: string): MessageTypes['At'] => {
+    parse: (id: string): SendingMessageTypes['At'] => {
       return {
         type: 'at',
         data: { qq: id.slice(1) }
@@ -68,7 +68,7 @@ const handler = {
   },
   face: {
     judge: (text: string) => findFromFaceMap(text) !== undefined,
-    parse: (face: string): MessageTypes['QQFace'] => {
+    parse: (face: string): SendingMessageTypes['QQFace'] => {
       return {
         type: 'face',
         data: { id: parseInt(findFromFaceMap(face)!) }
@@ -77,7 +77,7 @@ const handler = {
   },
   rps: {
     judge: (text: string) => text === 'rps',
-    parse: (): MessageTypes['Rps'] => {
+    parse: (): SendingMessageTypes['Rps'] => {
       return {
         type: 'rps',
         data: {}
@@ -86,7 +86,7 @@ const handler = {
   },
   dice: {
     judge: (text: string) => text === 'dice',
-    parse: (): MessageTypes['Dice'] => {
+    parse: (): SendingMessageTypes['Dice'] => {
       return {
         type: 'dice',
         data: {}
@@ -95,7 +95,7 @@ const handler = {
   },
   text: {
     judge: (_text: string) => true,
-    parse: (text: string): MessageTypes['Text'] => {
+    parse: (text: string): SendingMessageTypes['Text'] => {
       return {
         type: 'text',
         data: { text }

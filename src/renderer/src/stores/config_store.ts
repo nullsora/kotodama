@@ -49,6 +49,24 @@ export const useConfigStore = defineStore('config', () => {
     updateTheme()
   }
 
+  const saveToStorage = async () => {
+    const str = JSON.stringify(
+      {
+        windowTitle: windowTitle.value,
+        darkMode: darkMode.value,
+        logLevel: logLevel.value,
+        accounts: accounts.value,
+        primaryColor: primaryColor.value,
+        customSettings: customSettings.value,
+        userSettings: userSettings.value
+      },
+      null,
+      2
+    )
+    // @ts-ignore - window is defined in preload
+    await window.kotodama.file.saveConfig(str)
+  }
+
   const updatePrimaryColor = () => {
     updatePreset({
       semantic: {
@@ -121,9 +139,12 @@ export const useConfigStore = defineStore('config', () => {
     userSettings,
 
     loadFromStorage,
-    clearUserSettings,
+    saveToStorage,
+
     updatePrimaryColor,
     updateTheme,
+
+    clearUserSettings,
     $reset
   }
 })

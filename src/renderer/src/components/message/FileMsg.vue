@@ -70,13 +70,6 @@ const iconColor = computed(() => {
   return color ? color.color : 'var(--p-gray-800)'
 })
 
-const avatarStyle = computed(() => {
-  return {
-    'background-color': bgColor.value,
-    color: iconColor.value
-  }
-})
-
 const downloadFile = async () => {
   info.value = (await packagedGetter.getMsg.downloadFile(msg.data.file_id)).data
 }
@@ -97,7 +90,7 @@ const openFile = async () => {
     class="file-message flex items-center gap-sm cursor-pointer"
     @click="openFile"
   >
-    <Avatar size="large" :icon="fileType" :style="avatarStyle" />
+    <Avatar class="avatar" size="large" :icon="fileType" />
     <div class="flex flex-col">
       <span class="truncate text-sm w-40">{{ msg.data.file }}</span>
       <span class="text-xs text-gray-500">{{ fileSize }}</span>
@@ -114,5 +107,10 @@ const openFile = async () => {
 
 .file-message:hover {
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+  background-color: v-bind(bgColor);
+  color: v-bind(iconColor);
 }
 </style>

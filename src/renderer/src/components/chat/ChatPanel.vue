@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useConfigStore } from '@renderer/stores/ConfigStore'
+import { useConfigStore } from '@renderer/stores/config_store'
 import ChatInfo from './ChatInfo.vue'
 import MsgPanel from './MsgPanel.vue'
 import MsgSender from './MsgSender.vue'

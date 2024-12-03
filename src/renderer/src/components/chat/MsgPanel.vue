@@ -3,6 +3,7 @@ import { computed, inject, nextTick, onMounted, useTemplateRef, watch } from 'vu
 
 import { DataManager } from '@renderer/functions/data_manager'
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
+import { getSenderName as _getName } from '@renderer/functions/message/parse_msg'
 import { packagedGetter } from '@renderer/functions/packaged_api'
 import { GroupMsgChainNode, PrivateMsgChainNode } from '@renderer/functions/types'
 
@@ -121,9 +122,7 @@ const getSenderName = (node: PrivateMsgChainNode | GroupMsgChainNode, index: num
   if (node.type === 'private') {
     return ''
   } else if (node.type === 'group') {
-    return !node.messages[index].sender?.card || node.messages[index].sender.card === ''
-      ? node.messages[index].sender.nickname
-      : node.messages[index].sender.card
+    return _getName({ message_type: 'group', sender: node.messages[index].sender })
   } else return ''
 }
 

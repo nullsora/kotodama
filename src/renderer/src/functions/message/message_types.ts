@@ -63,6 +63,12 @@ export interface GroupMessage<MessageContent> extends BaseMessage<MessageContent
   } | null
 }
 
+export type SendingMessage = {
+  type: 'group' | 'private'
+  id: number
+  messages: AnySendingMessage[]
+}
+
 export type ForwardMessageContent = {
   messages: {
     content: AnyMessage[]
@@ -74,12 +80,6 @@ export type ForwardMessageContent = {
     message_format: 'string' | 'array'
     message_type: 'group' | 'private'
   }[]
-}
-
-export type SendingMessage = {
-  type: 'group' | 'private'
-  id: number
-  messages: AnyMessage[]
 }
 
 export type MessageTypes = {
@@ -103,34 +103,16 @@ export type MessageTypes = {
   JSON: JSONMessage
   File: FileMessage
   Markdown: MarkdownMessage
-
-  SendingImage: SendingImageMessage
-  SendingFile: SendingFileMessage
 }
 
-export type AnyMessage =
-  | TextMessage
-  | QQFaceMessage
-  | ImageMessage
-  | MFaceMessage
-  | RecordMessage
-  | VideoMessage
-  | AtMessage
-  | RpsMessage
-  | DiceMessage
-  | ShakeMessage
-  | PokeMessage
-  | ShareMessage
-  | ContactMessage
-  | LocationMessage
-  | ReplyMessage
-  | ForwardMessage
-  | XMLMessage
-  | JSONMessage
-  | FileMessage
-  | MarkdownMessage
-  | SendingImageMessage
-  | SendingFileMessage
+export type AnyMessage = MessageTypes[keyof MessageTypes]
+
+export type SendingMessageTypes = Omit<MessageTypes, 'Image' | 'File'> & {
+  Image: SendingImageMessage
+  File: SendingFileMessage
+}
+
+export type AnySendingMessage = SendingMessageTypes[keyof SendingMessageTypes]
 
 export type FileInfo = {
   file: string
@@ -139,23 +121,18 @@ export type FileInfo = {
   file_name: string
 }
 
-type TextMessage = {
-  type: 'text'
-  data: {
-    text: string
-  }
+type BaseMessageContent<T, D> = {
+  type: T
+  data: D
 }
 
-type QQFaceMessage = {
-  type: 'face'
-  data: {
-    id: number
-  }
-}
+type TextMessage = BaseMessageContent<'text', { text: string }>
 
-type ImageMessage = {
-  type: 'image'
-  data: {
+type QQFaceMessage = BaseMessageContent<'face', { id: number }>
+
+type ImageMessage = BaseMessageContent<
+  'image',
+  {
     /** 图片文件名 */
     file: string
     /** 图片类型, 如果是闪照则为`'flash'`, 否则无此项 */
@@ -169,109 +146,66 @@ type ImageMessage = {
     file_size?: string
     file_unique?: string
   }
-}
+>
+type SendingImageMessage = BaseMessageContent<'image', { file: string }>
 
-type SendingImageMessage = {
-  type: 'image'
-  data: {
-    file: string
-  }
-}
-
-type MFaceMessage = {
-  type: 'mface'
-  data: {
+type MFaceMessage = BaseMessageContent<
+  'mface',
+  {
     summary: string
     url: string
     emoji_id: string
     emoji_package_id: number
     key: string
   }
-}
+>
 
-type RecordMessage = {
-  type: 'record'
-  data: {
+type RecordMessage = BaseMessageContent<
+  'record',
+  {
     file: string
     url: string
     path?: string
     /** 变声为1 */
     magic: 0 | 1
   }
-}
+>
 
-type VideoMessage = {
-  type: 'video'
-  data: {
-    file: string
-    url: string
-    file_size: string
-    path?: string
-  }
-}
+type VideoMessage = BaseMessageContent<
+  'video',
+  { file: string; url: string; file_size: string; path?: string }
+>
 
-type AtMessage = {
-  type: 'at'
-  data: {
-    /** QQ号转字符串 */
-    qq: string
-  }
-}
+type AtMessage = BaseMessageContent<'at', { qq: string }>
 
 /** 猜拳魔法表情 */
-type RpsMessage = {
-  type: 'rps'
-  data: {
-    result?: '1' | '2' | '3'
-  }
-}
+type RpsMessage = BaseMessageContent<'rps', { result?: '1' | '2' | '3' }>
 
 /** 掷骰子魔法表情 */
-type DiceMessage = {
-  type: 'dice'
-  data: {
-    result?: '1' | '2' | '3' | '4' | '5' | '6'
-  }
-}
+type DiceMessage = BaseMessageContent<'dice', { result?: '1' | '2' | '3' | '4' | '5' | '6' }>
 
 /** 窗口抖动（戳一戳） */
-type ShakeMessage = {
-  type: 'shake'
-  data: Record<string, never>
-}
+type ShakeMessage = BaseMessageContent<'shake', Record<string, never>>
 
 /** 戳一戳 */
-type PokeMessage = {
-  type: 'poke'
-  data: {
-    type: string
-    id: string
-    name: string
-  }
-}
+type PokeMessage = BaseMessageContent<'poke', { type: string; id: string; name: string }>
 
 /** 分享链接 */
-type ShareMessage = {
-  type: 'share'
-  data: {
+type ShareMessage = BaseMessageContent<
+  'share',
+  {
     url: string
     title: string
     content?: string
     image?: string
   }
-}
+>
 
-type ContactMessage = {
-  type: 'contact'
-  data: {
-    type: 'qq' | 'group'
-    id: string
-  }
-}
+type ContactMessage = BaseMessageContent<'contact', { type: 'qq' | 'group'; id: string }>
 
-type LocationMessage = {
-  type: 'location'
-  data: {
+type LocationMessage = BaseMessageContent<
+  'location',
+  {
     /** 经度 */
     lon: number
     /** 纬度 */
@@ -279,43 +213,27 @@ type LocationMessage = {
     title: string
     content: string
   }
-}
+>
 
-type ReplyMessage = {
-  type: 'reply'
-  data: {
-    /** 回复的原消息ID */
-    id: number
-  }
-}
+type ReplyMessage = BaseMessageContent<'reply', { id: number }>
 
-type ForwardMessage = {
-  type: 'forward'
-  data: {
+type ForwardMessage = BaseMessageContent<
+  'forward',
+  {
     /** 合并转发消息ID */
     id: string | number
     /** (Napcat) 消息内容 */
     content?: PrivateMessage<AnyMessage>[] | GroupMessage<AnyMessage>[]
   }
-}
+>
 
-type XMLMessage = {
-  type: 'xml'
-  data: {
-    data: string
-  }
-}
+type XMLMessage = BaseMessageContent<'xml', { data: string }>
 
-type JSONMessage = {
-  type: 'json'
-  data: {
-    data: string
-  }
-}
+type JSONMessage = BaseMessageContent<'json', { data: string }>
 
-type FileMessage = {
-  type: 'file'
-  data: {
+type FileMessage = BaseMessageContent<
+  'file',
+  {
     file: string
     file_id: string
     file_size: string
@@ -323,21 +241,10 @@ type FileMessage = {
     path: string
     url: string
   }
-}
+>
+type SendingFileMessage = BaseMessageContent<'file', { file: string }>
 
-type SendingFileMessage = {
-  type: 'file'
-  data: {
-    file: string
-  }
-}
-
-type MarkdownMessage = {
-  type: 'markdown'
-  data: {
-    content: string
-  }
-}
+type MarkdownMessage = BaseMessageContent<'markdown', { content: string }>
 
 // 以下是JSON消息内联的特殊格式消息类型
 

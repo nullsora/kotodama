@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// 也不知道为什么用纯CSS写骰子
+
 import { MessageTypes } from '@renderer/functions/message/message_types'
 
 const { msg } = defineProps<{
