@@ -93,7 +93,7 @@ watch(
 </script>
 
 <template>
-  <div class="max-w-80 share-msg-card glassmorphism p-sm" @click="showContent = true">
+  <div class="w-80 share-msg-card glassmorphism p-sm" @click="showContent = true">
     <div class="flex flex-col gap-2">
       <div class="text-sm font-bold dark-gray-text">聊天记录</div>
       <div class="text-xs gray-text">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
 import { computed, inject, Ref, ref, useTemplateRef } from 'vue'
 
 const sendText = inject('sendText') as Ref<string>
@@ -16,9 +17,7 @@ const {
   showMenu?: boolean
 }>()
 
-const url = computed(() => {
-  return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${id}`
-})
+const url = computed(() => getAvatarUrlFromId(id, 'friend'))
 
 const handleRightClick = (e: MouseEvent) => {
   if (type === 'group' && showMenu) menu.value!.show(e)

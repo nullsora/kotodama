@@ -3,6 +3,7 @@ import { computed, useTemplateRef } from 'vue'
 
 import { Chat } from '@renderer/functions/types'
 import TextShortMsg from '../message/basic/TextShortMsg.vue'
+import { getAvatarUrl } from '@renderer/functions/get_avatar_url'
 
 const menu = useTemplateRef('menu')
 
@@ -21,13 +22,7 @@ const menuItems = computed(() => [
   }
 ])
 
-const getAvatarUrl = computed(() => {
-  if (chat.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${chat.data.user_id}`
-  } else {
-    return `https://p.qlogo.cn/gh/${chat.data.group_id}/${chat.data.group_id}/640`
-  }
-})
+const avatarUrl = computed(() => getAvatarUrl(chat))
 
 const getName = computed(() => {
   if (chat.type === 'friend') {
@@ -86,7 +81,7 @@ const parseTime = (time: number | undefined) => {
     @contextmenu="(event) => menu?.toggle(event)"
   >
     <div class="w-full flex justify-start items-center gap-2">
-      <img :src="getAvatarUrl" class="h-10 w-10 rounded-full" crossorigin="anonymous" />
+      <img :src="avatarUrl" class="h-10 w-10 rounded-full" />
       <div class="w-full flex flex-col justify-center items-start gap-0.3">
         <div class="w-45.5 flex justify-between items-center gap-2">
           <div class="chat-name text-sm truncate">
@@ -139,8 +134,9 @@ const parseTime = (time: number | undefined) => {
   background-color: var(--p-gray-700);
 }
 
-.chat-card.pinned {
-  backdrop-filter: brightness(0.7);
+.chat-card.pinned,
+.chat-card.pinned:hover {
+  backdrop-filter: brightness(0.8);
 }
 
 .chat-card.selected {

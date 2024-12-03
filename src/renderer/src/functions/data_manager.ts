@@ -64,6 +64,32 @@ export class DataManager {
   })
 
   //========== 用户数据操作  ==========
+  find = {
+    friend: (id: number) =>
+      this.user.value.contacts.friends.find((friend) => friend.user_id === id),
+    group: (id: number) => this.user.value.contacts.groups.find((group) => group.group_id === id),
+    showing: (id: number, type: 'friend' | 'group') => {
+      return this.user.value.contacts.showing.find((chat) => {
+        if (type === 'friend') {
+          return chat.type === 'friend' && chat.data.user_id === id
+        } else {
+          return chat.type === 'group' && chat.data.group_id === id
+        }
+      })
+    }
+  }
+  findIndex = {
+    showing: (id: number, type: 'friend' | 'group') => {
+      return this.user.value.contacts.showing.findIndex((chat) => {
+        if (type === 'friend') {
+          return chat.type === 'friend' && chat.data.user_id === id
+        } else {
+          return chat.type === 'group' && chat.data.group_id === id
+        }
+      })
+    }
+  }
+
   addToList = {
     chat: (chat: Chat) => {
       this.curContacts.showing.push(chat)
@@ -71,14 +97,9 @@ export class DataManager {
     },
 
     private: async (friendId: number) => {
-      if (
-        this.curContacts.showing.find(
-          (chat) => chat.type === 'friend' && chat.data.user_id === friendId
-        )
-      )
-        return
+      if (this.find.showing(friendId, 'friend')) return
 
-      const friend = this.curContacts.friends.find((friend) => friend.user_id === friendId)
+      const friend = this.find.friend(friendId)
       if (!friend) {
         throw new Error('Friend not found')
       }
@@ -91,14 +112,9 @@ export class DataManager {
     },
 
     group: async (groupId: number) => {
-      if (
-        this.curContacts.showing.find(
-          (chat) => chat.type === 'group' && chat.data.group_id === groupId
-        )
-      )
-        return
+      if (this.find.showing(groupId, 'group')) return
 
-      const group = this.curContacts.groups.find((group) => group.group_id === groupId)
+      const group = this.find.group(groupId)
       if (!group) {
         throw new Error('Group not found')
       }
@@ -107,21 +123,6 @@ export class DataManager {
         type: 'group',
         data: group,
         latestMsg
-      })
-    }
-  }
-
-  findChat = {
-    friend: (id: number) =>
-      this.user.value.contacts.friends.find((friend) => friend.user_id === id),
-    group: (id: number) => this.user.value.contacts.groups.find((group) => group.group_id === id),
-    inShowing: (id: number, type: 'friend' | 'group') => {
-      return this.user.value.contacts.showing.find((chat) => {
-        if (type === 'friend') {
-          return chat.type === 'friend' && chat.data.user_id === id
-        } else {
-          return chat.type === 'group' && chat.data.group_id === id
-        }
       })
     }
   }
@@ -256,14 +257,12 @@ export class DataManager {
     const chatId = message.message_type === 'private' ? message.sender.user_id : message.group_id
 
     if (message.message_type === 'private') {
-      const showingChatIndex = this.curContacts.showing.findIndex((chat) => {
-        return chat.type === 'friend' && chat.data.user_id === chatId
-      })
+      const showingChatIndex = this.findIndex.showing(chatId, 'friend')
 
       if (showingChatIndex !== -1) {
         this.curContacts.showing[showingChatIndex].latestMsg = message
       } else {
-        const sender = this.curContacts.friends.find((friend) => friend.user_id === chatId)
+        const sender = this.find.friend(chatId)
         if (!sender) {
           throw new Error('Sender not found')
         }
@@ -274,14 +273,12 @@ export class DataManager {
         })
       }
     } else {
-      const showingChatIndex = this.curContacts.showing.findIndex((chat) => {
-        return chat.type === 'group' && chat.data.group_id === chatId
-      })
+      const showingChatIndex = this.findIndex.showing(chatId, 'group')
 
       if (showingChatIndex !== -1) {
         this.curContacts.showing[showingChatIndex].latestMsg = message
       } else {
-        const group = this.curContacts.groups.find((group) => group.group_id === chatId)
+        const group = this.find.group(chatId)
         if (!group) {
           throw new Error('Group not found')
         }

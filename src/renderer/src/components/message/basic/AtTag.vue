@@ -37,7 +37,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Tag class="ml-1 mr-1" rounded>
+  <Tag rounded>
     <span class="text-xs">@{{ name }}</span>
   </Tag>
 </template>

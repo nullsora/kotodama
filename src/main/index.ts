@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
 import registerIpc from './registry'
+import { handleProtocol, registerProtocol } from './registry/protocol'
 
 function createWindow(): void {
   // Create the browser window.
@@ -23,15 +24,7 @@ function createWindow(): void {
   })
 
   registerIpc(mainWindow)
-
-  // CrossOrigin settings
-  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    const headers = details.responseHeaders ?? {}
-    headers['Access-Control-Allow-Origin'] = ['*']
-    callback({
-      responseHeaders: headers
-    })
-  })
+  handleProtocol()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -51,6 +44,8 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
+
+registerProtocol()
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

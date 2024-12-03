@@ -24,8 +24,12 @@ const getIconUrl = (meta: { source_icon: string; icon: string }) => {
 
 const getPreviewUrl = (meta: { preview: string }) => {
   if (meta.preview)
-    if (meta.preview.startsWith('http') || meta.preview.startsWith('https')) return meta.preview
-    else return `https://${meta.preview}`
+    try {
+      const { protocol } = new URL(meta.preview)
+      return 'k-web-img:' + meta.preview.slice(protocol.length)
+    } catch (error) {
+      return `k-web-img://${meta.preview}`
+    }
   else return ''
 }
 

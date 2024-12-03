@@ -12,6 +12,11 @@ const previewUrl = computed(() => {
   else return `https://${msg.preview}`
 })
 
+const iconUrl = computed(() => {
+  const { protocol } = new URL(msg.icon)
+  return 'k-web-img:' + msg.icon.slice(protocol.length)
+})
+
 const openInBrowser = () => {
   if (msg.qqdocurl.startsWith('http') || msg.qqdocurl.startsWith('https')) {
     window.open(msg.qqdocurl, '_blank')
@@ -31,7 +36,7 @@ const openInBrowser = () => {
     </div>
     <div class="divider" />
     <div class="flex justify-start items-center gap-1">
-      <img class="w-4 h-4 rd-0.5" :src="msg.icon" crossorigin="anonymous" />
+      <img class="w-4 h-4 rd-0.5" :src="iconUrl" />
       <span class="text-xs dark-gray-text">{{ msg.title }}</span>
     </div>
   </div>

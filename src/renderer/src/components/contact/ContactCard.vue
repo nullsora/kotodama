@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { Chat } from '@renderer/functions/types'
+import { getAvatarUrl } from '@renderer/functions/get_avatar_url'
 
 const { contact } = defineProps<{
   contact: Chat
   selected: boolean
 }>()
 
-const avatarUrl = computed(() => {
-  if (contact.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${contact.data.user_id}`
-  } else {
-    return `https://p.qlogo.cn/gh/${contact.data.group_id}/${contact.data.group_id}/640`
-  }
-})
+const avatarUrl = computed(() => getAvatarUrl(contact))
 const name = computed(() => {
   if (contact.type === 'friend') {
     const nick = contact.data.nickname

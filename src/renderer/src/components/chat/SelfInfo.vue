@@ -5,7 +5,7 @@ import { DataManager } from '@renderer/functions/data_manager'
 const runtimeData = inject('runtimeData') as DataManager
 
 const avatarUrl = computed(() => {
-  return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${runtimeData.userInfo.value.main.user_id ?? 10000}`
+  return `k-avatar://q1.qlogo.cn/g?b=qq&s=0&nk=${runtimeData.userInfo.value.main.user_id ?? 10000}`
 })
 
 const genderSymbol = computed(() => {

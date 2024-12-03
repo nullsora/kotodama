@@ -2,6 +2,7 @@
 import { computed, inject, ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { Friend, Group } from '@renderer/functions/types'
+import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
 
 const runtimeData = inject('runtimeData') as DataManager
 
@@ -16,7 +17,7 @@ const showInfo = ref(false)
 
 const chat = computed(() => {
   if (chatInfo) {
-    return runtimeData.findChat[chatInfo.type](chatInfo.id)
+    return runtimeData.find[chatInfo.type](chatInfo.id)
   } else return undefined
 })
 
@@ -38,11 +39,8 @@ const chatName = computed(() => {
 })
 
 const avartarUrl = computed(() => {
-  if (chatInfo?.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${chatInfo.id}`
-  } else if (chatInfo?.type === 'group') {
-    return `https://p.qlogo.cn/gh/${chatInfo.id}/${chatInfo.id}/640`
-  } else return ''
+  if (!chatInfo) return ''
+  return getAvatarUrlFromId(chatInfo.id, chatInfo.type)
 })
 </script>
 

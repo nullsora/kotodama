@@ -69,7 +69,6 @@ const stopDrag = () => {
 }
 
 const resetImg = () => {
-  curIndex.value = index
   scale.value = 1
   translate.value = { x: 0, y: 0 }
 }

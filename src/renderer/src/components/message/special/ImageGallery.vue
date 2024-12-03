@@ -9,7 +9,13 @@ const { msg } = defineProps<{
 
 const showPreview = ref(false)
 const showingImgIndex = ref(0)
-const blobUrls = ref<string[]>([])
+
+const parsedImgs = computed(() =>
+  msg.images.map((img) => {
+    const { protocol } = new URL(img)
+    return 'k-web-img:' + img.slice(protocol.length)
+  })
+)
 
 const splitedImg = computed(() => {
   const totalImages = msg.images.length
@@ -50,7 +56,6 @@ const openPreview = (index: number) => {
       <div class="flex justify-between gap-1">
         <div v-for="(img, i) in row" :key="i">
           <MsgImage
-            v-model:blob-url="blobUrls[getPreIndex(index, i)]"
             :src="img"
             :rounded="false"
             :style="getSize(row.length)"
@@ -60,6 +65,6 @@ const openPreview = (index: number) => {
         </div>
       </div>
     </div>
-    <ImgPreview v-model="showPreview" :images="blobUrls" :index="showingImgIndex" />
+    <ImgPreview v-model="showPreview" :images="parsedImgs" :index="showingImgIndex" />
   </div>
 </template>

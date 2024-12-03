@@ -2,6 +2,7 @@
 import { computed, inject, Ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { ChatInfo, Friend, Group, Pages } from '@renderer/functions/types'
+import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
 
 const runtimeData = inject('runtimeData') as DataManager
 const currentPage = inject('currentPage') as Ref<Pages>
@@ -11,12 +12,8 @@ const { contact } = defineProps<{
 }>()
 
 const contactObj = computed(() => {
-  if (contact?.type === 'friend') {
-    return runtimeData.curContacts.friends.find((friend) => friend.user_id === contact?.id)
-  } else if (contact?.type === 'group') {
-    return runtimeData.curContacts.groups.find((group) => group.group_id === contact?.id)
-  }
-  return null
+  if (!contact) return null
+  return runtimeData.find[contact.type](contact.id) ?? null
 })
 
 const contactName = computed(() => {
@@ -29,11 +26,8 @@ const contactName = computed(() => {
 })
 
 const avatarUrl = computed(() => {
-  if (contact?.type === 'friend') {
-    return `https://q1.qlogo.cn/g?b=qq&s=0&nk=${(contactObj.value as Friend).user_id}`
-  } else if (contact?.type === 'group') {
-    return `https://p.qlogo.cn/gh/${(contactObj.value as Group).group_id}/${(contactObj.value as Group).group_id}/640`
-  } else return ''
+  if (!contact) return ''
+  return getAvatarUrlFromId(contact.id, contact.type)
 })
 
 const jumpToMsg = async () => {

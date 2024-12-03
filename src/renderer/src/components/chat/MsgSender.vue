@@ -241,12 +241,7 @@ const sendMsg = async () => {
     ;(runtimeData.renderingMsgs.value as GroupMessage<AnyMessage>[]).push(msg)
   }
 
-  const chat = runtimeData.curContacts.showing.find((c) => {
-    if (c.type !== chatInfo?.type) return false
-    if (c.type === 'friend') return c.data.user_id === chatInfo?.id
-    else if (c.type === 'group') return c.data.group_id === chatInfo?.id
-    return false
-  })
+  const chat = runtimeData.find.showing(chatInfo.id, chatInfo.type)
 
   if (chat) chat.latestMsg = msg
 

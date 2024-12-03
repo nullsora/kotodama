@@ -12,69 +12,6 @@ import { Friend, FriendsCategory, Group, GroupMember, MsgBody, Stranger, UserInf
 
 export const packagedGetter = {
   cachedFile: {
-    imgBlob: {
-      get: async (url: string) => {
-        let imgCache = await localforage.getItem<{
-          [url: string]: {
-            blob: Blob
-            savedTime: number
-          }
-        }>('img-cache')
-
-        if (!imgCache) {
-          imgCache = {}
-          await localforage.setItem('img-cache', imgCache)
-        }
-
-        const fetchBlob = async () => {
-          // @ts-ignore - window is defined in preload
-          const res = await window.kotodama.web.fetchBuffer(url)
-          const blob = new Blob([res], { type: 'image/png' })
-          imgCache[url] = {
-            blob: blob,
-            savedTime: Date.now()
-          }
-          await localforage.setItem('img-cache', imgCache)
-          return blob
-        }
-
-        const imgBlob = imgCache?.[url]?.blob
-        if (imgBlob) {
-          const nowDate = Date.now()
-          if (nowDate - imgCache[url].savedTime < 1000 * 60 * 60 * 24) {
-            return imgBlob
-          } else {
-            delete imgCache[url]
-            await localforage.setItem('img-cache', imgCache)
-            return await fetchBlob()
-          }
-        } else return await fetchBlob()
-      },
-      clear: async (all: boolean = false) => {
-        let imgCache = await localforage.getItem<{
-          [url: string]: {
-            blob: Blob
-            savedTime: number
-          }
-        }>('img-cache')
-
-        if (!imgCache) {
-          imgCache = {}
-          await localforage.setItem('img-cache', imgCache)
-        }
-
-        if (all) {
-          await localforage.removeItem('img-cache')
-        } else {
-          for (const url in imgCache) {
-            if (Date.now() - imgCache[url].savedTime > 1000 * 60 * 60 * 24) {
-              delete imgCache[url]
-            }
-          }
-          await localforage.setItem('img-cache', imgCache)
-        }
-      }
-    },
     recordBlob: {
       get: async (url: string) => {
         const ext = url.split('.').pop()

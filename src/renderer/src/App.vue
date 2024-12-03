@@ -28,7 +28,6 @@ const runtimeData = new DataManager(storeToRefs(config).userSettings)
 onMounted(() => {
   config.loadFromStorage()
   runtimeData.watchConnect()
-  packagedGetter.cachedFile.imgBlob.clear()
   packagedGetter.cachedFile.recordBlob.clear()
 
   config.$subscribe(

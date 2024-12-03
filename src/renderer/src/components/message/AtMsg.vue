@@ -9,12 +9,14 @@ defineProps<{
 </script>
 
 <template>
-  <Suspense>
-    <AtTag :msg="msg" :send-group-id="sendGroupId" />
-    <template #fallback>
-      <Tag>
-        <span class="text-sm">@</span>
-      </Tag>
-    </template>
-  </Suspense>
+  <span class="m-1">
+    <Suspense>
+      <AtTag :msg="msg" :send-group-id="sendGroupId" />
+      <template #fallback>
+        <Tag>
+          <span class="text-sm">@</span>
+        </Tag>
+      </template>
+    </Suspense>
+  </span>
 </template>
