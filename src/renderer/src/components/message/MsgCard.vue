@@ -22,6 +22,7 @@ import XMLMsg from './XMLMsg.vue'
 
 import SendTime from './basic/SendTime.vue'
 import ImageGallery from './special/ImageGallery.vue'
+import MarkdownMsg from './MarkdownMsg.vue'
 
 type ImageGalleryMsg = {
   type: 'gallery'
@@ -103,9 +104,10 @@ const msgComponents = {
   reply: ReplyMsg,
   forward: ForwardMsg,
   face: FaceMsg,
-  file: FileMsg,
   xml: XMLMsg,
-  json: JsonMsg
+  json: JsonMsg,
+  file: FileMsg,
+  markdown: MarkdownMsg
 }
 
 const renderOnlyList = ['image', 'mface', 'rps', 'dice', 'json', 'video', 'forward']
@@ -149,6 +151,11 @@ const messageList = computed(() => {
   } else if (tempImgMsg) {
     result.push(tempImgMsg)
   }
+
+  if (result.length > 0 && result[0].type === 'markdown') {
+    return [result[0]]
+  }
+
   return result
 })
 

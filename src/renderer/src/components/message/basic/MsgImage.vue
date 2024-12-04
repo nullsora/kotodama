@@ -15,8 +15,6 @@ const {
   rounded?: boolean
   skeletonSize?: number
 }>()
-
-const image = useTemplateRef('image')
 const menu = useTemplateRef('menu')
 
 const showPreview = ref(false)
@@ -71,7 +69,6 @@ const onImgRightClick = (e: MouseEvent) => {
   <div>
     <img
       v-show="loaded"
-      ref="image"
       v-bind="$attrs"
       :src="imageUrl"
       :class="{ pointer: preview, 'rd-2': rounded }"

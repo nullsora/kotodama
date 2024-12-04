@@ -214,3 +214,60 @@
   background-color: var(--scrollbar-track);
   border-radius: var(--scrollbar-track-radius);
 }
+
+/*------------------ Markdown ------------------*/
+.markdown {
+  margin: -0.75rem 0;
+}
+
+.markdown h1 {
+  font-size: 1.1rem;
+}
+
+.markdown h2 {
+  font-size: 1.05rem;
+}
+
+.markdown h3 {
+  font-size: 1.025rem;
+}
+
+.markdown h4 {
+  font-size: 1rem;
+}
+
+.markdown h5 {
+  font-size: 0.875rem;
+}
+
+.markdown a {
+  background: var(--p-tag-primary-background);
+  color: var(--p-tag-primary-color);
+  border-radius: var(--p-tag-rounded-border-radius);
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: var(--p-tag-font-weight);
+  text-decoration: none;
+}
+
+.markdown blockquote {
+  color: var(--p-gray-500);
+  border-radius: 0.25rem;
+  border-left: 0.2rem solid var(--p-primary-300);
+  background-color: var(--p-primary-100);
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.dark-mode .markdown blockquote {
+  color: var(--p-gray-300);
+  border-left: 0.2rem solid var(--p-primary-500);
+  background: var(--p-tag-primary-background);
+}
+
+.markdown img {
+  max-width: 20rem;
+  max-height: 20rem;
+  border-radius: 0.5rem;
+}
