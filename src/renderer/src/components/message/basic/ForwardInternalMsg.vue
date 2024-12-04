@@ -64,11 +64,8 @@ const getPosition = (index: number, length: number) => {
   return 'mid'
 }
 
-onMounted(() => updateContent())
-watch(
-  () => msg,
-  () => updateContent()
-)
+onMounted(updateContent)
+watch(() => msg, updateContent)
 </script>
 
 <template>

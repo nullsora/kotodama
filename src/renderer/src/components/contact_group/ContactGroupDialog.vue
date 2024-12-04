@@ -88,7 +88,7 @@ const submitGroup = async () => {
   quit()
 }
 
-onMounted(() => {
+const updateInfo = () => {
   if (edit?.edit) {
     newContactGroupInfo.value = {
       name: runtimeData.user.value.contactGroups[edit.index].name,
@@ -96,20 +96,10 @@ onMounted(() => {
       chats: runtimeData.user.value.contactGroups[edit.index].chats
     }
   }
-})
+}
 
-watch(
-  () => edit,
-  () => {
-    if (edit?.edit) {
-      newContactGroupInfo.value = {
-        name: runtimeData.user.value.contactGroups[edit.index].name,
-        iconClass: runtimeData.user.value.contactGroups[edit.index].iconClass,
-        chats: runtimeData.user.value.contactGroups[edit.index].chats
-      }
-    }
-  }
-)
+onMounted(updateInfo)
+watch(() => edit, updateInfo)
 </script>
 
 <template>

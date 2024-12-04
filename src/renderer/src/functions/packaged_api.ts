@@ -1,4 +1,3 @@
-import localforage from 'localforage'
 import Connector from './connector'
 import {
   PrivateMessage,
@@ -11,73 +10,6 @@ import {
 import { Friend, FriendsCategory, Group, GroupMember, MsgBody, Stranger, UserInfo } from './types'
 
 export const packagedGetter = {
-  cachedFile: {
-    recordBlob: {
-      get: async (url: string) => {
-        const ext = url.split('.').pop()
-        let recordCache = await localforage.getItem<{
-          [url: string]: {
-            blob: Blob
-            savedTime: number
-          }
-        }>('record-cache')
-
-        if (!recordCache) {
-          recordCache = {}
-          await localforage.setItem('record-cache', recordCache)
-        }
-
-        const fetchBlob = async () => {
-          // @ts-ignore allow window
-          const res = await window.kotodama.file.getFileBuffer(url)
-          const blob = new Blob([res], { type: `audio/${ext ?? 'mpeg'}` })
-          recordCache[url] = {
-            blob: blob,
-            savedTime: Date.now()
-          }
-          await localforage.setItem('record-cache', recordCache)
-          return blob
-        }
-
-        const recordBlob = recordCache?.[url]?.blob
-        if (recordBlob) {
-          const nowDate = Date.now()
-          if (nowDate - recordCache[url].savedTime < 1000 * 60 * 60 * 24) {
-            return recordBlob
-          } else {
-            delete recordCache[url]
-            await localforage.setItem('record-cache', recordCache)
-            return await fetchBlob()
-          }
-        } else return await fetchBlob()
-      },
-      clear: async (all: boolean = false) => {
-        let recordCache = await localforage.getItem<{
-          [url: string]: {
-            blob: Blob
-            savedTime: number
-          }
-        }>('record-cache')
-
-        if (!recordCache) {
-          recordCache = {}
-          await localforage.setItem('record-cache', recordCache)
-        }
-
-        if (all) {
-          await localforage.removeItem('record-cache')
-        } else {
-          for (const url in recordCache) {
-            if (Date.now() - recordCache[url].savedTime > 1000 * 60 * 60 * 24) {
-              delete recordCache[url]
-            }
-          }
-          await localforage.setItem('record-cache', recordCache)
-        }
-      }
-    }
-  },
-
   getInfo: {
     self: async () => {
       return (await Connector.fetch('get_login_info', 'getUserInfo')) as MsgBody<UserInfo>

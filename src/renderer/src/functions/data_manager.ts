@@ -129,6 +129,7 @@ export class DataManager {
 
   //========== 前后端连接操作 ==========
   watchConnect(
+    connectCallback?: () => void,
     closeCallback?: ({
       code,
       message,
@@ -143,6 +144,8 @@ export class DataManager {
   ) {
     DataManager.onebot.onOpen(async (_event, connection) => {
       this.working.value = true
+
+      if (connectCallback) connectCallback()
 
       const { user_id: userId } = (await packagedGetter.getInfo.self()).data
       this.userIndex.value = this.userConfigs.value.findIndex(

@@ -34,11 +34,11 @@ const onlyImage = computed(() => {
   )
 })
 
-const imgClass = computed(() => {
+const isFace = computed(() => {
   if (!onlyImage.value) return ''
 
   const msg = originalMsg.value!.message[0] as MessageTypes['Image'] | MessageTypes['MFace']
-  return checkImgFace(msg) ? 'max-w-20 max-h-20' : 'max-w-50 max-h-50'
+  return checkImgFace(msg)
 })
 
 const getName = computed(() => {
@@ -61,10 +61,10 @@ watch(() => msg, getOringinalMsg)
     <div v-if="onlyImage" class="flex justify-start gap-2 items-center">
       <Suspense>
         <MsgImage
-          :class="imgClass"
+          :class="isFace ? 'max-w-20 max-h-20' : 'max-w-50 max-h-50'"
           :src="(originalMsg?.message[0] as MessageTypes['Image']).data.url"
           :show-menu="false"
-          :skeleton-size="50"
+          :skeleton-size="isFace ? 20 : 50"
         />
       </Suspense>
     </div>

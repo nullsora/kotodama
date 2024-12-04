@@ -20,6 +20,8 @@ const getMenuButtonStyle = (page: Pages) => {
       return currentPage.value === Pages.Contacts ? 'primary' : 'secondary'
     case Pages.Settings:
       return currentPage.value === Pages.Settings ? 'primary' : 'secondary'
+    case Pages.Login:
+      return currentPage.value === Pages.Login ? 'primary' : 'secondary'
   }
 }
 
@@ -45,8 +47,9 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
 <template>
   <div class="draggable topbar glassmorphism">
     <Tag rounded severity="primary" :value="title ?? 'Kotodama'" />
-    <div v-if="showMenu" class="non-drag topbar-menu">
+    <div class="non-drag topbar-menu">
       <Button
+        v-if="showMenu"
         class="menu-btn"
         size="small"
         rounded
@@ -57,6 +60,7 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
         {{ currentPage === Pages.Chat ? '聊天' : '' }}
       </Button>
       <Button
+        v-if="showMenu"
         class="menu-btn"
         size="small"
         rounded
@@ -65,6 +69,17 @@ kotodama.window.watchMaximize((_event, windowIsMaximized) => {
       >
         <i class="i-fluent-color-people-24 font-size-4" />
         {{ currentPage === Pages.Contacts ? '联系人' : '' }}
+      </Button>
+      <Button
+        v-if="!showMenu"
+        class="menu-btn"
+        size="small"
+        rounded
+        :severity="getMenuButtonStyle(Pages.Login)"
+        @click="currentPage = Pages.Login"
+      >
+        <i class="i-fluent-color-globe-shield-24 font-size-4" />
+        {{ currentPage === Pages.Login ? '登录' : '' }}
       </Button>
       <Button
         class="menu-btn"

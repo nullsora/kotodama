@@ -237,7 +237,7 @@ const checkOnly = computed(() => {
 }
 
 .dark-mode .msg-card[reverse='true'] {
-  background-color: var(--p-primary-600);
+  background-color: var(--p-primary-800);
   color: var(--p-gray-100);
 }
 
@@ -280,7 +280,7 @@ const checkOnly = computed(() => {
 
 .dark-mode .msg-card[position='end-reverse']::before,
 .dark-mode .msg-card[position='single-reverse']::before {
-  background-color: var(--p-primary-600);
+  background-color: var(--p-primary-800);
 }
 
 .send-arrow {

@@ -21,19 +21,10 @@ const getTargetName = async () => {
   return (await packagedGetter.getInfo.stranger(qq)).data.nickname
 }
 
-// watch props
-watch(
-  () => msg,
-  async (_newValue, _oldValue) => {
-    // if (newValue.msg.data.qq !== oldValue.msg.data.qq) {
-    name.value = await getTargetName()
-    // }
-  }
-)
+const updateName = async () => (name.value = await getTargetName())
 
-onMounted(async () => {
-  name.value = await getTargetName()
-})
+onMounted(updateName)
+watch(() => msg.data.qq, updateName)
 </script>
 
 <template>

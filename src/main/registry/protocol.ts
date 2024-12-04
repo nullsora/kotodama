@@ -1,4 +1,5 @@
 import { net, protocol } from 'electron'
+import path from 'path'
 import { pathToFileURL } from 'url'
 
 const schemes = {
@@ -50,9 +51,23 @@ export const handleProtocol = () => {
     })
   })
 
-  protocol.handle(schemes.file, (request) => {
-    const url = request.url.slice(`${schemes.file}://`.length)
+  protocol.handle(schemes.file, async (request) => {
+    const { host, searchParams } = new URL(request.url)
 
-    return net.fetch(pathToFileURL(url).toString())
+    const url = searchParams.get('path')
+    if (!url) return new Response('Not allowed', { status: 403 })
+
+    switch (host) {
+      case 'static':
+        return net.fetch(pathToFileURL(url).toString())
+      case 'relative':
+        if (url.startsWith('..')) return new Response('Not allowed', { status: 403 })
+        else {
+          const filePath = path.resolve(process.cwd(), url)
+          return net.fetch(pathToFileURL(filePath).toString())
+        }
+      default:
+        return new Response('Not allowed', { status: 403 })
+    }
   })
 }

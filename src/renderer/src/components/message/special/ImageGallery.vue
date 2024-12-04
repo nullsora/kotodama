@@ -57,7 +57,6 @@ const openPreview = (index: number) => {
         <div v-for="(img, i) in row" :key="i">
           <MsgImage
             :src="img"
-            :rounded="false"
             :style="getSize(row.length)"
             class="object-cover max-h-40"
             @click="openPreview(getPreIndex(index, i))"

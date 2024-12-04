@@ -142,12 +142,14 @@ const getPosition = (
 }
 
 const updateMsgHistory = async (append: boolean = false, count: number = 30) => {
-  const _count = !append ? count : msgHistoryList.value.length + count
+  const countBefore = msgHistoryList.value.length
+  const _count = !append ? count : countBefore + count
   if (chatInfo?.type === 'friend') {
     msgHistoryList.value = (await packagedGetter.getMsg.friend(chatInfo.id, _count)).data.messages
   } else if (chatInfo?.type === 'group') {
     msgHistoryList.value = (await packagedGetter.getMsg.group(chatInfo.id, _count)).data.messages
   }
+  return msgHistoryList.value.length - countBefore
 }
 
 // 在滚动到顶部时，加载更多消息
@@ -155,10 +157,11 @@ const handleScroll = async (e: Event) => {
   const element = e.target as HTMLElement
   if (element.scrollTop < 100) {
     const heightBefore = element.scrollHeight
-    await updateMsgHistory(true)
-    await nextTick(() => {
-      element.scrollTop = element.scrollHeight - heightBefore
-    })
+    const c = await updateMsgHistory(true)
+    if (c === 30)
+      await nextTick(() => {
+        element.scrollTop = element.scrollHeight - heightBefore
+      })
   }
 }
 

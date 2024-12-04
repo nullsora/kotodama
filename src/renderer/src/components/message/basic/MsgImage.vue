@@ -52,10 +52,6 @@ const menuItems = ref([
   }
 ])
 
-const onImgRightClick = (e: MouseEvent) => {
-  if (showMenu) menu.value!.show(e)
-}
-
 const imageUrl = computed(() => {
   try {
     const { protocol } = new URL(src)
@@ -66,11 +62,8 @@ const imageUrl = computed(() => {
   }
 })
 
-const getImageSize = () => {
-  const img = image.value
-  return img
-    ? { width: img.width + 'px', height: img.height + 'px' }
-    : { width: skeletonSize / 4 + 'rem', height: skeletonSize / 4 + 'rem' }
+const onImgRightClick = (e: MouseEvent) => {
+  if (showMenu) menu.value!.show(e)
 }
 </script>
 
@@ -90,8 +83,8 @@ const getImageSize = () => {
     <Skeleton
       v-if="!loaded"
       v-bind="$attrs"
-      :width="getImageSize().width"
-      :height="getImageSize().height"
+      :width="skeletonSize / 4 + 'rem'"
+      :height="skeletonSize / 4 + 'rem'"
     />
     <ContextMenu v-if="showMenu" ref="menu" :model="menuItems" />
     <ImgPreview v-if="preview" v-model="showPreview" :images="[imageUrl]" />

@@ -3,7 +3,8 @@ import { AnyMessage, GroupMessage, PrivateMessage } from './message/message_type
 export enum Pages {
   Chat = 'chat',
   Contacts = 'contacts',
-  Settings = 'settings'
+  Settings = 'settings',
+  Login = 'login'
 }
 
 export enum PrimaryColor {

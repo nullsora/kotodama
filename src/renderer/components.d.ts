@@ -35,6 +35,7 @@ declare module 'vue' {
     ContactPanel: typeof import('./src/components/contact/ContactPanel.vue')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
     DebugWS: typeof import('./src/components/misc/DebugWS.vue')['default']
+    DeferredContent: typeof import('primevue/deferredcontent')['default']
     Dialog: typeof import('primevue/dialog')['default']
     DiceMsg: typeof import('./src/components/message/DiceMsg.vue')['default']
     Divider: typeof import('primevue/divider')['default']

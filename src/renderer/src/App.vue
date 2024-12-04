@@ -14,21 +14,21 @@ import SettingsPage from './pages/SettingsPage.vue'
 
 import Connector from './functions/connector'
 import { Logger } from './functions/logger'
-import { packagedGetter } from './functions/packaged_api'
 import { Pages } from './functions/types'
 import { DataManager } from './functions/data_manager'
 import ContactPage from './pages/ContactPage.vue'
 
 const config = useConfigStore()
 
-const currentPage = ref(Pages.Chat)
+const currentPage = ref(Pages.Login)
 
 const runtimeData = new DataManager(storeToRefs(config).userSettings)
 
 onMounted(() => {
   config.loadFromStorage()
-  runtimeData.watchConnect()
-  packagedGetter.cachedFile.recordBlob.clear()
+  runtimeData.watchConnect(() => {
+    currentPage.value = Pages.Chat
+  })
 
   config.$subscribe(
     async (_mutation, state) => {
@@ -69,11 +69,9 @@ provide('currentPage', currentPage)
             <ContactPage
               v-else-if="runtimeData.connected.value && currentPage === Pages.Contacts"
             />
-            <SettingsPage
-              v-else-if="runtimeData.connected.value && currentPage === Pages.Settings"
-            />
+            <SettingsPage v-else-if="currentPage === Pages.Settings" />
           </FadeTransition>
-          <LoginPage v-if="!runtimeData.connected.value" />
+          <LoginPage v-if="!runtimeData.connected.value && currentPage === Pages.Login" />
         </div>
       </template>
     </MainLayout>

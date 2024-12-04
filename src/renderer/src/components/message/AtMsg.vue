@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <span class="m-1">
+  <span class="m-1 line-height-relaxed">
     <Suspense>
       <AtTag :msg="msg" :send-group-id="sendGroupId" />
       <template #fallback>

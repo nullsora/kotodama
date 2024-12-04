@@ -46,7 +46,12 @@ const avartarUrl = computed(() => {
 
 <template>
   <div class="chat-info">
-    <div>{{ chatName.name + (chatName.memberCount ? ` (${chatName.memberCount})` : '') }}</div>
+    <div class="flex items-end gap-2">
+      <div>{{ chatName.name }}</div>
+      <div v-if="chatInfo?.type === 'group'" class="gray-text text-sm">
+        {{ chatName.memberCount }}人
+      </div>
+    </div>
     <Button
       icon="i-fluent-more-24-regular w-6 h-6"
       severity="secondary"

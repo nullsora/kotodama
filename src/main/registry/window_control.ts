@@ -1,5 +1,8 @@
 import * as childProcess from 'child_process'
 import { BrowserWindow, ipcMain, shell } from 'electron'
+import { promisify } from 'util'
+
+const exec = promisify(childProcess.exec)
 
 export default (window: BrowserWindow) => {
   ipcMain.handle('window:toggleMaximize', async (_event) => {
@@ -28,6 +31,7 @@ export default (window: BrowserWindow) => {
   })
 
   ipcMain.handle('window:openExternal', async (_event, { url }: { url: string }) => {
+    let status = true
     try {
       await shell.openExternal(url)
     } catch (e) {
@@ -68,13 +72,22 @@ export default (window: BrowserWindow) => {
         'flac'
       ]
       if (extWhiteList.includes(url.split('.').pop()!)) {
-        childProcess.exec(`"${url}"`)
+        try {
+          await exec(`"${url}"`)
+        } catch (e) {
+          status = false
+        }
       } else {
         const slash = /\\|\//
         const sysSlash = process.platform === 'win32' ? '\\' : '/'
         const dir = url.split(slash).slice(0, -1).join(sysSlash)
-        childProcess.exec(`explorer "${dir}"`)
+        try {
+          await exec(`explorer ${dir}`)
+        } catch (e) {
+          status = false
+        }
       }
     }
+    return status
   })
 }

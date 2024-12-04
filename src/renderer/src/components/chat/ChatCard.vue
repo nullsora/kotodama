@@ -82,31 +82,37 @@ const parseTime = (time: number | undefined) => {
   >
     <div class="w-full flex justify-start items-center gap-2">
       <img :src="avatarUrl" class="h-10 w-10 rounded-full" />
-      <div class="w-full flex flex-col justify-center items-start gap-0.3">
+      <div class="w-full flex flex-col justify-center items-start gap-0.5">
         <div class="w-45.5 flex justify-between items-center gap-2">
-          <div class="chat-name text-sm truncate">
+          <div class="chat-name truncate">
             <i
-              class="chat-name w-4.2 h-4.2 align-mid pi"
+              class="w-4.2 h-4.2 mr-0.5 align-mid pi"
               :class="
                 chat.type === 'friend'
-                  ? 'i-fluent-chat-24-regular'
-                  : 'i-fluent-chat-multiple-24-regular'
+                  ? 'i-fluent-chat-16-regular'
+                  : 'i-fluent-chat-multiple-16-regular'
               "
             />
-            {{ getName }}
+            <span class="text-sm">{{ getName }}</span>
           </div>
           <div :class="{ 'text-gray-500': !selected }" class="text-xs whitespace-nowrap">
             {{ parseTime(chat?.latestMsg?.time) }}
           </div>
         </div>
         <div class="w-45.5 flex justify-between items-center gap-2">
-          <div :class="{ 'short-msg': !selected }" class="text-sm truncate">
+          <div :class="{ 'short-msg': !selected }" class="text-3.2 truncate">
             <Suspense>
               <TextShortMsg :msg="chat.latestMsg" />
+              <template #fallback>
+                <span class="select-none text-transparent">Fallback</span>
+              </template>
             </Suspense>
           </div>
           <div class="w-5 dark-gray-text">
-            <i v-if="chat.pinned" class="w-4 h-4 align-mid pi i-fluent-pin-24-regular" />
+            <i
+              v-if="chat.pinned"
+              class="w-4 h-4 align-mid text-gray-500 pi i-fluent-pin-24-regular"
+            />
           </div>
         </div>
       </div>
@@ -134,11 +140,21 @@ const parseTime = (time: number | undefined) => {
   background-color: var(--p-gray-700);
 }
 
-.chat-card.pinned,
-.chat-card.pinned:hover {
-  backdrop-filter: brightness(0.8);
+.chat-card.pinned {
+  background-color: var(--p-slate-200);
 }
 
+.chat-card.pinned:hover {
+  background-color: var(--p-slate-300);
+}
+
+.dark-mode .chat-card.pinned {
+  background-color: var(--p-slate-700);
+}
+
+.dark-mode .chat-card.pinned:hover {
+  background-color: var(--p-slate-600);
+}
 .chat-card.selected {
   background-color: var(--p-primary-500);
   border-color: var(--p-primary-500);
@@ -148,7 +164,6 @@ const parseTime = (time: number | undefined) => {
 .chat-card.selected:hover {
   background-color: var(--p-primary-400);
   border-color: var(--p-primary-400);
-  color: white;
 }
 
 .dark-mode .chat-name {

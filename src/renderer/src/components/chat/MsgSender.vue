@@ -67,7 +67,7 @@ const handler = {
     }
   },
   face: {
-    judge: (text: string) => findFromFaceMap(text) !== undefined,
+    judge: (text: string) => findFromFaceMap(text),
     parse: (face: string): SendingMessageTypes['QQFace'] => {
       return {
         type: 'face',
@@ -133,6 +133,13 @@ const handleDragleave = (e: DragEvent) => {
 const handleDrop = (e: DragEvent) => {
   e.preventDefault()
   dragOn.value = false
+  // text
+  const text = e.dataTransfer?.getData('text')
+  if (text) {
+    sendText.value += text
+    return
+  }
+  // file
   const files = e.dataTransfer?.files
   if (files && files.length > 0) {
     const path = files[0].path

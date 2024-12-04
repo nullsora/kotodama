@@ -19,13 +19,12 @@ const downloadFile = async () => {
 
 const openVideo = async () => {
   if (msg.data.path) {
-    try {
-      // @ts-ignore - window is defined in preload
-      await window.kotodama.window.openExternal(msg.data.path)
-    } catch (e) {
+    // @ts-ignore - window is defined in preload
+    const status = await window.kotodama.window.openExternal(msg.data.path)
+    if (!status) {
       await downloadFile()
       // @ts-ignore - window is defined in preload
-      await window.kotodama.window.openExternal(msg.data.path)
+      await window.kotodama.window.openExternal(info.value?.file)
     }
   }
 }

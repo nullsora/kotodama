@@ -1,3 +1,4 @@
+import { DataManager } from '../data_manager'
 import { faceMap } from '../face_map'
 import { packagedGetter } from '../packaged_api'
 import { AnyMessage, GroupMessage, JsonInnerMsg, PrivateMessage } from './message_types'
@@ -103,7 +104,8 @@ export const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = `[文件] ${msg.data.file}`
       break
     case 'markdown':
-      shortMsg = '[Markdown]'
+      // Markdown 有对应的 text 字段
+      shortMsg = ''
       break
     default:
       // @ts-ignore 未知消息类型
@@ -133,11 +135,12 @@ export const getSenderName = ({
   sender
 }: {
   message_type: 'private' | 'group'
-  sender: { nickname: string; card?: string }
+  sender: { nickname: string; card?: string; user_id?: number }
 }) => {
-  return message_type === 'private'
-    ? sender.nickname
-    : sender.card && sender.card !== ''
-      ? sender.card
-      : sender.nickname
+  if (message_type === 'private') return sender.nickname
+  else if (sender.card && sender.card !== '') return sender.card
+  else if (sender.user_id) {
+    const user = DataManager.getInstance().find.friend(sender.user_id)
+    return user && user.remark !== '' ? user.remark : sender.nickname
+  } else return sender.nickname
 }

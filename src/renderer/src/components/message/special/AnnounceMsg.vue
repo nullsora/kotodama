@@ -31,7 +31,7 @@ const parseUrl = (path: string) => {
         </div>
         <div class="gray-text text-sm">{{ content }}</div>
         <div v-if="msg.pic.length > 0">
-          <MsgImage :src="parseUrl(msg.pic[0].url)" class="max-w-60 max-h-60" />
+          <MsgImage :src="parseUrl(msg.pic[0].url)" class="max-w-60 max-h-60" :skeleton-size="60" />
         </div>
       </div>
     </div>

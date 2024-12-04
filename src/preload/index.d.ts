@@ -13,7 +13,7 @@ declare global {
         close: () => Promise<void>
 
         openNewWindow: (url: string) => Promise<void>
-        openExternal: (url: string) => Promise<void>
+        openExternal: (url: string) => Promise<boolean>
       }
       onebot: {
         connect(url: string, token: string): Promise<void>

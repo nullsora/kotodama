@@ -17,9 +17,11 @@ const openInBrowser = (meta: { jumpUrl: string | URL | undefined }) => {
 }
 
 const getIconUrl = (meta: { source_icon: string; icon: string }) => {
-  if (meta.source_icon) return meta.source_icon
-  else if (meta.icon) return meta.icon
-  else return ''
+  let icon = ''
+  if (meta.source_icon) icon = meta.source_icon
+  else if (meta.icon) icon = meta.icon
+  const { protocol } = new URL(icon)
+  return 'k-web-img:' + icon.slice(protocol.length)
 }
 
 const getPreviewUrl = (meta: { preview: string }) => {
@@ -55,7 +57,7 @@ const checkType = (msg: JsonInnerMsg, key: string | number) => {
     <LocationMsg v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.Location" :msg="value" />
     <div v-else class="w-80 share-msg-card glassmorphism p-sm" @click="openInBrowser(value)">
       <div class="flex justify-start items-center gap-2">
-        <MsgImage class="w-15 h-15 object-cover" :skeleton-size="15" :src="getPreviewUrl(value)" />
+        <MsgImage class="w-15 h-15 object-cover" :src="getPreviewUrl(value)" :skeleton-size="15" />
         <div class="flex flex-col justify-start items-start gap-1">
           <span class="font-bold text-sm dark-gray-text">{{ value.title }}</span>
           <span class="text-xs gray-text">{{ value.desc }}</span>
