@@ -14,12 +14,13 @@ const cautionMsg = ref('')
 
 const curIndex = ref(index)
 const scale = ref(1)
+const rotation = ref(0)
 const isDragging = ref(false)
 const dragStart = ref({ x: 0, y: 0 })
 const translate = ref({ x: 0, y: 0 })
 
 const imgStyle = computed(() => ({
-  transform: `scale(${scale.value}) translate(${translate.value.x}px, ${translate.value.y}px)`
+  transform: `scale(${scale.value}) translate(${translate.value.x}px, ${translate.value.y}px) rotate(${rotation.value}deg)`
 }))
 
 const showCautionMsg = (head: boolean) => {
@@ -52,6 +53,10 @@ const onWheel = (event: WheelEvent) => {
   }
 }
 
+const rotate = (delta: number) => {
+  rotation.value = rotation.value + delta
+}
+
 const startDrag = (event: MouseEvent) => {
   isDragging.value = true
   dragStart.value.x = event.clientX - translate.value.x * scale.value
@@ -70,6 +75,7 @@ const stopDrag = () => {
 
 const resetImg = () => {
   scale.value = 1
+  rotation.value = 0
   translate.value = { x: 0, y: 0 }
 }
 
@@ -101,6 +107,7 @@ watchEffect(() => {
         ref="image"
         draggable="false"
         class="image select-none"
+        :class="{ 'image-transition': !isDragging }"
         :src="images[curIndex]"
         :style="imgStyle"
         @mousedown="startDrag"
@@ -135,8 +142,15 @@ watchEffect(() => {
           @click="scale = Math.max(scale - 0.1, 0.1)"
         />
         <Button
+          icon="i-fluent-arrow-rotate-clockwise-24-regular w-6 h-6"
+          severity="secondary"
+          rounded
+          text
+          @click="rotate(90)"
+        />
+        <Button
           v-tooltip.top="'重置'"
-          icon="i-fluent-resize-image-24-regular w-6 h-6"
+          icon="i-fluent-arrow-reset-24-regular w-6 h-6"
           severity="secondary"
           rounded
           text
@@ -168,7 +182,8 @@ watchEffect(() => {
 <style scoped>
 .modal {
   position: fixed;
-  z-index: 9999;
+  /* 来点神奇小数字！ */
+  z-index: 2000;
   top: 0;
   left: 0;
   width: 100%;
@@ -185,6 +200,10 @@ watchEffect(() => {
   cursor: grab;
   max-width: 80%;
   max-height: 80%;
+}
+
+.image-transition {
+  transition: transform 0.2s ease-in-out;
 }
 
 .toolbar {

@@ -29,7 +29,7 @@ const menuItems = ref([
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         const img = new Image()
-        img.src = src
+        img.src = imageUrl.value
         img.onload = () => {
           canvas.width = img.width
           canvas.height = img.height

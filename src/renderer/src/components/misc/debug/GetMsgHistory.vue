@@ -24,7 +24,7 @@ const fetchMsg = async () => {
 </script>
 
 <template>
-  <Card class="w-180">
+  <Card class="w-180 ml-a mr-a">
     <template #title> Get History Message </template>
     <template #content>
       <SelectButton v-model="isGroup" :options="selectGroup" option-label="label" />
@@ -41,11 +41,14 @@ const fetchMsg = async () => {
         <Button class="flex-1 mr-1" label="Clear" severity="success" @click="msgResult = ''" />
         <Button class="flex-1" icon="i-fluent-send-24-regular" label="Send" @click="fetchMsg" />
       </div>
-      <ScrollPanel class="w-full h-80 mt-2">
-        <Message severity="success" class="w-full whitespace-pre-wrap break-words">
+      <div
+        v-if="msgResult !== ''"
+        class="w-full max-h-80 mt-2 scrollbar scrollbar-w-1 scrollbar-rounded"
+      >
+        <Message severity="success" class="whitespace-pre-wrap break-anywhere">
           {{ msgResult }}
         </Message>
-      </ScrollPanel>
+      </div>
     </template>
   </Card>
 </template>

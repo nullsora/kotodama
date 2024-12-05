@@ -316,6 +316,7 @@ watch(
   () => chatInfo?.id,
   () => {
     attachments.value = []
+    getFaceList()
   }
 )
 

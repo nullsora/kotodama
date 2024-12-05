@@ -200,6 +200,7 @@ watch(() => chatInfo, updateComponent)
               v-if="!checkSenderSelf(msgSingleNode)"
               :id="msgSingleNode.sender.user_id"
               :type="chatInfo?.type"
+              :group-id="chatInfo?.type === 'group' ? chatInfo.id : 0"
             />
             <div
               class="flex flex-col justify-end gap-1"
@@ -225,6 +226,7 @@ watch(() => chatInfo, updateComponent)
               v-if="checkSenderSelf(msgSingleNode)"
               :id="msgSingleNode.sender.user_id"
               :type="chatInfo?.type"
+              :group-id="chatInfo?.type === 'group' ? chatInfo.id : 0"
               position="right"
             />
           </div>

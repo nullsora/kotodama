@@ -35,7 +35,7 @@ const onlyImage = computed(() => {
 })
 
 const isFace = computed(() => {
-  if (!onlyImage.value) return ''
+  if (!onlyImage.value) return false
 
   const msg = originalMsg.value!.message[0] as MessageTypes['Image'] | MessageTypes['MFace']
   return checkImgFace(msg)
@@ -63,6 +63,7 @@ watch(() => msg, getOringinalMsg)
         <MsgImage
           :class="isFace ? 'max-w-20 max-h-20' : 'max-w-50 max-h-50'"
           :src="(originalMsg?.message[0] as MessageTypes['Image']).data.url"
+          :preview="!isFace"
           :show-menu="false"
           :skeleton-size="isFace ? 20 : 50"
         />

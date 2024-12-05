@@ -17,7 +17,7 @@ const genderSymbol = computed(() => {
 })
 
 const menu = useTemplateRef('menu')
-const togglePopup = async (event: Event) => {
+const togglePopup = (event: Event) => {
   menu.value!.toggle(event)
 }
 
@@ -31,7 +31,7 @@ const sendMsgToSelf = () => {
 </script>
 
 <template>
-  <Menu id="user_info_panel" ref="menu" :popup="true" class="p-sm">
+  <Menu ref="menu" :popup="true" class="p-sm">
     <template #start>
       <div class="flex flex-rol justify-between items-center">
         <img :src="avatarUrl" loading="lazy" class="w-12 h-12 rd-full" crossorigin="anonymous" />

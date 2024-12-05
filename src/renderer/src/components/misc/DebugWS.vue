@@ -17,9 +17,9 @@ const fetchResult = async () => {
 </script>
 
 <template>
-  <div class="w-full calc-height scrollbar scrollbar-w-1 scrollbar-rounded items-center">
+  <div class="w-full calc-height scrollbar scrollbar-w-1 scrollbar-rounded">
     <GetMsgHistory />
-    <Card class="w-180 mt-sm">
+    <Card class="w-180 mt-sm ml-a mr-a">
       <template #title>Connector Sender</template>
       <template #content>
         <div class="flex flex-col justify-between items-center">
@@ -39,11 +39,14 @@ const fetchResult = async () => {
             />
           </div>
 
-          <ScrollPanel class="w-full h-80 mb-2">
-            <Message severity="success" class="w-full whitespace-pre-wrap break-words">
+          <div
+            v-if="result !== ''"
+            class="w-full max-h-80 mb-2 scrollbar scrollbar-w-1 scrollbar-rounded"
+          >
+            <Message severity="success" class="whitespace-pre-wrap break-anywhere">
               {{ result }}
             </Message>
-          </ScrollPanel>
+          </div>
         </div>
       </template>
     </Card>
@@ -52,6 +55,6 @@ const fetchResult = async () => {
 
 <style scoped>
 .calc-height {
-  height: calc(100vh - 6rem);
+  height: calc(100vh - 5.5rem);
 }
 </style>

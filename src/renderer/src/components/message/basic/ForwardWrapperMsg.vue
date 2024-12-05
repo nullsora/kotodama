@@ -21,7 +21,6 @@ const renderShortMsg = ref<string[]>([])
 const parsedMsgChain = computed(() => {
   if (!content.value) return []
 
-  // 同一个人连续消息合并即可
   const msgChain: {
     sender: {
       user_id: number

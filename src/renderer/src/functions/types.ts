@@ -76,13 +76,14 @@ export type Friend = {
   /** 用户昵称 */
   nickname: string
 
+  age: number
+  sex: 'male' | 'female' | 'unknown'
+
   qid?: string
   longNick?: string
   birthday_year?: number
   birthday_month?: number
   birthday_day?: number
-  age?: number
-  sex?: 'male' | 'female' | 'unknown'
   eMail?: string
   phoneNum?: string
   /** 用户分类 */
