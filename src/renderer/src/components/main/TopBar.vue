@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Pages } from '@renderer/functions/types'
 import { computed, ref } from 'vue'
+
+// @ts-ignore - window is defined in preload
 const kotodama = window.kotodama
 
 defineProps<{ title?: string; showMenu: boolean }>()

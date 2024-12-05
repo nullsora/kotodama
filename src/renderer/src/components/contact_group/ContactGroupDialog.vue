@@ -3,8 +3,8 @@ import { computed, inject, onMounted, ref, watch } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { Chat } from '@renderer/functions/types'
 import SelectIcon from './SelectIcon.vue'
-import FadeTransition from '../misc/FadeTransition.vue'
 import ContactCard from '../contact/ContactCard.vue'
+import FadeTransition from '../misc/FadeTransition.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 

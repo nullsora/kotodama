@@ -6,6 +6,8 @@ import { Chat, UserSetting } from './types'
 export class DataManager {
   // @ts-ignore - window is defined in preload
   private static onebot = window.kotodama.onebot
+  // @ts-ignore - window is defined in preload
+  private static fileMgr = window.kotodama.file
 
   private static instance: DataManager
 
@@ -162,7 +164,8 @@ export class DataManager {
             connection: connection,
             info: {
               main: (await packagedGetter.getInfo.self()).data,
-              more: friendList.find((friend) => friend.user_id === userId)
+              more: friendList.find((friend) => friend.user_id === userId),
+              faces: (await packagedGetter.getInfo.customFace()).data
             },
             contacts: {
               friends: friendList,
@@ -175,16 +178,16 @@ export class DataManager {
           }) - 1
       } else {
         await this.updateInfo()
-        this.userConfigs.value[this.userIndex.value as number].connection = connection
+        this.userConfigs.value[this.userIndex.value!].connection = connection
       }
 
       await Promise.all(
-        this.userConfigs.value[this.userIndex.value as number].contacts.showing.map((chat) =>
+        this.userConfigs.value[this.userIndex.value!].contacts.showing.map((chat) =>
           this.updateLatestMessage(chat)
         )
       )
 
-      DataManager.sortChats(this.userConfigs.value[this.userIndex.value as number].contacts.showing)
+      DataManager.sortChats(this.userConfigs.value[this.userIndex.value!].contacts.showing)
     })
 
     DataManager.onebot.onClose((_event, closeMsg) => {
@@ -201,31 +204,32 @@ export class DataManager {
   } = {}) {
     this.checkWorking()
 
-    const [userInfo, friendList, friendsCategory, groupList] = await Promise.all([
+    const [userInfo, customFaces, friendList, friendsCategory, groupList] = await Promise.all([
       packagedGetter.getInfo.self().then((res) => res.data),
+      packagedGetter.getInfo.customFace().then((res) => res.data),
       packagedGetter.getList.friend().then((res) => res.data),
       packagedGetter.getList.friendWithCategory().then((res) => res.data),
       packagedGetter.getList.group().then((res) => res.data)
     ])
 
     if (selfInfo) {
-      this.userConfigs.value[this.userIndex.value as number].info.main = userInfo
-      this.userConfigs.value[this.userIndex.value as number].info.more = friendList.find(
+      this.userConfigs.value[this.userIndex.value!].info.main = userInfo
+      this.userConfigs.value[this.userIndex.value!].info.more = friendList.find(
         (friend) => friend.user_id === userInfo.user_id
       )
+      this.userConfigs.value[this.userIndex.value!].info.faces = customFaces
     }
 
     if (friend) {
-      this.userConfigs.value[this.userIndex.value as number].contacts.friends = friendList
+      this.userConfigs.value[this.userIndex.value!].contacts.friends = friendList
     }
 
     if (_friendsCategory) {
-      this.userConfigs.value[this.userIndex.value as number].contacts.friendsCategories =
-        friendsCategory
+      this.userConfigs.value[this.userIndex.value!].contacts.friendsCategories = friendsCategory
     }
 
     if (group) {
-      this.userConfigs.value[this.userIndex.value as number].contacts.groups = groupList
+      this.userConfigs.value[this.userIndex.value!].contacts.groups = groupList
     }
   }
 

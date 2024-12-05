@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 
+import { checkImgFace } from '@renderer/functions/message/check_img_face'
 import {
   AnyMessage,
   GroupMessage,
@@ -10,7 +11,6 @@ import {
 import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
 import { packagedGetter } from '@renderer/functions/packaged_api'
 import MsgImage from './basic/MsgImage.vue'
-import { checkImgFace } from '@renderer/functions/message/check_img_face'
 
 const { msg } = defineProps<{
   msg: MessageTypes['Reply']

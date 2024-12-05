@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, inject, Ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
-import { ChatInfo, Friend, Group, Pages } from '@renderer/functions/types'
 import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
+import { ChatInfo, Friend, Group, Pages } from '@renderer/functions/types'
 
 const runtimeData = inject('runtimeData') as DataManager
 const currentPage = inject('currentPage') as Ref<Pages>

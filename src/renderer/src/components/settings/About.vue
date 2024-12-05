@@ -52,6 +52,12 @@ const openGithub = () => openUrl('https://github.com/nullsora/kotodama')
             霞鹜文楷
           </div>
         </div>
+        <div class="flex justify-between items-center gap-2 mt-2">
+          <div>CSS动画</div>
+          <div class="primary-text cursor-pointer" @click="openUrl('http://animista.net')">
+            Animista
+          </div>
+        </div>
       </div>
     </div>
   </div>

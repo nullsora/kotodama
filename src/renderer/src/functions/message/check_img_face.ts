@@ -1,6 +1,8 @@
-import { MessageTypes } from './message_types'
+import { MessageTypes, SendingMessageTypes } from './message_types'
 
-export const checkImgFace = (msg: MessageTypes['Image'] | MessageTypes['MFace']) => {
+export const checkImgFace = (
+  msg: MessageTypes['Image'] | MessageTypes['MFace'] | SendingMessageTypes['Image']
+) => {
   if (msg.type === 'mface') return true
 
   if (msg.data.file === 'marketface') return true

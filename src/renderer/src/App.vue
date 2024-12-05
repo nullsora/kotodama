@@ -9,6 +9,7 @@ import TopBar from './components/main/TopBar.vue'
 import MainLayout from './components/layout/MainLayout.vue'
 
 import ChatPage from './pages/ChatPage.vue'
+import ContactPage from './pages/ContactPage.vue'
 import LoginPage from './pages/LoginPage.vue'
 import SettingsPage from './pages/SettingsPage.vue'
 
@@ -16,7 +17,6 @@ import Connector from './functions/connector'
 import { Logger } from './functions/logger'
 import { Pages } from './functions/types'
 import { DataManager } from './functions/data_manager'
-import ContactPage from './pages/ContactPage.vue'
 
 const config = useConfigStore()
 

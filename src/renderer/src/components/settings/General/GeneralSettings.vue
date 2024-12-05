@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import SettingItem from '@renderer/components/misc/SettingItem.vue'
-import BackgroundSettings from '@renderer/components/settings/General/BackgroundSettings.vue'
-import PrimaryColorSettings from '@renderer/components/settings/General/PrimaryColorSettings.vue'
 import { useConfigStore } from '@renderer/stores/config_store'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
+import BackgroundSettings from './BackgroundSettings.vue'
+import LoglevelSetting from './LoglevelSetting.vue'
+import PrimaryColorSettings from './PrimaryColorSettings.vue'
 
 const config = useConfigStore()
 
@@ -43,6 +44,7 @@ const confirmResetConfig = (event) => {
     <SettingItem :title="'窗口标题'" :description="'设置窗口标题'">
       <InputText v-model="config.windowTitle" />
     </SettingItem>
+    <LoglevelSetting />
     <PrimaryColorSettings />
     <BackgroundSettings />
     <SettingItem class="mt-sm" :title="'RESET'" :description="'重置所有设置'">

@@ -1,46 +1,54 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import DebugWS from '@renderer/components/misc/DebugWS.vue'
 import GeneralSettings from '@renderer/components/settings/General/GeneralSettings.vue'
 import MessageSettings from '@renderer/components/settings/Message/MessageSettings.vue'
 import About from '@renderer/components/settings/About.vue'
+import { LogLevel } from '@renderer/functions/logger'
+import { useConfigStore } from '@renderer/stores/config_store'
+
+const config = useConfigStore()
 
 const currentSettingItem = ref('General')
-
-const menuItems = ref([
-  {
-    label: '设置',
-    items: [
-      {
-        label: '通用设置',
-        icon: 'i-fluent-settings-24-regular',
-        command: () => {
-          currentSettingItem.value = 'General'
+const menuItems = computed(() => {
+  const items = [
+    {
+      label: '设置',
+      items: [
+        {
+          label: '通用设置',
+          icon: 'i-fluent-settings-24-regular',
+          command: () => {
+            currentSettingItem.value = 'General'
+          }
+        },
+        {
+          label: '消息设置',
+          icon: 'i-fluent-chat-24-regular',
+          command: () => {
+            currentSettingItem.value = 'Message'
+          }
         }
-      },
-      {
-        label: '消息设置',
-        icon: 'i-fluent-chat-24-regular',
-        command: () => {
-          currentSettingItem.value = 'Message'
+      ]
+    }
+  ]
+  if (config.logLevel === LogLevel.DEBUG) {
+    items.push({
+      label: 'Debug',
+      items: [
+        {
+          label: 'Websocket Debug',
+          icon: 'i-fluent-globe-24-regular',
+          command: () => {
+            currentSettingItem.value = 'WS'
+          }
         }
-      }
-    ]
-  },
-  {
-    label: 'Debug',
-    items: [
-      {
-        label: 'Websocket Debug',
-        icon: 'i-fluent-globe-24-regular',
-        command: () => {
-          currentSettingItem.value = 'WS'
-        }
-      }
-    ]
+      ]
+    })
   }
-])
+  return items
+})
 </script>
 
 <template>

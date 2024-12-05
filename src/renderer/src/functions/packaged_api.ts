@@ -14,6 +14,9 @@ export const packagedGetter = {
     self: async () => {
       return (await Connector.fetch('get_login_info', 'getUserInfo')) as MsgBody<UserInfo>
     },
+    customFace: async () => {
+      return (await Connector.fetch('fetch_custom_face', 'fetchCustomFace')) as MsgBody<string[]>
+    },
     stranger: async (userId: number) => {
       return (await Connector.fetch('get_stranger_info', 'getStrangerInfo', {
         user_id: userId

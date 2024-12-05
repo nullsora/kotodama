@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Chat } from '@renderer/functions/types'
 import { getAvatarUrl } from '@renderer/functions/get_avatar_url'
+import { Chat } from '@renderer/functions/types'
 
 const { contact } = defineProps<{
   contact: Chat

@@ -169,6 +169,7 @@ export type UserSetting = {
   info: {
     main: UserInfo
     more?: Friend
+    faces: string[]
   }
   contacts: {
     friends: Friend[]

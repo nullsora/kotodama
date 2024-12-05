@@ -3,8 +3,8 @@ import { computed, inject, nextTick, onMounted, useTemplateRef, watch } from 'vu
 
 import { DataManager } from '@renderer/functions/data_manager'
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
-import { getSenderName as _getName } from '@renderer/functions/message/parse_msg'
 import { packagedGetter } from '@renderer/functions/packaged_api'
+import { getSenderName as _getName } from '@renderer/functions/message/parse_msg'
 import { GroupMsgChainNode, PrivateMsgChainNode } from '@renderer/functions/types'
 
 import MsgCard from '../message/MsgCard.vue'

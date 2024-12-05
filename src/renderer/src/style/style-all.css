@@ -153,8 +153,13 @@
 }
 
 /*------------------ Popover ------------------*/
+.p-popover {
+  --p-popover-background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+}
+
 .dark-mode .p-popover {
-  --p-popover-background: var(--p-gray-700);
+  --p-popover-background: rgba(31, 41, 55, 0.65);
   --p-popover-border-color: var(--p-gray-600);
   --p-popover-color: var(--p-gray-100);
 }

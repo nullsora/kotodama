@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import debounce from 'lodash.debounce'
-import { computed, inject, Ref, ref, watch } from 'vue'
+import { computed, inject, onMounted, provide, Ref, ref, watch } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { findFromFaceMap } from '@renderer/functions/face_map'
 import {
@@ -27,6 +27,8 @@ const { chatInfo } = defineProps<{
 
 const imgExt = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
 
+const videoExt = ['mp4', 'webm', 'ogg']
+
 const handler = {
   image: {
     judge: (text: string) => text.startsWith('IA:'),
@@ -34,6 +36,16 @@ const handler = {
       const url = attachments.value[parseInt(attachId.slice(3))]
       return {
         type: 'image',
+        data: { file: url }
+      }
+    }
+  },
+  vidio: {
+    judge: (text: string) => text.startsWith('VA:'),
+    parse: (attachId: string): SendingMessageTypes['Video'] => {
+      const url = attachments.value[parseInt(attachId.slice(3))]
+      return {
+        type: 'video',
         data: { file: url }
       }
     }
@@ -75,6 +87,36 @@ const handler = {
       }
     }
   },
+  customFace: {
+    judge: (text: string) => text.startsWith('CF:'),
+    parse: (id: string): SendingMessageTypes['Image'] => {
+      return {
+        type: 'image',
+        data: {
+          file: runtimeData.userInfo.value.faces[parseInt(id.slice(3))],
+          sub_type: 1,
+          subType: 1
+        }
+      }
+    }
+  },
+  localFace: {
+    judge: (text: string) => text.startsWith('LF:'),
+    parse: (id: string): SendingMessageTypes['Image'] => {
+      const [category, face] = id
+        .slice(3)
+        .split(',')
+        .map((i) => parseInt(i))
+      return {
+        type: 'image',
+        data: {
+          file: localFaceList.value[category].faces[face],
+          sub_type: 1,
+          subType: 1
+        }
+      }
+    }
+  },
   rps: {
     judge: (text: string) => text === 'rps',
     parse: (): SendingMessageTypes['Rps'] => {
@@ -107,6 +149,7 @@ const handler = {
 const renderMsgs = ref<SendingMessage>()
 const attachments = ref<string[]>([])
 const dragOn = ref(false)
+const localFaceList = ref<{ category: string; faces: string[] }[]>([])
 
 const inputClass = computed(() => {
   return {
@@ -115,6 +158,12 @@ const inputClass = computed(() => {
 })
 
 const invalid = computed(() => sendText.value.length === 0)
+
+const getFaceList = async () => {
+  // @ts-ignore - window is defined in preload
+  const faces = await window.kotodama.file.getFaceList()
+  localFaceList.value = faces
+}
 
 const watchKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Enter' && e.ctrlKey) sendMsg()
@@ -146,6 +195,7 @@ const handleDrop = (e: DragEvent) => {
     attachments.value.push(path)
     const ext = path.split('.').pop()
     if (imgExt.includes(ext!)) sendText.value += `[/IA:${attachments.value.length - 1}]`
+    else if (videoExt.includes(ext!)) sendText.value += `[/VA:${attachments.value.length - 1}]`
     else sendText.value += `[/FA:${attachments.value.length - 1}]`
   }
 }
@@ -234,6 +284,9 @@ const sendMsg = async () => {
   const sender = parseSender()
   if (!sender) return
 
+  sendText.value = ''
+  attachments.value = []
+
   // Send
   const msgId = (await packagedSender.msg.send(sender)).data.message_id
 
@@ -251,9 +304,6 @@ const sendMsg = async () => {
   const chat = runtimeData.find.showing(chatInfo.id, chatInfo.type)
 
   if (chat) chat.latestMsg = msg
-
-  sendText.value = ''
-  attachments.value = []
 }
 
 const update = debounce(() => {
@@ -268,6 +318,10 @@ watch(
     attachments.value = []
   }
 )
+
+onMounted(getFaceList)
+
+provide('faceList', localFaceList)
 </script>
 
 <template>

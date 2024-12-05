@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, useTemplateRef } from 'vue'
 
+import { getAvatarUrl } from '@renderer/functions/get_avatar_url'
 import { Chat } from '@renderer/functions/types'
 import TextShortMsg from '../message/basic/TextShortMsg.vue'
-import { getAvatarUrl } from '@renderer/functions/get_avatar_url'
 
 const menu = useTemplateRef('menu')
 
@@ -100,7 +100,7 @@ const parseTime = (time: number | undefined) => {
           </div>
         </div>
         <div class="w-45.5 flex justify-between items-center gap-2">
-          <div :class="{ 'short-msg': !selected }" class="text-3.2 truncate">
+          <div :class="{ 'short-msg': !selected }" class="text-3.2 line-height-snug truncate">
             <Suspense>
               <TextShortMsg :msg="chat.latestMsg" />
               <template #fallback>

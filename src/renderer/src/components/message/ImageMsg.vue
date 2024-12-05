@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { checkImgFace } from '@renderer/functions/message/check_img_face'
 import { MessageTypes } from '@renderer/functions/message/message_types'
 import { computed } from 'vue'
 import MsgImage from './basic/MsgImage.vue'
-import { checkImgFace } from '@renderer/functions/message/check_img_face'
 
 const { msg } = defineProps<{
   msg: MessageTypes['Image'] | MessageTypes['MFace']

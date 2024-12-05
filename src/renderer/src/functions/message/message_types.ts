@@ -107,8 +107,9 @@ export type MessageTypes = {
 
 export type AnyMessage = MessageTypes[keyof MessageTypes]
 
-export type SendingMessageTypes = Omit<MessageTypes, 'Image' | 'File'> & {
+export type SendingMessageTypes = Omit<MessageTypes, 'Image' | 'Video' | 'File'> & {
   Image: SendingImageMessage
+  Video: SendingVideoMessage
   File: SendingFileMessage
 }
 
@@ -147,7 +148,14 @@ type ImageMessage = BaseMessageContent<
     file_unique?: string
   }
 >
-type SendingImageMessage = BaseMessageContent<'image', { file: string }>
+type SendingImageMessage = BaseMessageContent<
+  'image',
+  {
+    file: string
+    sub_type?: number
+    subType?: number
+  }
+>
 
 type MFaceMessage = BaseMessageContent<
   'mface',
@@ -175,6 +183,7 @@ type VideoMessage = BaseMessageContent<
   'video',
   { file: string; url: string; file_size: string; path?: string }
 >
+type SendingVideoMessage = BaseMessageContent<'video', { file: string }>
 
 type AtMessage = BaseMessageContent<'at', { qq: string }>
 

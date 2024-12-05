@@ -43,8 +43,11 @@ declare global {
         fetchBuffer(url: string, options?: RequestInit): Promise<ArrayBuffer>
       }
       file: {
+        access(path: string): Promise<boolean>
         getConfig(): Promise<string>
         saveConfig(config: string): Promise<void>
+        getFacePath(): Promise<string>
+        getFaceList(): Promise<{ category: string; faces: string[] }[]>
         getFileBuffer(path: string): Promise<Buffer>
       }
       crypto: {

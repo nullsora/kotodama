@@ -52,9 +52,12 @@ const menuItems = ref([
 
 const imageUrl = computed(() => {
   try {
-    const { protocol } = new URL(src)
-    const url = 'k-web-img:' + src.slice(protocol.length)
-    return url
+    const url = new URL(src)
+
+    if (url.protocol === 'file:') return 'k-file://static?path=' + url.toString().slice(8)
+
+    const parsed = 'k-web-img:' + src.slice(url.protocol.length)
+    return parsed
   } catch (e) {
     return ''
   }

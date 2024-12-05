@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+import Connector from '@renderer/functions/connector'
 import { Logger } from '@renderer/functions/logger'
 import { useConfigStore } from '@renderer/stores/config_store'
-import Connector from '@renderer/functions/connector'
 
 const config = useConfigStore()
 

@@ -25,6 +25,26 @@ const selectImage = () => {
   input.click()
 }
 
+const selectVideo = () => {
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = 'video/*'
+  input.multiple = false
+
+  input.onchange = (e) => {
+    const files = (e.target as HTMLInputElement).files
+    if (files && files.length > 0) {
+      // push directory to attachments
+      attachments.value.push(files[0].path)
+      sendText.value += `[/VA:${attachments.value.length - 1}]`
+      // delete input
+      input.remove()
+    }
+  }
+
+  input.click()
+}
+
 const selectFile = () => {
   const input = document.createElement('input')
   input.type = 'file'
@@ -58,6 +78,10 @@ const selectFile = () => {
         <div class="selection gray-text" @click="selectImage">
           <i class="i-fluent-image-24-regular w-7 h-7" />
           <div class="text-sm">图片</div>
+        </div>
+        <div class="selection gray-text" @click="selectVideo">
+          <i class="i-fluent-video-24-regular w-7 h-7" />
+          <div class="text-sm">视频</div>
         </div>
         <div class="selection gray-text" @click="selectFile">
           <i class="i-fluent-folder-24-regular w-7 h-7" />

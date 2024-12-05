@@ -12,6 +12,7 @@ import FileMsg from './FileMsg.vue'
 import ForwardMsg from './ForwardMsg.vue'
 import ImageMsg from './ImageMsg.vue'
 import JsonMsg from './JsonMsg.vue'
+import MarkdownMsg from './MarkdownMsg.vue'
 import RecordMsg from './RecordMsg.vue'
 import ReplyMsg from './ReplyMsg.vue'
 import RpsMsg from './RpsMsg.vue'
@@ -22,7 +23,6 @@ import XMLMsg from './XMLMsg.vue'
 
 import SendTime from './basic/SendTime.vue'
 import ImageGallery from './special/ImageGallery.vue'
-import MarkdownMsg from './MarkdownMsg.vue'
 
 type ImageGalleryMsg = {
   type: 'gallery'
