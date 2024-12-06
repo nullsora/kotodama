@@ -63,11 +63,7 @@ const avartarUrl = computed(() => {
       <Transition enter-active-class="slide-in-right" leave-active-class="slide-out-right">
         <div v-if="showInfo" class="chat-info-modal scrollbar scrollbar-w-1 scrollbar-rounded">
           <div class="info-card w-full p-sm gap-sm flex items-center">
-            <img
-              :src="avartarUrl"
-              class="w-12 h-12 rounded-full drag-none"
-              crossorigin="anonymous"
-            />
+            <img :src="avartarUrl" class="w-12 h-12 rounded-full drag-none" />
             <div class="flex flex-col justify-center items-start gap-1">
               <div class="max-w-55 truncate">
                 {{ chatName.name }}

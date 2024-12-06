@@ -48,7 +48,7 @@ const jumpToMsg = async () => {
     <Card class="w-4/5">
       <template #title>
         <div class="w-full flex justify-between items-center">
-          <img :src="avatarUrl" class="w-15 h-15 rounded-full drag-none" crossorigin="anonymous" />
+          <img :src="avatarUrl" class="w-15 h-15 rounded-full drag-none" />
           <div class="w-full flex flex-col justify-center items-end gap-2">
             <div class="text-xl font-bold">{{ contactName }}</div>
             <div class="text-sm text-gray-500">ID: {{ contact?.id }}</div>
@@ -77,10 +77,22 @@ const jumpToMsg = async () => {
           </div>
           <div class="w-full flex justify-between items-center">
             <div class="font-bold">
-              <i class="pi i-fluent-slide-text-edit-24-regular h-4 w-4 align-mid" />
+              <i class="pi i-fluent-signature-24-regular h-4 w-4 align-mid" />
               签名
             </div>
             <div class="text-gray-500">{{ (contactObj as Friend).longNick }}</div>
+          </div>
+        </div>
+        <div
+          v-else-if="contact?.type === 'group'"
+          class="w-full flex flex-col justify-start items-center gap-sm"
+        >
+          <div class="w-full flex justify-between items-center">
+            <div class="font-bold">
+              <i class="pi i-fluent-people-24-regular h-4 w-4 align-mid" />
+              成员数
+            </div>
+            <div class="text-gray-500">{{ (contactObj as Group).member_count }}</div>
           </div>
         </div>
         <Divider />

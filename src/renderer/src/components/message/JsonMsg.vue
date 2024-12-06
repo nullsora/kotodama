@@ -80,7 +80,6 @@ const checkType = (msg: JsonInnerMsg, key: string | number) => {
           v-if="value.icon || value.source_icon"
           class="w-4 h-4 rd-0.5 drag-none"
           :src="getIconUrl(value)"
-          crossorigin="anonymous"
         />
         <span class="text-xs gray-text">{{ value.tag ?? value.title }}</span>
       </div>

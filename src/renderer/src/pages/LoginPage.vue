@@ -24,9 +24,11 @@ const addToAccounts = () => {
     })
   }
 }
+
 const deleteAccount = (index: number) => {
   config.accounts.splice(index, 1)
 }
+
 const getAccount = (index: number) => {
   url.value = config.accounts[index].url
   accessToken.value = config.accounts[index].token
@@ -47,9 +49,7 @@ const login = () => {
             <div class="flex flex-row justify-center items-center gap-xl">
               <img class="w-15 h-15" :src="icon" />
               <i class="pi i-fluent-link-24-regular w-7 h-7" />
-              <div class="icon-bg w-15 h-15 p-2.6 rd-full flex justify-center items-center">
-                <i class="pi i-cib-tencent-qq text-black w-10 h-10" />
-              </div>
+              <div class="font-bold text-2xl">Onebot</div>
             </div>
           </template>
           <template #content>

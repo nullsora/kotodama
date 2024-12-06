@@ -5,7 +5,7 @@ import { computed, ref } from 'vue'
 // @ts-ignore - window is defined in preload
 const kotodama = window.kotodama
 
-defineProps<{ title?: string; showMenu: boolean }>()
+const { showMenu } = defineProps<{ title?: string; showMenu: boolean }>()
 const darkMode = defineModel<boolean>('darkMode')
 const currentPage = defineModel<string>('currentPage')
 
@@ -34,7 +34,7 @@ async function toggleMaximize() {
   await kotodama.window.toggleMaximize()
 }
 async function close() {
-  await kotodama.window.close()
+  await kotodama.window.close(!showMenu)
 }
 
 function switchDarkMode() {

@@ -41,12 +41,7 @@ const logout = () => {
   <Menu ref="menu" :popup="true" class="p-sm">
     <template #start>
       <div class="flex flex-rol justify-between items-center">
-        <img
-          :src="avatarUrl"
-          loading="lazy"
-          class="w-12 h-12 rd-full drag-none"
-          crossorigin="anonymous"
-        />
+        <img :src="avatarUrl" loading="lazy" class="w-12 h-12 rd-full drag-none" />
         <div class="text-right">
           <div class="font-bold text-lg dark-gray-text">
             <i
@@ -106,12 +101,7 @@ const logout = () => {
       aria-controls="user_info_panel"
       @click="togglePopup"
     >
-      <img
-        :src="avatarUrl"
-        loading="lazy"
-        class="w-10 h-10 rd-10 drag-none"
-        crossorigin="anonymous"
-      />
+      <img :src="avatarUrl" loading="lazy" class="w-10 h-10 rd-10 drag-none" />
     </Button>
   </OverlayBadge>
 </template>

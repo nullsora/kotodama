@@ -9,15 +9,7 @@ const { contact } = defineProps<{
 }>()
 
 const avatarUrl = computed(() => getAvatarUrl(contact))
-const name = computed(() => {
-  if (contact.type === 'friend') {
-    const nick = contact.data.nickname
-    const remark = contact.data.remark
-    return remark !== '' ? `${remark} (${nick})` : nick
-  } else {
-    return contact.data.group_name
-  }
-})
+const hasRemark = computed(() => contact.type === 'friend' && contact.data.remark !== '')
 </script>
 
 <template>
@@ -30,9 +22,17 @@ const name = computed(() => {
     }"
     class="w-full contact-card p-2"
   >
-    <img :src="avatarUrl" class="w-10 h-10 rounded-full drag-none" crossorigin="anonymous" />
-    <div class="flex flex-col justify-center items-start ml-2">
-      <span class="text-sm">{{ name }}</span>
+    <img :src="avatarUrl" class="w-10 h-10 rounded-full drag-none" />
+    <div
+      v-if="contact.type === 'friend'"
+      class="flex flex-col justify-center items-start gap-1 ml-sm"
+    >
+      <div class="text-sm">{{ hasRemark ? contact.data.remark : contact.data.nickname }}</div>
+      <div v-if="hasRemark" class="text-xs gray-text">{{ contact.data.nickname }}</div>
+    </div>
+    <div v-else class="flex flex-col justify-center items-start gap-1 ml-sm">
+      <div class="text-sm max-w-50 truncate">{{ contact.data.group_name }}</div>
+      <div class="text-xs gray-text">{{ contact.data.member_count }}人</div>
     </div>
   </div>
 </template>
@@ -62,6 +62,10 @@ const name = computed(() => {
 
 .contact-card.selected {
   background-color: var(--p-primary-500);
+  color: white;
+}
+
+.contact-card.selected .gray-text {
   color: white;
 }
 </style>

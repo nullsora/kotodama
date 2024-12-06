@@ -10,7 +10,7 @@ const kotodama = {
     ) => {
       ipcRenderer.on('window:watchMaximize', callback)
     },
-    close: async () => await ipcRenderer.invoke('window:close'),
+    close: async (force: boolean = false) => await ipcRenderer.invoke('window:close', { force }),
 
     openNewWindow: async (url: string) => await ipcRenderer.invoke('window:openNewWindow', { url }),
     openExternal: async (url: string) => await ipcRenderer.invoke('window:openExternal', { url })

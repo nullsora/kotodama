@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 
-import { checkImgFace } from '@renderer/functions/message/check_img_face'
 import {
   AnyMessage,
   GroupMessage,
@@ -10,7 +9,7 @@ import {
 } from '@renderer/functions/message/message_types'
 import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
 import { packagedGetter } from '@renderer/functions/packaged_api'
-import MsgImage from './basic/MsgImage.vue'
+import ImageMsg from './ImageMsg.vue'
 
 const { msg } = defineProps<{
   msg: MessageTypes['Reply']
@@ -19,7 +18,7 @@ const { msg } = defineProps<{
 const originalMsg = ref<PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>>()
 const renderShortMsg = ref('')
 
-const getOringinalMsg = async () => {
+const getOriginalMsg = async () => {
   const oriId = msg.data.id
   const oriMsg = await packagedGetter.getMsg.single(oriId)
   originalMsg.value = oriMsg.data
@@ -34,13 +33,6 @@ const onlyImage = computed(() => {
   )
 })
 
-const isFace = computed(() => {
-  if (!onlyImage.value) return false
-
-  const msg = originalMsg.value!.message[0] as MessageTypes['Image'] | MessageTypes['MFace']
-  return checkImgFace(msg)
-})
-
 const getName = computed(() => {
   if (originalMsg.value?.message_type === 'private') {
     return originalMsg.value.sender.nickname
@@ -51,23 +43,15 @@ const getName = computed(() => {
   } else return '[解析错误]'
 })
 
-onMounted(getOringinalMsg)
-watch(() => msg, getOringinalMsg)
+onMounted(getOriginalMsg)
+watch(() => msg, getOriginalMsg)
 </script>
 
 <template>
   <div class="flex flex-col justify-start gap-2 items-start reply-msg">
     <div class="reply-msg-sender text-xs font-bold">{{ getName }}</div>
     <div v-if="onlyImage" class="flex justify-start gap-2 items-center">
-      <Suspense>
-        <MsgImage
-          :class="isFace ? 'max-w-20 max-h-20' : 'max-w-50 max-h-50'"
-          :src="(originalMsg?.message[0] as MessageTypes['Image']).data.url"
-          :preview="!isFace"
-          :show-menu="false"
-          :skeleton-size="isFace ? 20 : 50"
-        />
-      </Suspense>
+      <ImageMsg :small="true" :msg="originalMsg!.message[0] as MessageTypes['Image']" />
     </div>
     <div v-else class="text-xs msg-content max-w-90">
       {{ renderShortMsg }}

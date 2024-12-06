@@ -78,7 +78,6 @@ declare module 'vue' {
     RecordMsg: typeof import('./src/components/message/RecordMsg.vue')['default']
     ReplyMsg: typeof import('./src/components/message/ReplyMsg.vue')['default']
     RpsMsg: typeof import('./src/components/message/RpsMsg.vue')['default']
-    ScrollPanel: typeof import('primevue/scrollpanel')['default']
     Select: typeof import('primevue/select')['default']
     SelectButton: typeof import('primevue/selectbutton')['default']
     SelectIcon: typeof import('./src/components/contact_group/SelectIcon.vue')['default']

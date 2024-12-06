@@ -85,6 +85,12 @@ export const packagedGetter = {
         file_id: fileId
       })) as MsgBody<FileInfo>
     },
+    imgPath: async (fileId: string) => {
+      return (await Connector.fetch('get_image', 'getImage', {
+        file: fileId,
+        file_id: fileId
+      })) as MsgBody<FileInfo>
+    },
     parseRecord: async (fileId: string, format: 'wav' | 'mp3' | 'amr' = 'mp3') => {
       return (await Connector.fetch('get_record', 'getRecord', {
         file: fileId,

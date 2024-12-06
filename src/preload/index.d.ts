@@ -10,7 +10,7 @@ declare global {
         watchMaximize: (
           callback: (event: IpcRendererEvent, windowState: boolean, ...args: unknown[]) => void
         ) => void
-        close: () => Promise<void>
+        close: (force?: boolean) => Promise<void>
 
         openNewWindow: (url: string) => Promise<void>
         openExternal: (url: string) => Promise<boolean>

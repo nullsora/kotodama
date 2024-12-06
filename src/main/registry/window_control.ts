@@ -17,8 +17,9 @@ export default (window: BrowserWindow) => {
     window.minimize()
   })
 
-  ipcMain.handle('window:close', async (_event) => {
+  ipcMain.handle('window:close', async (_event, { force }: { force: boolean }) => {
     window.close()
+    if (force) window.destroy()
   })
 
   ipcMain.handle('window:openNewWindow', async (_event, { url }: { url: string }) => {

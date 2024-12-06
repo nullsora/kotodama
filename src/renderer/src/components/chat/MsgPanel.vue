@@ -25,6 +25,8 @@ const msgPanel = useTemplateRef('msgPanel')
 
 const curScrollTop = ref(0)
 const isBottom = ref(true)
+const lastScrollHeight = ref(0)
+const loading = ref(false)
 
 // 将历史消息转为消息链
 const parsedMsgChain = computed(() => {
@@ -155,11 +157,10 @@ const getPosition = (
 const updateMsgHistory = async (append: boolean = false, count: number = 30) => {
   const countBefore = msgHistoryList.value.length
   const _count = !append ? count : countBefore + count
-  if (chatInfo?.type === 'friend') {
-    msgHistoryList.value = (await packagedGetter.getMsg.friend(chatInfo.id, _count)).data.messages
-  } else if (chatInfo?.type === 'group') {
-    msgHistoryList.value = (await packagedGetter.getMsg.group(chatInfo.id, _count)).data.messages
-  }
+  if (!chatInfo) return 0
+  msgHistoryList.value = (
+    await packagedGetter.getMsg[chatInfo.type](chatInfo.id, _count)
+  ).data.messages
   return msgHistoryList.value.length - countBefore
 }
 
@@ -168,13 +169,24 @@ const handleScroll = async (e: Event) => {
   const element = e.target as HTMLElement
   curScrollTop.value = element.scrollTop
   checkScrollBottom()
-  if (element.scrollTop < 100) {
-    const heightBefore = element.scrollHeight
-    const c = await updateMsgHistory(true)
-    if (c === 30)
-      await nextTick(() => {
-        element.scrollTop = element.scrollHeight - heightBefore
-      })
+
+  if (element.scrollTop <= 50 && !loading.value) {
+    loading.value = true
+    lastScrollHeight.value = element.scrollHeight
+
+    try {
+      const updateChatCount = await updateMsgHistory(true)
+      if (updateChatCount > 0) {
+        await nextTick(() => {
+          // 计算新增内容的高度差
+          const heightDiff = element.scrollHeight - lastScrollHeight.value
+          // 保持滚动位置
+          element.scrollTop = heightDiff
+        })
+      }
+    } finally {
+      loading.value = false
+    }
   }
 }
 
@@ -211,6 +223,9 @@ watch(
     @scroll="handleScroll"
   >
     <div v-if="msgHistoryList.length > 0">
+      <div v-if="loading" class="flex justify-center items-center h-12">
+        <i class="animate-spin pi i-fluent-arrow-sync-24-regular gray-text w-5 h-5" />
+      </div>
       <div v-for="(msgChainNode, indexDate) in parsedMsgChain" :key="indexDate" class="w-full">
         <div class="w-full flex justify-center items-center">
           <Tag class="format-day m-sm select-none" rounded :value="formateDay(msgChainNode.time)" />
