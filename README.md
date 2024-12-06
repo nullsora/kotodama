@@ -50,6 +50,7 @@
     <li><a href="#特性支持">特性支持</a></li>
     <li><a href="#贡献">贡献</a></li>
     <li><a href="#许可证">许可证</a></li>
+    <li><a href="#致谢">致谢</a></li>
   </ol>
 </details>
 
@@ -59,6 +60,8 @@
 
 Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
+[![Kotodama Screen Shot][product-screenshot]](resources/screenshot.png)
+
 > [!IMPORTANT]
 > 本项目目前仍在开发中，部分功能可能尚未完善或不可用。
 
@@ -66,8 +69,12 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 ### 构建工具
 
-- [Node.js](https://nodejs.org/)
-- [pnpm](https://pnpm.io/)
+- [Electron](https://www.electronjs.org/)
+- [Electron-Vite](https://electron-vite.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vue.js](https://vuejs.org/)
+- [PrimeVue](https://primevue.org/)
+- [UnoCSS](https://unocss.dev/)
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
 
@@ -213,6 +220,21 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 根据 AGPL-3.0 许可证分发。打开 [LICENSE](LICENSE) 查看更多内容。
 
 <p align="right">(<a href="#top">回到顶部</a>)</p>
+
+<!-- 致谢 -->
+
+## 致谢
+
+* @柴油动力轮椅 - 为本项目绘制了图标
+* [Animista](https://animista.net/) - 提供了部分动画效果
+* [霞鹜文楷](https://github.com/lxgw/LxgwWenKai)
+* [Vite](https://vitejs.dev/)
+* [Pinia](https://pinia.vuejs.org/)
+* [unocss-preset-scrollbar](https://github.com/unocss-community/unocss-preset-scrollbar)
+* [VueDraggablePlus](https://vue-draggable-plus.pages.dev/)
+* [markdown-it](https://markdown-it.github.io/markdown-it/)
+
+<p align="right">(<a href="#top">返回顶部</a>)</p>
 
 <!-- MARKDOWN 链接 & 图片 -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
