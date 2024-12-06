@@ -26,9 +26,14 @@ const runtimeData = new DataManager(storeToRefs(config).userSettings)
 
 onMounted(() => {
   config.loadFromStorage()
-  runtimeData.watchConnect(() => {
-    currentPage.value = Pages.Chat
-  })
+  runtimeData.watchConnect(
+    () => {
+      currentPage.value = Pages.Chat
+    },
+    () => {
+      currentPage.value = Pages.Login
+    }
+  )
 
   config.$subscribe(
     async (_mutation, state) => {

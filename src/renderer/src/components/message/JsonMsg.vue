@@ -5,6 +5,7 @@ import AnnounceMsg from './special/AnnounceMsg.vue'
 import MsgImage from './basic/MsgImage.vue'
 import MiniAppMsg from './special/MiniAppMsg.vue'
 import LocationMsg from './special/LocationMsg.vue'
+import ContactShareMsg from './special/ContactShareMsg.vue'
 
 const { msg } = defineProps<{
   msg: MessageTypes['JSON']
@@ -37,12 +38,14 @@ const getPreviewUrl = (meta: { preview: string }) => {
 
 enum JsonMsgTypes {
   Annouce = 'mannounce',
+  ContactShare = 'contact_share',
   Miniapp = 'miniapp',
   Location = 'location'
 }
 
 const checkType = (msg: JsonInnerMsg, key: string | number) => {
   if (key === JsonMsgTypes.Annouce) return JsonMsgTypes.Annouce
+  else if (msg.view === 'contact') return JsonMsgTypes.ContactShare
   else if (msg.app.startsWith('com.tencent.miniapp') && key !== 'miniapp')
     return JsonMsgTypes.Miniapp
   else if (msg.view === 'LocationShare') return JsonMsgTypes.Location
@@ -53,11 +56,19 @@ const checkType = (msg: JsonInnerMsg, key: string | number) => {
 <template>
   <div v-for="(value, key) in parsedMsg.meta" :key="key">
     <AnnounceMsg v-if="checkType(parsedMsg, key) === JsonMsgTypes.Annouce" :msg="value" />
+    <ContactShareMsg
+      v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.ContactShare"
+      :msg="value"
+    />
     <MiniAppMsg v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.Miniapp" :msg="value" />
     <LocationMsg v-else-if="checkType(parsedMsg, key) === JsonMsgTypes.Location" :msg="value" />
     <div v-else class="w-80 share-msg-card glassmorphism p-sm" @click="openInBrowser(value)">
       <div class="flex justify-start items-center gap-2">
-        <MsgImage class="w-15 h-15 object-cover" :src="getPreviewUrl(value)" :skeleton-size="15" />
+        <MsgImage
+          class="w-15 h-15 object-cover drag-none"
+          :src="getPreviewUrl(value)"
+          :skeleton-size="15"
+        />
         <div class="flex flex-col justify-start items-start gap-1">
           <span class="font-bold text-sm dark-gray-text">{{ value.title }}</span>
           <span class="text-xs gray-text">{{ value.desc }}</span>
@@ -67,7 +78,7 @@ const checkType = (msg: JsonInnerMsg, key: string | number) => {
       <div class="flex justify-start items-center gap-1">
         <img
           v-if="value.icon || value.source_icon"
-          class="w-4 h-4 rd-0.5"
+          class="w-4 h-4 rd-0.5 drag-none"
           :src="getIconUrl(value)"
           crossorigin="anonymous"
         />

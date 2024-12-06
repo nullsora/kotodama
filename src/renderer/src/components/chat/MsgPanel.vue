@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, onMounted, useTemplateRef, watch } from 'vue'
+import { computed, inject, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
 
 import { DataManager } from '@renderer/functions/data_manager'
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
@@ -10,6 +10,7 @@ import { GroupMsgChainNode, PrivateMsgChainNode } from '@renderer/functions/type
 import MsgCard from '../message/MsgCard.vue'
 import UserAvatar from '../message/basic/UserAvatar.vue'
 import SpecialTitle from '../message/basic/SpecialTitle.vue'
+import BackBottomBtn from './BackBottomBtn.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 
@@ -21,6 +22,9 @@ const { chatInfo } = defineProps<{
 }>()
 const msgHistoryList = runtimeData.renderingMsgs
 const msgPanel = useTemplateRef('msgPanel')
+
+const curScrollTop = ref(0)
+const isBottom = ref(true)
 
 // 将历史消息转为消息链
 const parsedMsgChain = computed(() => {
@@ -93,6 +97,13 @@ const parsedMsgChain = computed(() => {
   } else return []
 })
 
+const checkScrollBottom = () => {
+  if (!msgPanel.value) return
+  const scrollBottom =
+    msgPanel.value.scrollHeight - msgPanel.value.scrollTop - msgPanel.value.clientHeight
+  isBottom.value = Math.abs(scrollBottom) < 10
+}
+
 const checkSenderSelf = (node: { sender: { user_id: unknown } }) => {
   const senderId = node.sender.user_id
   return senderId === runtimeData.userInfo.value.main.user_id
@@ -155,6 +166,8 @@ const updateMsgHistory = async (append: boolean = false, count: number = 30) => 
 // 在滚动到顶部时，加载更多消息
 const handleScroll = async (e: Event) => {
   const element = e.target as HTMLElement
+  curScrollTop.value = element.scrollTop
+  checkScrollBottom()
   if (element.scrollTop < 100) {
     const heightBefore = element.scrollHeight
     const c = await updateMsgHistory(true)
@@ -178,6 +191,17 @@ const updateComponent = async () => {
 
 onMounted(updateComponent)
 watch(() => chatInfo, updateComponent)
+
+watch(
+  () => msgHistoryList.value.length,
+  () => {
+    if (isBottom.value) {
+      nextTick(() => {
+        if (msgPanel.value) msgPanel.value!.scrollTop = msgPanel.value!.scrollHeight
+      })
+    }
+  }
+)
 </script>
 
 <template>
@@ -233,6 +257,11 @@ watch(() => chatInfo, updateComponent)
         </div>
       </div>
     </div>
+    <BackBottomBtn
+      :show-height="(msgPanel?.scrollHeight ?? 1145) - 1145"
+      :cur-height="curScrollTop + (msgPanel?.clientHeight ?? 1145)"
+      @click="msgPanel!.scrollTop = msgPanel!.scrollHeight"
+    />
   </div>
 </template>
 

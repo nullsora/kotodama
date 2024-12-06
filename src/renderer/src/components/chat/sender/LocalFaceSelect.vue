@@ -21,19 +21,21 @@ const getTransformOrigin = (index: number) =>
 
 <template>
   <div class="flex flex-row justify-between gap-2 h-full">
-    <div class="primary-border h-full p-2 scrollbar scrollbar-w-1 scrollbar-rounded">
+    <div
+      class="primary-border h-full p-2 overflow-x-hidden scrollbar scrollbar-w-1 scrollbar-rounded"
+    >
       <div
         v-for="(category, index) in faceList"
         :key="index"
         v-ripple
         v-tooltip.right="category.category"
-        class="h-8 w-8 mb-1 rd-2"
+        class="h-8 w-8 mb-1 rd-2 flex justify-center items-center hover:brightness-80"
         @click="currentCategory = index"
       >
-        <img class="max-h-8 max-w-8" :src="`k-file://static?path=${category.faces[0]}`" />
+        <img class="max-h-8 max-w-8 drag-none" :src="`k-file://static?path=${category.faces[0]}`" />
       </div>
     </div>
-    <div class="flex-1 h-80 scrollbar scrollbar-w-1 scrollbar-rounded">
+    <div class="flex-1 h-80 overflow-x-hidden scrollbar scrollbar-w-1 scrollbar-rounded">
       <div class="grid grid-cols-5 gap-2">
         <div
           v-for="(url, index) in faceList[currentCategory].faces"
@@ -47,7 +49,7 @@ const getTransformOrigin = (index: number) =>
             }
           "
         >
-          <img class="max-h-18 max-w-18" :src="`k-file://static?path=${url}`" />
+          <img class="max-h-18 max-w-18 drag-none" :src="`k-file://static?path=${url}`" />
         </div>
       </div>
     </div>

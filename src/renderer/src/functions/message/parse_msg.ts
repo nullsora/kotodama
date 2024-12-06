@@ -131,14 +131,13 @@ export const msgListToShortMsg = async (
 }
 
 export const getSenderName = ({
-  message_type,
+  message_type: _message_type,
   sender
 }: {
   message_type: 'private' | 'group'
   sender: { nickname: string; card?: string; user_id?: number }
 }) => {
-  if (message_type === 'private') return sender.nickname
-  else if (sender.card && sender.card !== '') return sender.card
+  if (sender.card && sender.card !== '') return sender.card
   else if (sender.user_id) {
     const user = DataManager.getInstance().find.friend(sender.user_id)
     return user && user.remark !== '' ? user.remark : sender.nickname

@@ -36,7 +36,7 @@ const openInBrowser = () => {
     </div>
     <div class="divider" />
     <div class="flex justify-start items-center gap-1">
-      <img class="w-4 h-4 rd-0.5" :src="iconUrl" />
+      <img class="w-4 h-4 rd-0.5 drag-none" :src="iconUrl" />
       <span class="text-xs dark-gray-text">{{ msg.title }}</span>
     </div>
   </div>

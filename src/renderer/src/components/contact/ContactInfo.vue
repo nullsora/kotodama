@@ -44,11 +44,11 @@ const jumpToMsg = async () => {
 </script>
 
 <template>
-  <div class="glassmorphism calc-height w-full flex flex-col justify-center items-center">
+  <div class="calc-height w-full flex flex-col justify-center items-center">
     <Card class="w-4/5">
       <template #title>
         <div class="w-full flex justify-between items-center">
-          <img :src="avatarUrl" class="w-15 h-15 rounded-full" crossorigin="anonymous" />
+          <img :src="avatarUrl" class="w-15 h-15 rounded-full drag-none" crossorigin="anonymous" />
           <div class="w-full flex flex-col justify-center items-end gap-2">
             <div class="text-xl font-bold">{{ contactName }}</div>
             <div class="text-sm text-gray-500">ID: {{ contact?.id }}</div>
@@ -61,6 +61,13 @@ const jumpToMsg = async () => {
           v-if="contact?.type === 'friend'"
           class="w-full flex flex-col justify-start items-center gap-sm"
         >
+          <div v-if="(contactObj as Friend).qid" class="w-full flex justify-between items-center">
+            <div class="font-bold">
+              <i class="pi i-fluent-slide-text-person-24-regular h-4 w-4 align-mid" />
+              QID
+            </div>
+            <div class="text-gray-500">{{ (contactObj as Friend).qid }}</div>
+          </div>
           <div class="w-full flex justify-between items-center">
             <div class="font-bold">
               <i class="pi i-fluent-person-edit-24-regular h-4 w-4 align-mid" />

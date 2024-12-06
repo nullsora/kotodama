@@ -185,7 +185,7 @@ type VideoMessage = BaseMessageContent<
 >
 type SendingVideoMessage = BaseMessageContent<'video', { file: string }>
 
-type AtMessage = BaseMessageContent<'at', { qq: string }>
+type AtMessage = BaseMessageContent<'at', { qq: string; name?: string }>
 
 /** 猜拳魔法表情 */
 type RpsMessage = BaseMessageContent<'rps', { result?: '1' | '2' | '3' }>
@@ -315,4 +315,13 @@ export type LocationMsg = {
   lng: string
   name: string
   uint64_peer_account: number
+}
+
+export type ContactShareMsg = {
+  avatar: string
+  contact: string
+  jumpUrl: string
+  nickname: string
+  tag: string
+  tagIcon: string | null
 }

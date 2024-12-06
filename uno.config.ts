@@ -5,6 +5,12 @@ export default defineConfig({
   presets: [presetUno(), presetAttributify(), presetIcons({}), presetScrollbar()],
   rules: [
     [
+      'drag-none',
+      {
+        '-webkit-user-drag': 'none'
+      }
+    ],
+    [
       'primary-border',
       {
         border: '1px solid var(--p-slate-200)',

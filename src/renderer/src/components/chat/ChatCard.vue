@@ -81,7 +81,7 @@ const parseTime = (time: number | undefined) => {
     @contextmenu="(event) => menu?.toggle(event)"
   >
     <div class="w-full flex justify-start items-center gap-2">
-      <img :src="avatarUrl" class="h-10 w-10 rounded-full" />
+      <img :src="avatarUrl" class="h-10 w-10 rounded-full drag-none" />
       <div class="w-full flex flex-col justify-center items-start gap-0.5">
         <div class="w-45.5 flex justify-between items-center gap-2">
           <div class="chat-name truncate">

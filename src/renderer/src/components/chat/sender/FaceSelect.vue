@@ -80,7 +80,7 @@ const openLocalFaceFolder = async () => {
             }
           "
         >
-          <img class="w-6 h-6" :src="getFaceImg(index)" :alt="face" />
+          <img class="w-6 h-6 drag-none" :src="getFaceImg(index)" :alt="face" />
         </Button>
       </div>
     </div>
@@ -98,7 +98,12 @@ const openLocalFaceFolder = async () => {
             }
           "
         >
-          <MsgImage class="max-h-18 max-w-18" :src="url" :show-menu="false" :rounded="false" />
+          <MsgImage
+            class="max-h-18 max-w-18 drag-none"
+            :src="url"
+            :show-menu="false"
+            :rounded="false"
+          />
         </div>
       </div>
     </div>

@@ -17,6 +17,7 @@ declare module 'vue' {
     Attachments: typeof import('./src/components/chat/sender/Attachments.vue')['default']
     AtTag: typeof import('./src/components/message/basic/AtTag.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
+    BackBottomBtn: typeof import('./src/components/chat/BackBottomBtn.vue')['default']
     BackgroundSettings: typeof import('./src/components/settings/General/BackgroundSettings.vue')['default']
     Button: typeof import('primevue/button')['default']
     ButtonGroup: typeof import('primevue/buttongroup')['default']
@@ -33,6 +34,7 @@ declare module 'vue' {
     ContactInfo: typeof import('./src/components/contact/ContactInfo.vue')['default']
     ContactPageLayout: typeof import('./src/components/layout/ContactPageLayout.vue')['default']
     ContactPanel: typeof import('./src/components/contact/ContactPanel.vue')['default']
+    ContactShareMsg: typeof import('./src/components/message/special/ContactShareMsg.vue')['default']
     ContextMenu: typeof import('primevue/contextmenu')['default']
     DebugWS: typeof import('./src/components/misc/DebugWS.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
@@ -94,6 +96,7 @@ declare module 'vue' {
     TopBar: typeof import('./src/components/main/TopBar.vue')['default']
     UnsupportedMsg: typeof import('./src/components/message/UnsupportedMsg.vue')['default']
     UserAvatar: typeof import('./src/components/message/basic/UserAvatar.vue')['default']
+    UserInfoMenu: typeof import('./src/components/message/basic/UserInfoMenu.vue')['default']
     VideoMsg: typeof import('./src/components/message/VideoMsg.vue')['default']
     XMLMsg: typeof import('./src/components/message/XMLMsg.vue')['default']
   }

@@ -30,7 +30,7 @@ const name = computed(() => {
     }"
     class="w-full contact-card p-2"
   >
-    <img :src="avatarUrl" class="w-10 h-10 rounded-full" crossorigin="anonymous" />
+    <img :src="avatarUrl" class="w-10 h-10 rounded-full drag-none" crossorigin="anonymous" />
     <div class="flex flex-col justify-center items-start ml-2">
       <span class="text-sm">{{ name }}</span>
     </div>

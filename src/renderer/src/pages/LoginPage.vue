@@ -5,6 +5,8 @@ import Connector from '@renderer/functions/connector'
 import { Logger } from '@renderer/functions/logger'
 import { useConfigStore } from '@renderer/stores/config_store'
 
+const icon = new URL('../assets/icon.png', import.meta.url).href
+
 const config = useConfigStore()
 
 const url = ref('')
@@ -42,9 +44,12 @@ const login = () => {
       <div class="h-full flex flex-col justify-center items-center">
         <Card>
           <template #title>
-            <div class="flex flex-col justify-start items-center gap-sm">
-              <i class="pi i-fluent-iot-24-filled w-15 h-15 gray-text" />
-              连接 Onebot
+            <div class="flex flex-row justify-center items-center gap-xl">
+              <img class="w-15 h-15" :src="icon" />
+              <i class="pi i-fluent-link-24-regular w-7 h-7" />
+              <div class="icon-bg w-15 h-15 p-2.6 rd-full flex justify-center items-center">
+                <i class="pi i-cib-tencent-qq text-black w-10 h-10" />
+              </div>
             </div>
           </template>
           <template #content>
@@ -124,6 +129,10 @@ const login = () => {
 
 .calc-height {
   max-height: calc(100vh - 25rem);
+}
+
+.icon-bg {
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
 }
 
 .gradient {
