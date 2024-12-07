@@ -60,7 +60,7 @@
 
 Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
-[![Kotodama Screen Shot][product-screenshot]](resources/screenshot.png)
+<img src="resources/screenshot.png" alt="screenshot" width="100%">
 
 > [!IMPORTANT]
 > 本项目目前仍在开发中，部分功能可能尚未完善或不可用。
