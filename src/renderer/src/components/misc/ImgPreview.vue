@@ -2,17 +2,17 @@
 import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import FadeTransition from './FadeTransition.vue'
 
-const { images, index = 0 } = defineProps<{
+const { images } = defineProps<{
   images: string[]
-  index?: number
 }>()
+
+const index = defineModel<number>('index', { required: true })
 
 const showPreview = defineModel<boolean>({ required: true })
 
 const showCaution = ref(false)
 const cautionMsg = ref('')
 
-const curIndex = ref(index)
 const scale = ref(1)
 const rotation = ref(0)
 const isDragging = ref(false)
@@ -32,13 +32,13 @@ const showCautionMsg = (head: boolean) => {
 }
 
 const switchImg = (delta: number) => {
-  const newIndex = curIndex.value + delta
+  const newIndex = index.value + delta
   if (newIndex < 0) {
     showCautionMsg(true)
   } else if (newIndex >= images.length) {
     showCautionMsg(false)
   } else {
-    curIndex.value = newIndex
+    index.value = newIndex
   }
 }
 
@@ -108,7 +108,7 @@ watchEffect(() => {
         draggable="false"
         class="image select-none"
         :class="{ 'image-transition': !isDragging }"
-        :src="images[curIndex]"
+        :src="images[index]"
         :style="imgStyle"
         @mousedown="startDrag"
       />

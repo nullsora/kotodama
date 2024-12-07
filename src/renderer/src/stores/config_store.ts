@@ -22,6 +22,7 @@ export const useConfigStore = defineStore('config', () => {
     },
     message: {
       alwaysShowTimestamp: true,
+      localFacePath: '',
       useImageGallery: true,
       useLxgw: false
     }
@@ -41,7 +42,10 @@ export const useConfigStore = defineStore('config', () => {
       logLevel.value = parsedConfig.logLevel ?? logLevel.value
       accounts.value = parsedConfig.accounts ?? accounts.value
       primaryColor.value = parsedConfig.primaryColor ?? primaryColor.value
-      customSettings.value = parsedConfig.customSettings ?? customSettings.value
+      customSettings.value = {
+        ...defaultCustomSettings,
+        ...parsedConfig.customSettings
+      }
 
       userSettings.value = parsedConfig.userSettings ?? userSettings.value
     }

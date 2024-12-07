@@ -58,10 +58,11 @@ const kotodama = {
   },
   file: {
     access: async (path: string) => await ipcRenderer.invoke('file:access', { path }),
+    chooseDirectory: async () => await ipcRenderer.invoke('file:chooseDirectory'),
     getConfig: async () => await ipcRenderer.invoke('file:getConfig'),
     saveConfig: async (config: string) => await ipcRenderer.invoke('file:saveConfig', { config }),
     getFacePath: async () => await ipcRenderer.invoke('file:getFacePath'),
-    getFaceList: async () => await ipcRenderer.invoke('file:getFaceList'),
+    getFaceList: async (path: string) => await ipcRenderer.invoke('file:getFaceList', { path }),
     getFileBuffer: async (path: string) => await ipcRenderer.invoke('file:getFileBuffer', { path })
   },
   crypto: {

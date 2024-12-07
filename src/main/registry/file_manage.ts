@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { dialog, ipcMain } from 'electron'
 import * as fs from 'fs/promises'
 import path from 'path'
 
@@ -38,9 +38,9 @@ export default () => {
     return path.resolve(process.cwd(), 'config/faces')
   })
 
-  ipcMain.handle('file:getFaceList', async () => {
+  ipcMain.handle('file:getFaceList', async (_event, { path: customPath }: { path: string }) => {
     await getFacePathAccess()
-    const facePath = path.resolve(process.cwd(), 'config/faces')
+    const facePath = customPath !== '' ? customPath : path.resolve(process.cwd(), 'config/faces')
     const faceList = await fs.readdir(facePath, { withFileTypes: true })
     const result: {
       category: string
@@ -93,5 +93,12 @@ export default () => {
 
   ipcMain.handle('file:getFileBuffer', async (_event, { path }) => {
     return await fs.readFile(path)
+  })
+
+  ipcMain.handle('file:chooseDirectory', async () => {
+    const { filePaths } = await dialog.showOpenDialog({
+      properties: ['openDirectory']
+    })
+    return filePaths
   })
 }

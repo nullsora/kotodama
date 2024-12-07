@@ -20,6 +20,7 @@ const {
 const menu = useTemplateRef('menu')
 
 const showPreview = ref(false)
+const previewIndex = ref(0)
 const loaded = ref(false)
 const error = ref(false)
 
@@ -108,7 +109,12 @@ watch(
       :height="skeletonSize / 4 + 'rem'"
     />
     <ContextMenu v-if="showMenu" ref="menu" :model="menuItems" />
-    <ImgPreview v-if="preview" v-model="showPreview" :images="[imageUrl]" />
+    <ImgPreview
+      v-if="preview"
+      v-model="showPreview"
+      v-model:index="previewIndex"
+      :images="[imageUrl]"
+    />
   </div>
 </template>
 

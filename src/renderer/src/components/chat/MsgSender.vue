@@ -11,12 +11,15 @@ import {
   SendingMessageTypes
 } from '@renderer/functions/message/message_types'
 import { packagedGetter, packagedSender } from '@renderer/functions/packaged_api'
+import { useConfigStore } from '@renderer/stores/config_store'
 import FaceSelect from './sender/FaceSelect.vue'
 import MsgPreview from './sender/MsgPreview.vue'
 import Attachments from './sender/Attachments.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 const sendText = inject('sendText') as Ref<string>
+
+const config = useConfigStore()
 
 const { chatInfo } = defineProps<{
   chatInfo: {
@@ -161,8 +164,9 @@ const invalid = computed(() => sendText.value.length === 0)
 
 const getFaceList = async () => {
   // @ts-ignore - window is defined in preload
-  const faces = await window.kotodama.file.getFaceList()
+  const faces = await window.kotodama.file.getFaceList(config.customSettings.message.localFacePath)
   localFaceList.value = faces
+  await runtimeData.updateInfo.face()
 }
 
 const watchKeydown = (e: KeyboardEvent) => {

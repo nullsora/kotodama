@@ -33,7 +33,11 @@ async function minimize() {
 async function toggleMaximize() {
   await kotodama.window.toggleMaximize()
 }
-async function close() {
+async function close(event: MouseEvent) {
+  if (event.shiftKey) {
+    await kotodama.window.close(true)
+    return
+  }
   await kotodama.window.close(!showMenu)
 }
 

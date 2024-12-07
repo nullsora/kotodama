@@ -79,7 +79,7 @@ const submitGroup = async () => {
       await runtimeData.addToList.group(chat.data.group_id)
     }
   }
-  await runtimeData.updateInfo()
+  await runtimeData.updateInfo.all()
   runtimeData.user.value.contactGroups.push({
     name: newContactGroupInfo.value.name,
     iconClass: newContactGroupInfo.value.iconClass,

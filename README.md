@@ -44,6 +44,7 @@
       <ul>
         <li><a href="#依赖">依赖</a></li>
         <li><a href="#安装">安装</a></li>
+        <li><a href="#构建">构建</a></li>
       </ul>
     </li>
     <li><a href="#使用方法">使用方法</a></li>
@@ -82,6 +83,10 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 ## 开始
 
+如果你并非开发者，你可以直接下载最新的版本并且运行。
+
+[![Release](https://img.shields.io/github/v/release/nullsora/kotodama?style=for-the-badge)][release-url]
+
 这是一份在本地构建项目的指导的例子。
 要获取本地副本并且配置运行，你可以按照下面的示例步骤操作。
 
@@ -107,18 +112,7 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
    pnpm dev
    ```
 
-<p align="right">(<a href="#top">返回顶部</a>)</p>
-
-<!-- 使用方法 示例 -->
-
-## 使用方法
-
-- 在使用之前，你需要有一个可用的Onebot后端。因为使用了一些非Onebot标准的API，推荐[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)。
-
-  同时，你需要在Onebot后端中启用ws正向连接。
-
-> [!WARNING]
-> 使用最新 (9.9.16.x) 版本的 QQ 配合 LiteloaderQQNT 出现了[强制下线现象](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues/1032)，谨慎升级QQ。
+### 构建项目
 
 - 构建icon
 
@@ -126,7 +120,9 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
   pnpm build:icon
   ```
 
-- 选择你的平台进行项目构建
+  只需要在第一次构建时运行一次，之后不需要再运行。
+
+- 选择你的平台进行打包
 
   ```sh
   pnpm build:unpack
@@ -134,6 +130,23 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
   pnpm build:linux
   pnpm build:mac
   ```
+
+- 你可以在 `dist` 文件夹中找到构建好的文件
+
+<p align="right">(<a href="#top">返回顶部</a>)</p>
+
+<!-- 使用方法 示例 -->
+
+## 使用方法
+
+- 在使用之前，你需要有一个可用的Onebot后端。因为使用了一些非Onebot标准的API，所以对[NapCat](https://github.com/NapNeko/NapCatQQ)或[LLOnebot](https://github.com/LLOneBot/LLOneBot)的支持是最好的。
+
+  同时，你需要在Onebot后端中启用ws正向连接。
+
+> [!WARNING]
+> 使用最新 (9.9.16.x) 版本的 QQ 配合 LiteloaderQQNT 出现了[强制下线现象](https://github.com/LiteLoaderQQNT/LiteLoaderQQNT/issues/1032)，谨慎升级QQ。
+
+- 打开软件，输入Onebot服务器地址和token (如果存在), 点击连接
 
 <p align="right">(<a href="#top">返回顶部</a>)</p>
 
@@ -225,14 +238,14 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 
 ## 致谢
 
-* @柴油动力轮椅 - 为本项目绘制了图标
-* [Animista](https://animista.net/) - 提供了部分动画效果
-* [霞鹜文楷](https://github.com/lxgw/LxgwWenKai)
-* [Vite](https://vitejs.dev/)
-* [Pinia](https://pinia.vuejs.org/)
-* [unocss-preset-scrollbar](https://github.com/unocss-community/unocss-preset-scrollbar)
-* [VueDraggablePlus](https://vue-draggable-plus.pages.dev/)
-* [markdown-it](https://markdown-it.github.io/markdown-it/)
+- @柴油动力轮椅 - 为本项目绘制了图标
+- [Animista](https://animista.net/) - 提供了部分动画效果
+- [霞鹜文楷](https://github.com/lxgw/LxgwWenKai)
+- [Vite](https://vitejs.dev/)
+- [Pinia](https://pinia.vuejs.org/)
+- [unocss-preset-scrollbar](https://github.com/unocss-community/unocss-preset-scrollbar)
+- [VueDraggablePlus](https://vue-draggable-plus.pages.dev/)
+- [markdown-it](https://markdown-it.github.io/markdown-it/)
 
 <p align="right">(<a href="#top">返回顶部</a>)</p>
 
@@ -249,4 +262,5 @@ Kotodama 是一个基于 Onebot 标准的第三方客户端实现。
 [issues-url]: https://github.com/nullsora/kotodama/issues
 [license-shield]: https://img.shields.io/github/license/nullsora/kotodama.svg?style=for-the-badge
 [license-url]: https://github.com/nullsora/kotodama/blob/main/LICENSE
+[release-url]: https://github.com/nullsora/kotodama/releases/latest
 

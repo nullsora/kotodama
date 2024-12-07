@@ -37,17 +37,38 @@ const confirmResetConfig = (event) => {
     }
   })
 }
+
+const selectPath = async () => {
+  // @ts-ignore - window is defined in preload
+  const kotodama = window.kotodama
+  const path = await kotodama.file.chooseDirectory()
+  if (path.length > 0) {
+    config.customSettings.message.localFacePath = path[0]
+  }
+}
 </script>
 
 <template>
   <div class="scrollbar scrollbar-w-1 scrollbar-rounded">
-    <SettingItem :title="'窗口标题'" :description="'设置窗口标题'">
+    <SettingItem title="窗口标题">
       <InputText v-model="config.windowTitle" />
+    </SettingItem>
+    <SettingItem class="mt-sm" title="本地表情位置">
+      <div class="flex items-center">
+        <InputText v-model="config.customSettings.message.localFacePath" />
+        <Button class="ml-sm" label="选择" @click="selectPath()" />
+        <Button
+          class="ml-sm"
+          label="重置"
+          severity="danger"
+          @click="config.customSettings.message.localFacePath = ''"
+        />
+      </div>
     </SettingItem>
     <LoglevelSetting />
     <PrimaryColorSettings />
     <BackgroundSettings />
-    <SettingItem class="mt-sm" :title="'RESET'" :description="'重置所有设置'">
+    <SettingItem class="mt-sm" title="RESET" description="重置所有设置">
       <Button label="重置" severity="danger" @click="confirmResetConfig($event)" />
     </SettingItem>
   </div>

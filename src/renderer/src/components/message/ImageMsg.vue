@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { checkImgFace } from '@renderer/functions/message/check_img_face'
 import { FileInfo, MessageTypes } from '@renderer/functions/message/message_types'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import MsgImage from './basic/MsgImage.vue'
 import { packagedGetter } from '@renderer/functions/packaged_api'
 
@@ -30,12 +30,11 @@ const size = computed(() => {
 })
 
 const getImgInfo = async () => {
-  if (msg.type === 'mface') return
-  imageInfo.value = (await packagedGetter.getMsg.imgPath(msg.data.file)).data
+  if (isFace.value) return
+  imageInfo.value = (
+    await packagedGetter.getMsg.imgPath((msg as MessageTypes['Image']).data.file)
+  ).data
 }
-
-onMounted(getImgInfo)
-watch(() => msg.data.url, getImgInfo)
 </script>
 
 <template>
@@ -45,5 +44,6 @@ watch(() => msg.data.url, getImgInfo)
     :show-menu="!isFace"
     :preview="!isFace"
     :skeleton-size="size"
+    @click="getImgInfo"
   />
 </template>

@@ -44,10 +44,11 @@ declare global {
       }
       file: {
         access(path: string): Promise<boolean>
+        chooseDirectory(): Promise<string[]>
         getConfig(): Promise<string>
         saveConfig(config: string): Promise<void>
         getFacePath(): Promise<string>
-        getFaceList(): Promise<{ category: string; faces: string[] }[]>
+        getFaceList(path: string): Promise<{ category: string; faces: string[] }[]>
         getFileBuffer(path: string): Promise<Buffer>
       }
       crypto: {

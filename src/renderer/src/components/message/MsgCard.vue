@@ -23,6 +23,7 @@ import XMLMsg from './XMLMsg.vue'
 
 import SendTime from './basic/SendTime.vue'
 import ImageGallery from './special/ImageGallery.vue'
+import { checkImgFace } from '@renderer/functions/message/check_img_face'
 
 type ImageGalleryMsg = {
   type: 'gallery'
@@ -129,14 +130,18 @@ const messageList = computed(() => {
   if (!config.customSettings.message.useImageGallery) return message.value
 
   const result: (AnyMessage | ImageGalleryMsg)[] = []
+
+  // Merge continuous images into a gallery
   let imgGallery: ImageGalleryMsg = { type: 'gallery', images: [] }
   let tempImgMsg: AnyMessage | null = null
+
   for (const msg of message.value) {
-    if (msg.type === 'image') {
+    if (msg.type === 'image' && !checkImgFace(msg)) {
       imgGallery.images.push(msg.data.url)
       tempImgMsg = msg
     } else {
-      if (imgGallery.images.length > 1) {
+      // If the gallery has more than 2 images, push it to the result
+      if (imgGallery.images.length >= 2) {
         result.push(imgGallery)
         imgGallery = { type: 'gallery', images: [] }
       } else if (tempImgMsg) {
@@ -146,12 +151,13 @@ const messageList = computed(() => {
       result.push(msg)
     }
   }
-  if (imgGallery.images.length > 1) {
+  if (imgGallery.images.length >= 2) {
     result.push(imgGallery)
-  } else if (tempImgMsg) {
+  } else if (imgGallery.images.length > 0 && tempImgMsg) {
     result.push(tempImgMsg)
   }
 
+  // If the first message is a markdown message, only render the markdown message
   if (result.length > 0 && result[0].type === 'markdown') {
     return [result[0]]
   }

@@ -177,7 +177,7 @@ export class DataManager {
             contactGroups: []
           }) - 1
       } else {
-        await this.updateInfo()
+        await this.updateInfo.all()
         this.userConfigs.value[this.userIndex.value!].connection = connection
       }
 
@@ -196,40 +196,54 @@ export class DataManager {
     })
   }
 
-  async updateInfo({
-    selfInfo = true,
-    friend = true,
-    friendsCategory: _friendsCategory = true,
-    group = true
-  } = {}) {
-    this.checkWorking()
-
-    const [userInfo, customFaces, friendList, friendsCategory, groupList] = await Promise.all([
-      packagedGetter.getInfo.self().then((res) => res.data),
-      packagedGetter.getInfo.customFace().then((res) => res.data),
-      packagedGetter.getList.friend().then((res) => res.data),
-      packagedGetter.getList.friendWithCategory().then((res) => res.data),
-      packagedGetter.getList.group().then((res) => res.data)
-    ])
-
-    if (selfInfo) {
+  updateInfo = {
+    self: async () => {
+      this.checkWorking()
+      const [userInfo, friendList] = await Promise.all([
+        packagedGetter.getInfo.self().then((res) => res.data),
+        this.updateInfo.friend()
+      ])
       this.userConfigs.value[this.userIndex.value!].info.main = userInfo
       this.userConfigs.value[this.userIndex.value!].info.more = friendList.find(
         (friend) => friend.user_id === userInfo.user_id
       )
+    },
+
+    face: async () => {
+      this.checkWorking()
+      const customFaces = await packagedGetter.getInfo.customFace().then((res) => res.data)
       this.userConfigs.value[this.userIndex.value!].info.faces = customFaces
-    }
+    },
 
-    if (friend) {
+    friend: async () => {
+      this.checkWorking()
+      const friendList = await packagedGetter.getList.friend().then((res) => res.data)
       this.userConfigs.value[this.userIndex.value!].contacts.friends = friendList
-    }
+      return friendList
+    },
 
-    if (_friendsCategory) {
+    friendCategory: async () => {
+      this.checkWorking()
+      const friendsCategory = await packagedGetter.getList
+        .friendWithCategory()
+        .then((res) => res.data)
       this.userConfigs.value[this.userIndex.value!].contacts.friendsCategories = friendsCategory
-    }
+    },
 
-    if (group) {
+    group: async () => {
+      this.checkWorking()
+      const groupList = await packagedGetter.getList.group().then((res) => res.data)
       this.userConfigs.value[this.userIndex.value!].contacts.groups = groupList
+    },
+
+    all: async () => {
+      this.checkWorking()
+      await Promise.all([
+        this.updateInfo.self(),
+        this.updateInfo.face(),
+        this.updateInfo.friendCategory(),
+        this.updateInfo.group()
+      ])
     }
   }
 

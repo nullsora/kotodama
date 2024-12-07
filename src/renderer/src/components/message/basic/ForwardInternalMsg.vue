@@ -30,7 +30,7 @@ const parsedMsgChain = computed(() => {
 
   let curIndex = -1
   for (const item of msg.data.content) {
-    if (msgChain[curIndex] && msgChain[curIndex].sender.user_id === item.sender.user_id) {
+    if (msgChain[curIndex] && msgChain[curIndex].sender.nickname === item.sender.nickname) {
       msgChain[curIndex].messages.push(item)
     } else {
       curIndex++

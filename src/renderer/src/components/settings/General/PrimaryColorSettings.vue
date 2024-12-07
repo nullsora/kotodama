@@ -33,7 +33,7 @@ const updatePrimaryColor = () => {
 </script>
 
 <template>
-  <SettingItem class="mt-sm" :title="'主题色'" :description="'更改主题色'">
+  <SettingItem class="mt-sm" title="主题色" description="更改主题色">
     <div class="flex items-center">
       <Select v-model="config.primaryColor" :options="primaryColors" option-label="name">
         <template #value="{ value }">
