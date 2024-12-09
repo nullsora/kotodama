@@ -16,13 +16,13 @@
 }
 
 .dark-mode {
-  --p-floatlabel-on-active-background: var(--p-gray-700);
-  --p-floatlabel-active-color: var(--p-gray-300);
-}
-
-.dark-mode .scrollbar {
+  /*------------------ Scrollbar ------------------*/
   --scrollbar-track: var(--p-gray-700);
   --scrollbar-thumb: var(--p-gray-500);
+
+  /*------------------ Float Label ------------------*/
+  --p-floatlabel-on-active-background: var(--p-gray-700);
+  --p-floatlabel-active-color: var(--p-gray-300);
 }
 
 .dark-mode .primary-border {

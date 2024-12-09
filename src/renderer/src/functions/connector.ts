@@ -24,6 +24,28 @@ const Connector = {
     Connector.sendRaw(data)
   },
 
+  watchConnection: (
+    onConnect?: ({ url, accessToken }: { url: string; accessToken: string }) => void,
+    onClose?: ({
+      code,
+      message,
+      address,
+      token
+    }: {
+      code: number
+      message: string
+      address: string
+      token: string
+    }) => void
+  ) => {
+    onebot.onOpen((_event, params) => {
+      if (onConnect) onConnect(params)
+    })
+    onebot.onClose((_event, params) => {
+      if (onClose) onClose(params)
+    })
+  },
+
   listenMessage: () => {
     onebot.onMessage((_event, data) => {
       Parser.getInstance().watchMessage(data)

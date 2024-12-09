@@ -2,10 +2,9 @@ import { computed, ref, Ref } from 'vue'
 import { AnyMessage, GroupMessage, PrivateMessage } from './message/message_types'
 import { packagedGetter } from './packaged_api'
 import { Chat, UserSetting } from './types'
+import Connector from './connector'
 
 export class DataManager {
-  // @ts-ignore - window is defined in preload
-  private static onebot = window.kotodama.onebot
   // @ts-ignore - window is defined in preload
   private static fileMgr = window.kotodama.file
 
@@ -130,70 +129,55 @@ export class DataManager {
   }
 
   //========== 前后端连接操作 ==========
-  watchConnect(
-    connectCallback?: () => void,
-    closeCallback?: ({
-      code,
-      message,
-      address,
-      token
-    }: {
-      code: number
-      message: string
-      address: string
-      token: string
-    }) => void
-  ) {
-    DataManager.onebot.onOpen(async (_event, connection) => {
-      this.working.value = true
+  init() {
+    Connector.watchConnection(
+      async (connection) => {
+        this.working.value = true
 
-      if (connectCallback) connectCallback()
-
-      const { user_id: userId } = (await packagedGetter.getInfo.self()).data
-      this.userIndex.value = this.userConfigs.value.findIndex(
-        (user) => user.info.main.user_id === userId
-      )
-
-      if (this.userIndex.value === -1) {
-        const friendList = (await packagedGetter.getList.friend()).data
-        const friendsCategoryList = (await packagedGetter.getList.friendWithCategory()).data
-        const groupList = (await packagedGetter.getList.group()).data
-
-        this.userIndex.value =
-          this.userConfigs.value.push({
-            connection: connection,
-            info: {
-              main: (await packagedGetter.getInfo.self()).data,
-              more: friendList.find((friend) => friend.user_id === userId),
-              faces: (await packagedGetter.getInfo.customFace()).data
-            },
-            contacts: {
-              friends: friendList,
-              friendsCategories: friendsCategoryList,
-              groups: groupList,
-
-              showing: []
-            },
-            contactGroups: []
-          }) - 1
-      } else {
-        await this.updateInfo.all()
-        this.userConfigs.value[this.userIndex.value!].connection = connection
-      }
-
-      await Promise.all(
-        this.userConfigs.value[this.userIndex.value!].contacts.showing.map((chat) =>
-          this.updateLatestMessage(chat)
+        const { user_id: userId } = (await packagedGetter.getInfo.self()).data
+        this.userIndex.value = this.userConfigs.value.findIndex(
+          (user) => user.info.main.user_id === userId
         )
-      )
 
-      DataManager.sortChats(this.userConfigs.value[this.userIndex.value!].contacts.showing)
-    })
+        if (this.userIndex.value === -1) {
+          const friendList = (await packagedGetter.getList.friend()).data
+          const friendsCategoryList = (await packagedGetter.getList.friendWithCategory()).data
+          const groupList = (await packagedGetter.getList.group()).data
 
-    DataManager.onebot.onClose((_event, closeMsg) => {
-      this.working.value = false
-      if (closeCallback) closeCallback(closeMsg)
-    })
+          this.userIndex.value =
+            this.userConfigs.value.push({
+              connection: connection,
+              info: {
+                main: (await packagedGetter.getInfo.self()).data,
+                more: friendList.find((friend) => friend.user_id === userId),
+                faces: (await packagedGetter.getInfo.customFace()).data
+              },
+              contacts: {
+                friends: friendList,
+                friendsCategories: friendsCategoryList,
+                groups: groupList,
+
+                showing: []
+              },
+              contactGroups: []
+            }) - 1
+        } else {
+          await this.updateInfo.all()
+          this.userConfigs.value[this.userIndex.value!].connection = connection
+        }
+
+        await Promise.all(
+          this.userConfigs.value[this.userIndex.value!].contacts.showing.map((chat) =>
+            this.updateLatestMessage(chat)
+          )
+        )
+
+        DataManager.sortChats(this.userConfigs.value[this.userIndex.value!].contacts.showing)
+      },
+      () => {
+        this.working.value = false
+      }
+    )
   }
 
   updateInfo = {
