@@ -1,0 +1,24 @@
+﻿{
+  "name": "LLOneBot",
+  "mappings": [
+    {
+      "actions": ["get_file", "get_image", "get_record"],
+      "parse": [
+        {
+          "alias": "file",
+          "base": "file_id"
+        }
+      ]
+    }
+  ],
+  "structures": {
+    "message": {
+      "image": [
+        {
+          "alias": "subType",
+          "base": "sub_type"
+        }
+      ]
+    }
+  }
+}

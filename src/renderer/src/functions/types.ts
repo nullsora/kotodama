@@ -28,6 +28,25 @@ export enum PrimaryColor {
   Rose = 'rose'
 }
 
+export type BotConfig = {
+  name: string
+  mappings?: {
+    actions: string[]
+    parse: {
+      alias: string
+      base: string
+    }[]
+  }[]
+  structures?: {
+    [key: string]: {
+      [key: string]: {
+        alias: string
+        base: string
+      }[]
+    }
+  }
+}
+
 // API body types
 
 export interface MsgBody<T> {
@@ -37,6 +56,12 @@ export interface MsgBody<T> {
   message: string
   wording: string
   echo: string
+}
+
+export type OnebotInfo = {
+  app_name: string
+  app_version: string
+  protocol_version: string
 }
 
 export type UserInfo = {

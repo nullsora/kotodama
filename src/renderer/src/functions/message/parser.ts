@@ -23,7 +23,7 @@ export class Parser {
     }
   }
 
-  watchMessage(data: string) {
+  handleIncomingMessage(data: string) {
     if (!this.watching) {
       this.watching = true
     }
@@ -45,7 +45,7 @@ export class Parser {
     try {
       if (msg) {
         if (msg.echo !== undefined) {
-          msgType = (msg.echo as string).split('_')[0]
+          msgType = msg.echo as string
           parseMsgFuncs[msgType](msg)
         } else {
           msgType = msg.post_type as string

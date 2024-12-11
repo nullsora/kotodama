@@ -44,7 +44,7 @@ onMounted(() => {
     { detached: true }
   )
 
-  Connector.listenMessage()
+  Connector.init()
 
   Logger.getInstance().debug('watching connection')
 })

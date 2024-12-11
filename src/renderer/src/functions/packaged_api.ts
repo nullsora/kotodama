@@ -81,31 +81,21 @@ export const packagedGetter = {
     },
     downloadFile: async (fileId: string) => {
       return (await Connector.fetch('get_file', 'getFile', {
-        file: fileId,
         file_id: fileId
       })) as MsgBody<FileInfo>
     },
     imgPath: async (fileId: string) => {
       return (await Connector.fetch('get_image', 'getImage', {
-        file: fileId,
         file_id: fileId
       })) as MsgBody<FileInfo>
     },
     parseRecord: async (fileId: string, format: 'wav' | 'mp3' | 'amr' = 'mp3') => {
       return (await Connector.fetch('get_record', 'getRecord', {
-        file: fileId,
         file_id: fileId,
         out_format: format
       })) as MsgBody<FileInfo>
     }
   }
-  /*
-  getRecentContacts: async (count: number = 10) => {
-    return (await Connector.fetch('get_recent_contacts', 'getRecentContacts', {
-      count
-    })) as MsgBody<>
-  }
-  */
 }
 
 export const packagedSender = {
