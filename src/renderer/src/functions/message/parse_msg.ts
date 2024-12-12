@@ -1,13 +1,24 @@
 import { DataManager } from '../data_manager'
 import { faceMap } from '../face_map'
 import { packagedGetter } from '../packaged_api'
-import { AnyMessage, GroupMessage, JsonInnerMsg, PrivateMessage } from './message_types'
+import { checkImgFace } from './check_img_face'
+import {
+  AnyMessage,
+  GroupMessage,
+  JsonInnerMsg,
+  MessageTypes,
+  PrivateMessage
+} from './message_types'
 
-const parseAtMsg = async (msg: string, sendGroupId?: number) => {
-  if (msg.includes('全体成员') || msg.includes('all')) {
+const parseAtMsg = async (msg: MessageTypes['At'], sendGroupId?: number) => {
+  if (msg.data.name) return `@${msg.data.name} `
+
+  const qqString = msg.data.qq
+
+  if (qqString.includes('全体成员') || qqString.includes('all')) {
     return '@全体成员 '
   }
-  const qq = parseInt(msg)
+  const qq = parseInt(qqString)
   let name: string
   try {
     if (sendGroupId) {
@@ -44,16 +55,7 @@ export const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = `[${faceMap[msg.data.id] ?? '表情'}]`
       break
     case 'image':
-      if (
-        (() => {
-          if (msg.data.file === 'marketface') return true
-          else if (msg.data.sub_type) return true
-          else if (msg.data.subType) return true
-          else return false
-        })()
-      )
-        shortMsg = '[动画表情]'
-      else shortMsg = '[图片]'
+      shortMsg = checkImgFace(msg) ? '[动画表情]' : '[图片]'
       break
     case 'mface':
       shortMsg = msg.data.summary
@@ -65,7 +67,7 @@ export const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = '[视频]'
       break
     case 'at':
-      shortMsg = await parseAtMsg(msg.data.qq, groupId)
+      shortMsg = await parseAtMsg(msg, groupId)
       break
     case 'rps':
       shortMsg = `[猜拳: ${parseRps(msg.data.result!)}]`
@@ -104,9 +106,7 @@ export const parseShortMsg = async (msg: AnyMessage, groupId?: number) => {
       shortMsg = `[文件] ${msg.data.file}`
       break
     case 'markdown':
-      // Markdown 有对应的 text 字段
-      shortMsg = ''
-      break
+      break // Markdown 有对应的 text 字段
     default:
       // @ts-ignore 未知消息类型
       shortMsg = `[${msg.type}: 解析错误]`

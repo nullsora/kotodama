@@ -140,8 +140,6 @@ type ImageMessage = BaseMessageContent<
     type?: 'flash'
     /** 非零为表情 */
     sub_type?: number
-    /** 非零为表情 */
-    subType?: number
     /** 图片URL */
     url: string
     file_size?: string
@@ -153,7 +151,6 @@ type SendingImageMessage = BaseMessageContent<
   {
     file: string
     sub_type?: number
-    subType?: number
   }
 >
 

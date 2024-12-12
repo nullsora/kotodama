@@ -30,6 +30,10 @@ export enum PrimaryColor {
 
 export type BotConfig = {
   name: string
+  apiMap?: {
+    alias: string
+    base: string
+  }[]
   mappings?: {
     actions: string[]
     parse: {

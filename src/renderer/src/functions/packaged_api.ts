@@ -1,4 +1,4 @@
-import Connector from './connector'
+import Connector, { parseMsg, parseSendingMsg } from './connector'
 import {
   PrivateMessage,
   AnyMessage,
@@ -52,32 +52,63 @@ export const packagedGetter = {
 
   getMsg: {
     single: async (messageId: number) => {
-      return (await Connector.fetch('get_msg', 'getMsg', {
+      const res = (await Connector.fetch('get_msg', 'getMsg', {
         message_id: messageId
       })) as MsgBody<PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>>
+
+      res.data.message = res.data.message.map(parseMsg)
+
+      return res
     },
     friend: async (userId: number, count?: number, startMsgId?: number) => {
-      return (await Connector.fetch('get_friend_msg_history', 'getFriendMsgHistory', {
+      const res = (await Connector.fetch('get_friend_msg_history', 'getFriendMsgHistory', {
         user_id: userId,
         count,
         message_seq: startMsgId
       })) as MsgBody<{
         messages: PrivateMessage<AnyMessage>[]
       }>
+
+      res.data.messages = res.data.messages.map((msg) => {
+        return {
+          ...msg,
+          message: msg.message.map(parseMsg)
+        }
+      })
+
+      return res
     },
     group: async (groupId: number, count?: number, startMsgId?: number) => {
-      return (await Connector.fetch('get_group_msg_history', 'getGroupMsgHistory', {
+      const res = (await Connector.fetch('get_group_msg_history', 'getGroupMsgHistory', {
         group_id: groupId,
         count,
         message_seq: startMsgId
       })) as MsgBody<{
         messages: GroupMessage<AnyMessage>[]
       }>
+
+      res.data.messages = res.data.messages.map((msg) => {
+        return {
+          ...msg,
+          message: msg.message.map(parseMsg)
+        }
+      })
+
+      return res
     },
     forward: async (forwardId: string) => {
-      return (await Connector.fetch('get_forward_msg', 'getForwardMsg', {
+      const res = (await Connector.fetch('get_forward_msg', 'getForwardMsg', {
         message_id: forwardId
       })) as MsgBody<ForwardMessageContent>
+
+      res.data.messages = res.data.messages.map((msg) => {
+        return {
+          ...msg,
+          content: msg.content.map(parseMsg)
+        }
+      })
+
+      return res
     },
     downloadFile: async (fileId: string) => {
       return (await Connector.fetch('get_file', 'getFile', {
@@ -101,6 +132,8 @@ export const packagedGetter = {
 export const packagedSender = {
   msg: {
     send: async (sender: SendingMessage) => {
+      sender.messages = sender.messages.map(parseSendingMsg)
+
       if (sender.type === 'private') {
         return (await Connector.fetch('send_private_msg', 'sendPrivateMsg', {
           user_id: sender.id,

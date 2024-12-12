@@ -1,6 +1,7 @@
 import { Logger } from '../logger'
 import { AnyMessage, GroupMessage, PrivateMessage } from './message_types'
 import { DataManager } from '../data_manager'
+import { parseMsg } from '../connector'
 
 export class Parser {
   private static instance: Parser
@@ -69,7 +70,14 @@ const parseNoticeFuncs = {
     // TODO: 记录心跳相关信息
     // DataManager.getInstance().connected = true
   },
-  message: (_type: string, msg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>) => {
+  message: (_type: string, _msg: PrivateMessage<AnyMessage> | GroupMessage<AnyMessage>) => {
+    const innerMsgs = _msg.message.map(parseMsg)
+
+    const msg = {
+      ..._msg,
+      message: innerMsgs
+    }
+
     DataManager.getInstance().pushNewMessage(msg)
   }
 }

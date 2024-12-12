@@ -7,6 +7,5 @@ export const checkImgFace = (
 
   if (msg.data.file === 'marketface') return true
   else if (msg.data.sub_type) return true
-  else if (msg.data.subType) return true
   else return false
 }

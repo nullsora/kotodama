@@ -97,8 +97,7 @@ const handler = {
         type: 'image',
         data: {
           file: runtimeData.userInfo.value.faces[parseInt(id.slice(3))],
-          sub_type: 1,
-          subType: 1
+          sub_type: 1
         }
       }
     }
@@ -114,8 +113,7 @@ const handler = {
         type: 'image',
         data: {
           file: localFaceList.value[category].faces[face],
-          sub_type: 1,
-          subType: 1
+          sub_type: 1
         }
       }
     }
