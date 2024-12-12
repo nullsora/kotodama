@@ -143,3 +143,25 @@ export const getSenderName = ({
     return user && user.remark !== '' ? user.remark : sender.nickname
   } else return sender.nickname
 }
+
+export const getUserNameById = async (userId: number, groupId?: number) => {
+  if (!groupId) {
+    const user = DataManager.getInstance().find.friend(userId)
+    return !user
+      ? (await packagedGetter.getInfo.stranger(userId)).data.nickname
+      : user.remark !== ''
+        ? user.remark
+        : user.nickname
+  } else {
+    const user = (await packagedGetter.getInfo.groupMember(groupId, userId)).data
+    const userFriend = DataManager.getInstance().find.friend(userId)
+    if (!user) {
+      return (await packagedGetter.getInfo.stranger(userId)).data.nickname
+    }
+    return user.card && user.card !== ''
+      ? user.card
+      : userFriend
+        ? userFriend.remark
+        : user.nickname
+  }
+}

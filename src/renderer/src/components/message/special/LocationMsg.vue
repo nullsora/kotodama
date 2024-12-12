@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { LocationMsg } from '@renderer/functions/message/message_types'
+import { JSONLocationMsg } from '@renderer/functions/message/message_types'
 
 const { msg } = defineProps<{
-  msg: LocationMsg
+  msg: JSONLocationMsg
 }>()
 
 const searchInAMap = () => {

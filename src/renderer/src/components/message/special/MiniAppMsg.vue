@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { MiniAppMsg } from '@renderer/functions/message/message_types'
+import { JSONMiniAppMsg } from '@renderer/functions/message/message_types'
 import MsgImage from '../basic/MsgImage.vue'
 import { computed } from 'vue'
 
 const { msg } = defineProps<{
-  msg: MiniAppMsg
+  msg: JSONMiniAppMsg
 }>()
 
 const previewUrl = computed(() => {

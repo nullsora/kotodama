@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { GroupAnnounceMsg } from '@renderer/functions/message/message_types'
+import { JSONGroupAnnounceMsg } from '@renderer/functions/message/message_types'
 import { computed } from 'vue'
 import MsgImage from '../basic/MsgImage.vue'
 
 const { msg } = defineProps<{
-  msg: GroupAnnounceMsg
+  msg: JSONGroupAnnounceMsg
 }>()
 
 const title = computed(() => {
@@ -17,20 +17,20 @@ const content = computed(() => {
 })
 
 const parseUrl = (path: string) => {
-  return `https://gdynamic.qpic.cn/gdynamic/${path}/628`
+  return `https://gdynamic.qpic.cn/gdynamic/${path}/0`
 }
 </script>
 
 <template>
   <div>
-    <div class="share-msg-card p-sm msg-shadow">
+    <div class="share-msg-card max-w-100 p-sm msg-shadow">
       <div class="flex flex-col items-start gap-sm">
         <div class="dark-gray-text font-bold">
           <i class="w-5 h-5 align-mid primary-text pi i-fluent-megaphone-circle-24-regular" />
           {{ title }}
         </div>
-        <div class="gray-text text-sm">{{ content }}</div>
-        <div v-if="msg.pic.length > 0">
+        <div class="gray-text text-sm whitespace-pre-wrap">{{ content }}</div>
+        <div v-if="msg.pic && msg.pic.length > 0">
           <MsgImage :src="parseUrl(msg.pic[0].url)" class="max-w-60 max-h-60" :skeleton-size="60" />
         </div>
       </div>

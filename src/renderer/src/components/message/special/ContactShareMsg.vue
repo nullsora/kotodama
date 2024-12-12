@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ContactShareMsg } from '@renderer/functions/message/message_types'
+import { JSONContactShareMsg } from '@renderer/functions/message/message_types'
 
 const { msg } = defineProps<{
-  msg: ContactShareMsg
+  msg: JSONContactShareMsg
 }>()
 
 const parseUrl = (url: string) => {

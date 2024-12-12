@@ -3,6 +3,7 @@ import { computed, inject, ref } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
 import { Friend, Group } from '@renderer/functions/types'
+import ChatAppBtn from './chat_apps/ChatAppBtn.vue'
 
 const runtimeData = inject('runtimeData') as DataManager
 
@@ -52,13 +53,16 @@ const avartarUrl = computed(() => {
         {{ chatName.memberCount }}人
       </div>
     </div>
-    <Button
-      icon="i-fluent-more-24-regular w-6 h-6"
-      severity="secondary"
-      text
-      rounded
-      @click="showInfo = !showInfo"
-    />
+    <div class="flex justify-center items-end gap-2">
+      <ChatAppBtn v-if="chatInfo?.type === 'group'" :group-id="chatInfo.id" />
+      <Button
+        icon="i-fluent-more-24-regular w-6 h-6"
+        severity="secondary"
+        text
+        rounded
+        @click="showInfo = !showInfo"
+      />
+    </div>
     <Teleport defer to=".chat-panel">
       <Transition enter-active-class="slide-in-right" leave-active-class="slide-out-right">
         <div v-if="showInfo" class="chat-info-modal scrollbar scrollbar-w-1 scrollbar-rounded">

@@ -183,7 +183,7 @@ watchEffect(() => {
 .modal {
   position: fixed;
   /* 来点神奇小数字！ */
-  z-index: 2000;
+  z-index: 2200;
   top: 0;
   left: 0;
   width: 100%;

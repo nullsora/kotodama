@@ -115,13 +115,6 @@ export type SendingMessageTypes = Omit<MessageTypes, 'Image' | 'Video' | 'File'>
 
 export type AnySendingMessage = SendingMessageTypes[keyof SendingMessageTypes]
 
-export type FileInfo = {
-  file: string
-  url: string
-  file_size: string
-  file_name: string
-}
-
 type BaseMessageContent<T, D> = {
   type: T
   data: D
@@ -266,12 +259,12 @@ export type JsonInnerMsg = {
   view: string
 }
 
-export type GroupAnnounceMsg = {
+export type JSONGroupAnnounceMsg = {
   cr: number
   encode: number
   fid: string
   gc: string
-  pic: {
+  pic?: {
     width: number
     height: number
     url: string
@@ -283,7 +276,7 @@ export type GroupAnnounceMsg = {
   uin: number
 }
 
-export type MiniAppMsg = {
+export type JSONMiniAppMsg = {
   appid: string
   preview: string
   shareTemplateData: Record<string, unknown>
@@ -302,7 +295,7 @@ export type MiniAppMsg = {
   shareOrigin: number
 }
 
-export type LocationMsg = {
+export type JSONLocationMsg = {
   address: string
   enum_relation_type: number
   from: string
@@ -314,11 +307,34 @@ export type LocationMsg = {
   uint64_peer_account: number
 }
 
-export type ContactShareMsg = {
+export type JSONContactShareMsg = {
   avatar: string
   contact: string
   jumpUrl: string
   nickname: string
   tag: string
   tagIcon: string | null
+}
+
+// 以下是特殊的消息类型
+
+export type FileInfo = {
+  file: string
+  url: string
+  file_size: string
+  file_name: string
+}
+
+export type GroupAnnouce = {
+  sender_id: number
+  /** 还是时间戳 / 1000 */
+  publish_time: number
+  message: {
+    text: string
+    images: {
+      id: string
+      width: string
+      height: string
+    }[]
+  }
 }

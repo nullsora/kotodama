@@ -55,7 +55,6 @@ const handleRightClick = (e: MouseEvent) => {
 
 <style scoped>
 .avatar {
-  position: -webkit-sticky;
   position: sticky;
   bottom: 0;
   cursor: pointer;

@@ -19,6 +19,14 @@
           "base": "sub_type"
         }
       ]
+    },
+    "response": {
+      "annouce": [
+        {
+          "alias": "image",
+          "base": "images"
+        }
+      ]
     }
   }
 }

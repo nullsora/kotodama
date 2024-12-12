@@ -1,11 +1,12 @@
-import Connector, { parseMsg, parseSendingMsg } from './connector'
+import Connector, { parseAnnounce, parseMsg, parseSendingMsg } from './connector'
 import {
   PrivateMessage,
   AnyMessage,
   GroupMessage,
   SendingMessage,
   FileInfo,
-  ForwardMessageContent
+  ForwardMessageContent,
+  GroupAnnouce
 } from './message/message_types'
 import { Friend, FriendsCategory, Group, GroupMember, MsgBody, Stranger, UserInfo } from './types'
 
@@ -125,6 +126,18 @@ export const packagedGetter = {
         file_id: fileId,
         out_format: format
       })) as MsgBody<FileInfo>
+    }
+  },
+
+  group: {
+    getAnnouce: async (groupId: number) => {
+      const res = (await Connector.fetch('_get_group_notice', 'getGroupAnnounce', {
+        group_id: groupId
+      })) as MsgBody<GroupAnnouce[]>
+
+      res.data = res.data.map(parseAnnounce)
+
+      return res
     }
   }
 }

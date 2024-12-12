@@ -3,7 +3,7 @@ import { Parser } from './message/parser'
 import { BotConfig, MsgBody, OnebotInfo } from './types'
 
 import LLOneBot from '../bot_mapping/LLOnebot.json'
-import { AnyMessage, AnySendingMessage } from './message/message_types'
+import { AnyMessage, AnySendingMessage, GroupAnnouce } from './message/message_types'
 
 // @ts-ignore - window is defined in preload
 const { onebot, crypto } = window.kotodama
@@ -87,6 +87,24 @@ export const parseSendingMsg = (msg: AnySendingMessage) => {
   }
 
   return res as AnySendingMessage
+}
+
+export const parseAnnounce = (msg: GroupAnnouce) => {
+  const config = getBotConfig()
+  if (!config) return msg
+
+  const mappings = config?.structures?.response?.annouce
+  if (!mappings) return msg
+
+  const aliasMap = new Map(mappings.map(({ alias, base }) => [alias, base]))
+  const res = {
+    ...msg,
+    message: Object.fromEntries(
+      Object.entries(msg.message).map(([key, value]) => [aliasMap.get(key) ?? key, value])
+    )
+  }
+
+  return res as GroupAnnouce
 }
 
 const Connector = {
