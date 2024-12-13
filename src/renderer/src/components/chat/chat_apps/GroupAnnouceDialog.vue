@@ -52,7 +52,7 @@ watch(() => groupId, getAnnouces)
           </div>
           <div class="divider" />
           <div class="text-sm whitespace-pre-wrap">{{ msg.message.text }}</div>
-          <div v-if="msg.message.images" class="flex justify-center">
+          <div v-if="msg.message.images" class="flex items-center">
             <MsgImage
               v-for="(img, i) in msg.message.images"
               :key="i"

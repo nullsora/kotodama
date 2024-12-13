@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
-import { computed, inject, Ref, ref, useTemplateRef } from 'vue'
+import { useStatusStore } from '@renderer/stores/status_store'
+import { computed, ref, useTemplateRef } from 'vue'
 import UserInfoMenu from './UserInfoMenu.vue'
 
-const sendText = inject('sendText') as Ref<string>
+const status = useStatusStore()
 
 const contextMenu = useTemplateRef('contextMenu')
 const menu = useTemplateRef('menu')
@@ -26,7 +27,7 @@ const menuItems = ref([
     label: '@ TA',
     icon: 'i-fluent-person-24-regular w-4 h-4',
     command: () => {
-      sendText.value += `[/@${id}] `
+      status.sendingText += `[/@${id}] `
     }
   }
 ])

@@ -2,8 +2,9 @@
 import { AnyMessage, GroupMessage, PrivateMessage } from '@renderer/functions/message/message_types'
 import { msgListToShortMsg } from '@renderer/functions/message/parse_msg'
 import { useConfigStore } from '@renderer/stores/config_store'
+import { useStatusStore } from '@renderer/stores/status_store'
 
-import { computed, inject, Ref, ref, useTemplateRef } from 'vue'
+import { computed, ref, useTemplateRef } from 'vue'
 
 import AtMsg from './AtMsg.vue'
 import DiceMsg from './DiceMsg.vue'
@@ -31,7 +32,7 @@ type ImageGalleryMsg = {
 }
 
 const config = useConfigStore()
-const sendText = inject('sendText') as Ref<string>
+const status = useStatusStore()
 
 const menu = useTemplateRef('menu')
 
@@ -87,7 +88,7 @@ const menuItems = ref([
     label: '引用',
     icon: 'i-fluent-comment-quote-24-regular w-4 h-4',
     command: () => {
-      sendText.value = `[/R: ${extra.value.message_id}]${sendText.value}`
+      status.sendingText = `[/R: ${extra.value.message_id}]${status.sendingText}`
     }
   }
 ])

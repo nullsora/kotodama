@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import debounce from 'lodash.debounce'
-import { computed, inject, onMounted, provide, Ref, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { findFromFaceMap } from '@renderer/functions/face_map'
 import {
@@ -12,12 +12,14 @@ import {
 } from '@renderer/functions/message/message_types'
 import { packagedGetter, packagedSender } from '@renderer/functions/packaged_api'
 import { useConfigStore } from '@renderer/stores/config_store'
+import { useStatusStore } from '@renderer/stores/status_store'
 import FaceSelect from './sender/FaceSelect.vue'
 import MsgPreview from './sender/MsgPreview.vue'
 import Attachments from './sender/Attachments.vue'
 
+const status = useStatusStore()
+
 const runtimeData = inject('runtimeData') as DataManager
-const sendText = inject('sendText') as Ref<string>
 
 const config = useConfigStore()
 
@@ -112,7 +114,7 @@ const handler = {
       return {
         type: 'image',
         data: {
-          file: localFaceList.value[category].faces[face],
+          file: status.localFaceList[category].faces[face],
           sub_type: 1
         }
       }
@@ -150,7 +152,6 @@ const handler = {
 const renderMsgs = ref<SendingMessage>()
 const attachments = ref<string[]>([])
 const dragOn = ref(false)
-const localFaceList = ref<{ category: string; faces: string[] }[]>([])
 
 const inputClass = computed(() => {
   return {
@@ -158,12 +159,12 @@ const inputClass = computed(() => {
   }
 })
 
-const invalid = computed(() => sendText.value.length === 0)
+const invalid = computed(() => status.sendingText.length === 0)
 
 const getFaceList = async () => {
   // @ts-ignore - window is defined in preload
   const faces = await window.kotodama.file.getFaceList(config.customSettings.message.localFacePath)
-  localFaceList.value = faces
+  status.localFaceList = faces
   await runtimeData.updateInfo.face()
 }
 
@@ -187,7 +188,7 @@ const handleDrop = (e: DragEvent) => {
   // text
   const text = e.dataTransfer?.getData('text')
   if (text) {
-    sendText.value += text
+    status.sendingText += text
     return
   }
   // file
@@ -196,9 +197,9 @@ const handleDrop = (e: DragEvent) => {
     const path = files[0].path
     attachments.value.push(path)
     const ext = path.split('.').pop()
-    if (imgExt.includes(ext!)) sendText.value += `[/IA:${attachments.value.length - 1}]`
-    else if (videoExt.includes(ext!)) sendText.value += `[/VA:${attachments.value.length - 1}]`
-    else sendText.value += `[/FA:${attachments.value.length - 1}]`
+    if (imgExt.includes(ext!)) status.sendingText += `[/IA:${attachments.value.length - 1}]`
+    else if (videoExt.includes(ext!)) status.sendingText += `[/VA:${attachments.value.length - 1}]`
+    else status.sendingText += `[/FA:${attachments.value.length - 1}]`
   }
 }
 
@@ -213,8 +214,8 @@ const handlePaste = (e: ClipboardEvent) => {
       const path = URL.createObjectURL(file)
       attachments.value.push(path)
       const ext = file.name.split('.').pop()
-      if (imgExt.includes(ext!)) sendText.value += `[/IA:${attachments.value.length - 1}]`
-      else sendText.value += `[/FA:${attachments.value.length - 1}]`
+      if (imgExt.includes(ext!)) status.sendingText += `[/IA:${attachments.value.length - 1}]`
+      else status.sendingText += `[/FA:${attachments.value.length - 1}]`
     }
   }
     */
@@ -228,30 +229,30 @@ const parseSender = () => {
   // Read until '[/'
   let i = 0
   let start = 0
-  while (i < sendText.value.length) {
-    if (sendText.value[i] === '[' && sendText.value[i + 1] === '/') {
+  while (i < status.sendingText.length) {
+    if (status.sendingText[i] === '[' && status.sendingText[i + 1] === '/') {
       if (i !== start) {
         parser.push({
           type: 'text',
-          data: { text: sendText.value.slice(start, i) }
+          data: { text: status.sendingText.slice(start, i) }
         })
       }
       start = i
       // match '[/xxx]'
       let msg: AnyMessage
 
-      while (i < sendText.value.length && sendText.value[i] !== ']') {
+      while (i < status.sendingText.length && status.sendingText[i] !== ']') {
         i++
         // if meets another '[/'
-        if (sendText.value[i] === '[' && sendText.value[i + 1] === '/') {
-          parser.push(handler.text.parse(sendText.value.slice(start, i)))
+        if (status.sendingText[i] === '[' && status.sendingText[i + 1] === '/') {
+          parser.push(handler.text.parse(status.sendingText.slice(start, i)))
           start = i
           continue
         }
       }
-      if (i >= sendText.value.length) break
+      if (i >= status.sendingText.length) break
 
-      const matchVal = sendText.value.slice(start + 2, i)
+      const matchVal = status.sendingText.slice(start + 2, i)
 
       for (const key in handler) {
         if (handler[key].judge(matchVal)) {
@@ -269,7 +270,7 @@ const parseSender = () => {
   if (start !== i) {
     parser.push({
       type: 'text',
-      data: { text: sendText.value.slice(start, i) }
+      data: { text: status.sendingText.slice(start, i) }
     })
   }
 
@@ -286,7 +287,7 @@ const sendMsg = async () => {
   const sender = parseSender()
   if (!sender) return
 
-  sendText.value = ''
+  status.sendingText = ''
   attachments.value = []
 
   // Send
@@ -312,7 +313,7 @@ const update = debounce(() => {
   renderMsgs.value = parseSender()
 }, 600)
 
-watch(sendText, update)
+watch(() => status.sendingText, update)
 
 watch(
   () => chatInfo?.id,
@@ -323,15 +324,13 @@ watch(
 )
 
 onMounted(getFaceList)
-
-provide('faceList', localFaceList)
 </script>
 
 <template>
   <div class="w-full h-12 p-1 flex justify-between items-end gap-1">
     <Attachments v-model="attachments" />
     <InputText
-      v-model="sendText"
+      v-model="status.sendingText"
       :class="inputClass"
       class="flex-1 h-10 scrollbar scrollbar-w-1 scrollbar-rounded"
       @keydown="watchKeydown"
@@ -349,7 +348,7 @@ provide('faceList', localFaceList)
       :disabled="invalid"
       @click="sendMsg"
     />
-    <div v-if="sendText !== ''" class="msg-preview flex flex-col items-end gap-1">
+    <div v-if="status.sendingText !== ''" class="msg-preview flex flex-col items-end gap-1">
       <div class="gray-text text-xs">消息预览</div>
       <div class="max-w-100">
         <MsgPreview :msg="renderMsgs" />

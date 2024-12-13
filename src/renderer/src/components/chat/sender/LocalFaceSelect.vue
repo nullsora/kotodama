@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { getTransitionOrigin as _getOrigin } from '@renderer/functions/misc'
-import { inject, ref, Ref } from 'vue'
+import { useStatusStore } from '@renderer/stores/status_store'
+import { ref } from 'vue'
 
-const sendText = inject('sendText') as Ref<string>
-const faceList = inject('faceList') as Ref<{ category: string; faces: string[] }[]>
+const status = useStatusStore()
 
 const emit = defineEmits<{
   select: [event: Event]
@@ -12,11 +12,11 @@ const emit = defineEmits<{
 const currentCategory = ref(0)
 
 const selectFace = (categoryIndex: number, faceIndex: number) => {
-  sendText.value += `[/LF:${categoryIndex},${faceIndex}]`
+  status.sendingText += `[/LF:${categoryIndex},${faceIndex}]`
 }
 
 const getTransformOrigin = (index: number) =>
-  _getOrigin(index, 5, faceList.value[currentCategory.value].faces.length)
+  _getOrigin(index, 5, status.localFaceList[currentCategory.value].faces.length)
 </script>
 
 <template>
@@ -25,7 +25,7 @@ const getTransformOrigin = (index: number) =>
       class="primary-border h-full p-2 overflow-x-hidden scrollbar scrollbar-w-1 scrollbar-rounded"
     >
       <div
-        v-for="(category, index) in faceList"
+        v-for="(category, index) in status.localFaceList"
         :key="index"
         v-ripple
         v-tooltip.right="category.category"
@@ -38,7 +38,7 @@ const getTransformOrigin = (index: number) =>
     <div class="flex-1 h-80 overflow-x-hidden scrollbar scrollbar-w-1 scrollbar-rounded">
       <div class="grid grid-cols-5 gap-2">
         <div
-          v-for="(url, index) in faceList[currentCategory].faces"
+          v-for="(url, index) in status.localFaceList[currentCategory].faces"
           :key="index"
           :style="getTransformOrigin(index)"
           class="custom-face flex justify-center items-center"

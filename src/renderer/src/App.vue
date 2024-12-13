@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, provide, ref } from 'vue'
+import { onMounted, provide } from 'vue'
 import { storeToRefs } from 'pinia'
 
 import { useConfigStore } from './stores/config_store'
+import { useStatusStore } from './stores/status_store'
 
 import FadeTransition from './components/misc/FadeTransition.vue'
 import TopBar from './components/main/TopBar.vue'
@@ -19,16 +20,15 @@ import { Pages } from './functions/types'
 import { DataManager } from './functions/data_manager'
 
 const config = useConfigStore()
-
-const currentPage = ref(Pages.Login)
+const status = useStatusStore()
 
 const runtimeData = new DataManager(storeToRefs(config).userSettings)
 
 onMounted(() => {
   config.loadFromStorage()
   Connector.watchConnection(
-    () => (currentPage.value = Pages.Chat),
-    () => (currentPage.value = Pages.Login)
+    () => (status.currentPage = Pages.Chat),
+    () => (status.currentPage = Pages.Login)
   )
   runtimeData.init()
 
@@ -50,7 +50,6 @@ onMounted(() => {
 })
 
 provide('runtimeData', runtimeData)
-provide('currentPage', currentPage)
 </script>
 
 <template>
@@ -59,7 +58,7 @@ provide('currentPage', currentPage)
       <template #header>
         <TopBar
           v-model:dark-mode="config.darkMode"
-          v-model:current-page="currentPage"
+          v-model:current-page="status.currentPage"
           :title="config.windowTitle"
           :show-menu="runtimeData.connected.value"
         />
@@ -67,13 +66,13 @@ provide('currentPage', currentPage)
       <template #main>
         <div class="h-full">
           <FadeTransition>
-            <ChatPage v-if="runtimeData.connected.value && currentPage === Pages.Chat" />
+            <ChatPage v-if="runtimeData.connected.value && status.currentPage === Pages.Chat" />
             <ContactPage
-              v-else-if="runtimeData.connected.value && currentPage === Pages.Contacts"
+              v-else-if="runtimeData.connected.value && status.currentPage === Pages.Contacts"
             />
-            <SettingsPage v-else-if="currentPage === Pages.Settings" />
+            <SettingsPage v-else-if="status.currentPage === Pages.Settings" />
           </FadeTransition>
-          <LoginPage v-if="!runtimeData.connected.value && currentPage === Pages.Login" />
+          <LoginPage v-if="!runtimeData.connected.value && status.currentPage === Pages.Login" />
         </div>
       </template>
     </MainLayout>

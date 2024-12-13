@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { inject, Ref, useTemplateRef } from 'vue'
+import { useStatusStore } from '@renderer/stores/status_store'
+import { useTemplateRef } from 'vue'
+
+const status = useStatusStore()
 
 const popover = useTemplateRef('popover')
-const sendText = inject('sendText') as Ref<string>
+
 const attachments = defineModel<string[]>({ required: true })
 
 const selectImage = () => {
@@ -16,7 +19,7 @@ const selectImage = () => {
     if (files && files.length > 0) {
       // push directory to attachments
       attachments.value.push(files[0].path)
-      sendText.value += `[/IA:${attachments.value.length - 1}]`
+      status.sendingText += `[/IA:${attachments.value.length - 1}]`
       // delete input
       input.remove()
     }
@@ -36,7 +39,7 @@ const selectVideo = () => {
     if (files && files.length > 0) {
       // push directory to attachments
       attachments.value.push(files[0].path)
-      sendText.value += `[/VA:${attachments.value.length - 1}]`
+      status.sendingText += `[/VA:${attachments.value.length - 1}]`
       // delete input
       input.remove()
     }
@@ -56,7 +59,7 @@ const selectFile = () => {
     if (files && files.length > 0) {
       // push directory to attachments
       attachments.value.push(files[0].path)
-      sendText.value += `[/FA:${attachments.value.length - 1}]`
+      status.sendingText += `[/FA:${attachments.value.length - 1}]`
     }
   }
 

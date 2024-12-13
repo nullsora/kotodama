@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, inject, Ref } from 'vue'
+import { computed, inject } from 'vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { getAvatarUrlFromId } from '@renderer/functions/get_avatar_url'
 import { ChatInfo, Friend, Group, Pages } from '@renderer/functions/types'
+import { useStatusStore } from '@renderer/stores/status_store'
+
+const status = useStatusStore()
 
 const runtimeData = inject('runtimeData') as DataManager
-const currentPage = inject('currentPage') as Ref<Pages>
 
 const { contact } = defineProps<{
   contact: ChatInfo | null
@@ -33,11 +35,11 @@ const avatarUrl = computed(() => {
 const jumpToMsg = async () => {
   if (contact?.type === 'friend') {
     await runtimeData.addToList.private(contact.id)
-    currentPage.value = Pages.Chat
+    status.currentPage = Pages.Chat
     runtimeData.showingChat.value = { type: 'friend', id: contact.id }
   } else if (contact?.type === 'group') {
     await runtimeData.addToList.group(contact.id)
-    currentPage.value = Pages.Chat
+    status.currentPage = Pages.Chat
     runtimeData.showingChat.value = { type: 'group', id: contact.id }
   }
 }

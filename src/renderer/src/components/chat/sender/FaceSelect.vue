@@ -2,12 +2,14 @@
 import MsgImage from '@renderer/components/message/basic/MsgImage.vue'
 import { DataManager } from '@renderer/functions/data_manager'
 import { faceMap } from '@renderer/functions/face_map'
-import { inject, Ref, ref, useTemplateRef } from 'vue'
-import LocalFaceSelect from './LocalFaceSelect.vue'
 import { getTransitionOrigin as _getOrigin } from '@renderer/functions/misc'
+import { useStatusStore } from '@renderer/stores/status_store'
+import { inject, ref, useTemplateRef } from 'vue'
+import LocalFaceSelect from './LocalFaceSelect.vue'
+
+const status = useStatusStore()
 
 const runtimeData = inject('runtimeData') as DataManager
-const sendText = inject('sendText') as Ref<string>
 
 const panel = useTemplateRef('panel')
 
@@ -50,7 +52,7 @@ const openLocalFaceFolder = async () => {
           text
           @click="
             (event) => {
-              sendText += '[/rps]'
+              status.sendingText += '[/rps]'
               toggle(event)
             }
           "
@@ -62,7 +64,7 @@ const openLocalFaceFolder = async () => {
           text
           @click="
             (event) => {
-              sendText += '[/dice]'
+              status.sendingText += '[/dice]'
               toggle(event)
             }
           "
@@ -75,7 +77,7 @@ const openLocalFaceFolder = async () => {
           text
           @click="
             (event) => {
-              sendText += `[/${face}]`
+              status.sendingText += `[/${face}]`
               toggle(event)
             }
           "
@@ -93,7 +95,7 @@ const openLocalFaceFolder = async () => {
           class="custom-face flex justify-center items-center"
           @click="
             (event) => {
-              sendText += '[/CF:' + index + ']'
+              status.sendingText += '[/CF:' + index + ']'
               toggle(event)
             }
           "

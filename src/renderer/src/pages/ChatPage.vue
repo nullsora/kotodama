@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, provide, ref, watch } from 'vue'
+import { computed, inject, ref, watch } from 'vue'
 
 import Sidebar from '@renderer/components/chat/Sidebar.vue'
 import ChatSelectPanel from '@renderer/components/chat/ChatSelectPanel.vue'
@@ -7,12 +7,13 @@ import ChatPageLayout from '@renderer/components/layout/ChatPageLayout.vue'
 import ChatPanel from '@renderer/components/chat/ChatPanel.vue'
 
 import { DataManager } from '@renderer/functions/data_manager'
+import { useStatusStore } from '@renderer/stores/status_store'
 
 const runtimeData = inject('runtimeData') as DataManager
 
 const selectedGroupId = ref(-1)
 
-const sendText = ref('')
+const status = useStatusStore()
 
 const renderContacts = computed(() => {
   if (selectedGroupId.value === -1) {
@@ -25,11 +26,9 @@ const renderContacts = computed(() => {
 watch(
   () => runtimeData.showingChat.value,
   () => {
-    sendText.value = ''
+    status.sendingText = ''
   }
 )
-
-provide('sendText', sendText)
 </script>
 
 <template>
