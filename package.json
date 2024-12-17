@@ -1,6 +1,6 @@
 {
   "name": "kotodama",
-  "version": "0.9.0",
+  "version": "0.9.5",
   "description": "A Third-party Client For Onebot (QQ)",
   "main": "./out/main/index.js",
   "author": "nullsora",

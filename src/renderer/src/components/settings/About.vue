@@ -19,7 +19,7 @@ const openGithub = () => openUrl('https://github.com/nullsora/kotodama')
       />
       <div>
         <div class="text-xl">Kotodama / 言靈</div>
-        <div class="text-sm mt-1">Version 0.9.0</div>
+        <div class="text-sm mt-1">Version 0.9.5</div>
         <div class="text-sm mt-1">AGPL-3.0 license</div>
       </div>
     </div>
